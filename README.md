@@ -1,2 +1,2 @@
-# Pandriod
+# Pandroid
 Pandora android client
