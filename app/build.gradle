@@ -28,8 +28,12 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.4.0'
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:design:25.4.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
 }
