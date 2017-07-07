@@ -3,12 +3,10 @@ package com.jz.pandroid
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
-import android.util.Base64
 import android.util.Log
 import com.jz.pandroid.request.BasicCallback
 import com.jz.pandroid.request.PandoraAPI
 import com.jz.pandroid.request.buildPandoraAPI
-import com.jz.pandroid.request.crypt.blowSoHard
 import com.jz.pandroid.request.crypt.decrypt
 import com.jz.pandroid.request.crypt.hexStringToByteArray
 import com.jz.pandroid.request.model.PartnerLoginRequest
