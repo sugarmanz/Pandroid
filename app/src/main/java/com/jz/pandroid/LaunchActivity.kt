@@ -7,8 +7,7 @@ import android.util.Log
 import com.jz.pandroid.request.BasicCallback
 import com.jz.pandroid.request.PandoraAPI
 import com.jz.pandroid.request.buildPandoraAPI
-import com.jz.pandroid.request.crypt.decrypt
-import com.jz.pandroid.request.crypt.hexStringToByteArray
+import com.jz.pandroid.request.crypt.BlowFish
 import com.jz.pandroid.request.model.PartnerLoginRequest
 import com.jz.pandroid.request.model.ResponseModel
 import retrofit2.Call
@@ -38,11 +37,10 @@ class LaunchActivity : AppCompatActivity() {
                     if (responseModel.isOk) {
                         Log.i(TAG, "Handling success")
 
-                        val decoded = hexStringToByteArray(responseModel.result["syncTime"].toString())
-                        var decrypted = decrypt(decoded)
-//                        var decrypted = decrypt(responseModel.result["syncTime"].toString())
+                        val fugu = BlowFish()
+                        val decoded = fugu.hexStringToByteArray(responseModel.result["syncTime"].toString())
+                        var decrypted = fugu.decrypt(decoded)
 
-                        Log.i(TAG, String(decrypted))
                         decrypted = decrypted.copyOfRange(4, decrypted.size)
                         Log.i(TAG, String(decrypted))
                         goToMain()
