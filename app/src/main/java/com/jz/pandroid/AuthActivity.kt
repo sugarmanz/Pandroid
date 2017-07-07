@@ -22,8 +22,16 @@ import android.widget.TextView
 
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
+import android.util.Log
+import com.jz.pandroid.request.BasicCallback
+import com.jz.pandroid.request.PandoraAPI
+import com.jz.pandroid.request.buildPandoraAPI
+import com.jz.pandroid.request.model.PartnerLoginRequest
+import com.jz.pandroid.request.model.ResponseModel
+import com.jz.pandroid.request.model.UserLoginRequest
 
 import kotlinx.android.synthetic.main.activity_auth.*
+import retrofit2.Call
 
 /**
  * A login screen that offers login via email/password.
@@ -33,6 +41,8 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private var mAuthTask: UserLoginTask? = null
+    var userLoginCall: Call<ResponseModel>? = null
+    val TAG = "AuthActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -233,8 +243,38 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             // TODO: attempt authentication against a network service.
 
             try {
-                // Simulate network access.
-                Thread.sleep(2000)
+                val pandoraAPI = buildPandoraAPI().create(PandoraAPI::class.java)
+                val requestModel = UserLoginRequest(mEmail, mPassword, "VAI+vKUfyXtPd8BL/jyjPPu5E0syCJU7by", "")
+                userLoginCall = pandoraAPI.attemptPOST("auth.userLogin", requestModel = requestModel)
+
+                Log.i(TAG, "Making Call")
+                userLoginCall?.enqueue(object : BasicCallback<ResponseModel>() {
+                    override fun handleSuccess(responseModel: ResponseModel) {
+                        if (responseModel.isOk) {
+                            Log.i(TAG, "Handling success")
+                        } else {
+                            handleCommonError()
+                        }
+                    }
+
+                    override fun handleConnectionError() {
+                        Log.e(TAG, "Connection Error")
+                    }
+
+                    override fun handleStatusError(responseCode: Int) {
+                        Log.e(TAG, responseCode.toString())
+                    }
+
+                    override fun handleCommonError() {
+                        Log.e(TAG, "Common Error")
+                    }
+
+                    override fun onFinish() {
+                        Log.i(TAG, "Call finished")
+                        userLoginCall = null
+                    }
+
+                })
             } catch (e: InterruptedException) {
                 return false
             }
