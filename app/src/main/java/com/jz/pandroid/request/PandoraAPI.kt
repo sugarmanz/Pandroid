@@ -2,6 +2,7 @@ package com.jz.pandroid.request
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.jz.pandroid.request.crypt.BlowFish
 import com.jz.pandroid.request.crypt.EncryptionSerializer
 import com.jz.pandroid.request.model.EncryptedRequest
 import com.jz.pandroid.request.model.PartnerLoginRequest

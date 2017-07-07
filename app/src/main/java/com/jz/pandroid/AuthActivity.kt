@@ -248,6 +248,7 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 userLoginCall = pandoraAPI.attemptPOST("auth.userLogin", requestModel = requestModel)
 
                 Log.i(TAG, "Making Call")
+                Log.i(TAG, Preferences.syncTime)
                 userLoginCall?.enqueue(object : BasicCallback<ResponseModel>() {
                     override fun handleSuccess(responseModel: ResponseModel) {
                         if (responseModel.isOk) {
