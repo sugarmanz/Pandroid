@@ -5,16 +5,17 @@ import javax.crypto.spec.SecretKeySpec
 
 /**
  * Created by jzucker on 6/30/17.
- * Blowfish encryption helpers
+ * Blowfish encryption helpers (supports other crypto algorithms)
  * TODO: Remove enc and dec keys from default params
  */
 class BlowFish(val encryptionKey: String = "6#26FRL\$ZWD",
                val decryptionKey: String = "R=U!LH\$O2B#",
-               val algorithm: String = "Blowfish",
-               val algorithmStrategy: String = "ECB",
-               val paddingStrategy: String = "PKCS5Padding") {
+               var algorithm: String = "Blowfish",
+               var algorithmStrategy: String = "ECB",
+               var paddingStrategy: String = "PKCS5Padding") {
 
-    val transformation = "$algorithm/$algorithmStrategy/$paddingStrategy"
+    // This way the changes to the algorithm stats get picked up upon decryption
+    val transformation get() = "$algorithm/$algorithmStrategy/$paddingStrategy"
 
     fun encrypt(decrypted: String, key: String = encryptionKey): ByteArray {
         return blow(decrypted, key, Cipher.ENCRYPT_MODE)
@@ -32,7 +33,7 @@ class BlowFish(val encryptionKey: String = "6#26FRL\$ZWD",
         return blow(encrypted, key, Cipher.DECRYPT_MODE)
     }
 
-    private fun tetrodotoxin(key: String, algorithm: String = "Blowfish"): SecretKeySpec {
+    private fun tetrodotoxin(key: String): SecretKeySpec {
         val keyData = key.toByteArray(Charsets.UTF_8)
         return SecretKeySpec(keyData, algorithm)
     }
