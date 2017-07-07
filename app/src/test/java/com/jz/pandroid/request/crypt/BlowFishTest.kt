@@ -9,18 +9,13 @@ class BlowFishTest {
     @Throws(Exception::class)
     fun blowSoHard() {
         val value = "I am a test value!"
+        val key = "assodijlfk"
+        val fugu = BlowFish(key, key)
 
-        // Test encryption key
-        val encrypted = encrypt(value, EKEY)
-        val decrypted = decrypt(encrypted, EKEY)
+        val encrypted = fugu.encrypt(value)
+        val decrypted = fugu.decrypt(encrypted)
 
         Assert.assertEquals(value, String(decrypted, Charsets.UTF_8))
-
-        // Test decryption key
-        val encrypted2 = encrypt(value, DKEY)
-        val decrypted2 = decrypt(encrypted2, DKEY)
-
-        Assert.assertEquals(value, String(decrypted2, Charsets.UTF_8))
     }
 
 }
