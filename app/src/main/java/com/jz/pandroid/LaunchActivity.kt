@@ -24,12 +24,27 @@ class LaunchActivity : AppCompatActivity() {
         doPartnerLogin()
     }
 
+    fun decryptSyncTime(raw: String): String {
+        val fugu = BlowFish()
+        val decoded = fugu.hexStringToByteArray(raw)
+        var decrypted = fugu.decrypt(decoded)
+
+        decrypted = decrypted.copyOfRange(4, decrypted.size)
+
+        return String(decrypted, Charsets.UTF_8)
+    }
+
     fun doPartnerLogin() {
         if (partnerLoginCall == null) {
             Log.i(TAG, "Creating Call")
             val pandoraAPI = buildPandoraAPI().create(PandoraAPI::class.java)
-            val requestModel = PartnerLoginRequest("android", "AC7IBG09A3DTSYM4R41UJWL07VLN8JI7", "android-generic", "5")
-            partnerLoginCall = pandoraAPI.attemptPOST("auth.partnerLogin", requestModel = requestModel)
+            val requestModel = PartnerLoginRequest(
+                    PartnerLogin.partnerUsername,
+                    PartnerLogin.partnerPassword,
+                    PartnerLogin.deviceType,
+                    PartnerLogin.version
+            )
+            partnerLoginCall = pandoraAPI.attemptPOST(PartnerLogin.methodName, requestModel = requestModel)
 
             Log.i(TAG, "Making Call")
             partnerLoginCall?.enqueue(object : BasicCallback<ResponseModel>() {
@@ -37,12 +52,7 @@ class LaunchActivity : AppCompatActivity() {
                     if (responseModel.isOk) {
                         Log.i(TAG, "Handling success")
 
-                        val fugu = BlowFish()
-                        val decoded = fugu.hexStringToByteArray(responseModel.result["syncTime"].toString())
-                        var decrypted = fugu.decrypt(decoded)
-
-                        decrypted = decrypted.copyOfRange(4, decrypted.size)
-                        Log.i(TAG, String(decrypted))
+                        Preferences.syncTime = decryptSyncTime(responseModel.result["syncTime"].toString())
                         goToMain()
                     } else {
                         handleCommonError()
