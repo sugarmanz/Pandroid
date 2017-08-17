@@ -26,9 +26,8 @@ import android.util.Log
 import com.jz.pandroid.request.BasicCallback
 import com.jz.pandroid.request.PandoraAPI
 import com.jz.pandroid.request.buildPandoraAPI
-import com.jz.pandroid.request.model.PartnerLoginRequest
 import com.jz.pandroid.request.model.ResponseModel
-import com.jz.pandroid.request.model.UserLoginRequest
+import com.jz.pandroid.request.model.UserLogin
 
 import kotlinx.android.synthetic.main.activity_auth.*
 import retrofit2.Call
@@ -244,8 +243,8 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
             try {
                 val pandoraAPI = buildPandoraAPI().create(PandoraAPI::class.java)
-                val requestModel = UserLoginRequest(mEmail, mPassword, "VAI+vKUfyXtPd8BL/jyjPPu5E0syCJU7by", "")
-                userLoginCall = pandoraAPI.attemptPOST("auth.userLogin", requestModel = requestModel)
+                val requestModel = UserLogin.RequestBody(mEmail, mPassword, "VAI+vKUfyXtPd8BL/jyjPPu5E0syCJU7by", "")
+                userLoginCall = pandoraAPI.attemptPOST(UserLogin.methodName, requestModel = requestModel)
 
                 Log.i(TAG, "Making Call")
                 Log.i(TAG, Preferences.syncTime)
