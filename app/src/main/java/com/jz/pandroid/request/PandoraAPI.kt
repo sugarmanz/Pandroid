@@ -23,10 +23,10 @@ interface PandoraAPI {
     fun attemptConnection(): Call<ResponseModel>
 
     @POST("./")
-    fun attemptPOST(@Query(value="method", encoded=true) method: String = "",
-                    @Query(value="partner_id", encoded=true) partnerId: String = "",
-                    @Query(value="auth_token", encoded=true) authToken: String = "",
-                    @Query(value="user_id", encoded=true) userId: String = "",
+    fun attemptPOST(@Query(value="method", encoded=true) method: String? = null,
+                    @Query(value="partner_id", encoded=true) partnerId: String? = null,
+                    @Query(value="auth_token", encoded=true) authToken: String? = null,
+                    @Query(value="user_id", encoded=true) userId: String? = null,
                     @Header(value=EncryptionInterceptor.ENC_HEADER_TAG) encrypted: Boolean = true,
                     @Body requestModel: MyRequestBody?): Call<ResponseModel>
 }

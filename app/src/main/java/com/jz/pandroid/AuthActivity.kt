@@ -243,8 +243,8 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
             try {
                 val pandoraAPI = buildPandoraAPI().create(PandoraAPI::class.java)
-                val requestModel = UserLogin.RequestBody(mEmail, mPassword, Preferences.partnerAuthToken!!, (Preferences.syncTimeOffset!! + (System.currentTimeMillis() / 1000L)).toString())
-                userLoginCall = pandoraAPI.attemptPOST(UserLogin.methodName, partnerId = Preferences.partnerId!!, requestModel = requestModel)
+                val requestModel = UserLogin.RequestBody(mEmail, mPassword, Preferences.partnerAuthToken!!, (Preferences.syncTimeOffset!! + (System.currentTimeMillis() / 1000L)))
+                userLoginCall = pandoraAPI.attemptPOST(UserLogin.methodName, partnerId = Preferences.partnerId!!, authToken = Preferences.partnerAuthToken!!, requestModel = requestModel)
 
                 Log.i(TAG, "Making Call")
                 Log.i(TAG, Preferences.syncTimeOffset.toString())

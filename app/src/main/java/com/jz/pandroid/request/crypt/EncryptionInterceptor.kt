@@ -28,12 +28,13 @@ class EncryptionInterceptor: Interceptor {
             val oldBodyString = buffer.readUtf8()
 
             // Perform encryption
-            val encryptedByteArray = BlowFish().encrypt(oldBodyString)
-            val encryptedString = String(encryptedByteArray, Charsets.UTF_8)
+            val blowFish = BlowFish()
+            val encryptedByteArray = blowFish.encrypt(oldBodyString)
+            val encodedString = blowFish.bytesToHex(encryptedByteArray)
 
             // Rebuild request
             val mediaType = MediaType.parse("text/plain; charset=utf-8")
-            val newRequestBody = RequestBody.create(mediaType, encryptedString)
+            val newRequestBody = RequestBody.create(mediaType, encodedString)
             request = request.newBuilder()
                     .removeHeader(EncryptionInterceptor.ENC_HEADER_TAG)
                     .header("Content-Type", newRequestBody.contentType().toString())

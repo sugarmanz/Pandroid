@@ -8,7 +8,7 @@ object UserLogin {
         val username: String,
         val password: String,
         val partnerAuthToken: String,
-        val syncTime: String,
+        val syncTime: Long,
         val loginType: String = "user"
     ) : EncryptedRequest()
 
