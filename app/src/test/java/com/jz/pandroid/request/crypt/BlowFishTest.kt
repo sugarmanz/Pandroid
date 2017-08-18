@@ -41,4 +41,9 @@ class BlowFishTest {
         Assert.assertEquals(newTransformation, fugu.transformation)
     }
 
+    @Test
+    fun testByteArrayToHexString() {
+        val bytes = byteArrayOf(-1, 0, 1, 2, 3)
+        Assert.assertEquals(BlowFish().bytesToHex(bytes), "ff00010203")
+    }
 }

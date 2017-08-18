@@ -65,11 +65,16 @@ class BlowFish(val encryptionKey: String = "6#26FRL\$ZWD",
         return data
     }
 
-    fun bytesToHex(array: ByteArray): String {
-        val builder = StringBuilder()
-        for (b in array) {
-            builder.append(String.format("%02x", b))
+    // Credit where credit is due
+    // https://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
+    private val hexArray = "0123456789abcdef".toCharArray()
+    fun bytesToHex(bytes: ByteArray): String {
+        val hexChars = CharArray(bytes.size * 2)
+        for (j in bytes.indices) {
+            val v = bytes[j].toInt() and 0xFF
+            hexChars[j * 2] = hexArray[v.ushr(4)]
+            hexChars[j * 2 + 1] = hexArray[v and 0x0F]
         }
-        return builder.toString()
+        return String(hexChars)
     }
 }
