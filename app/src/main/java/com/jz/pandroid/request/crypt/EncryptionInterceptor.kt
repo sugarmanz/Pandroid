@@ -31,7 +31,7 @@ class EncryptionInterceptor: Interceptor {
             val encryptedByteArray = BlowFish().encrypt(oldBodyString)
             val encryptedString = String(encryptedByteArray, Charsets.UTF_8)
 
-            // Rebuild request TODO: It's possible that the mediatype should be application/json
+            // Rebuild request
             val mediaType = MediaType.parse("text/plain; charset=utf-8")
             val newRequestBody = RequestBody.create(mediaType, encryptedString)
             request = request.newBuilder()
