@@ -243,11 +243,11 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
             try {
                 val pandoraAPI = buildPandoraAPI().create(PandoraAPI::class.java)
-                val requestModel = UserLogin.RequestBody(mEmail, mPassword, "VAI+vKUfyXtPd8BL/jyjPPu5E0syCJU7by", "")
-                userLoginCall = pandoraAPI.attemptPOST(UserLogin.methodName, requestModel = requestModel)
+                val requestModel = UserLogin.RequestBody(mEmail, mPassword, Preferences.partnerAuthToken!!, (Preferences.syncTimeOffset!! + (System.currentTimeMillis() / 1000L)).toString())
+                userLoginCall = pandoraAPI.attemptPOST(UserLogin.methodName, partnerId = Preferences.partnerId!!, requestModel = requestModel)
 
                 Log.i(TAG, "Making Call")
-                Log.i(TAG, Preferences.syncTime)
+                Log.i(TAG, Preferences.syncTimeOffset.toString())
                 userLoginCall?.enqueue(object : BasicCallback<ResponseModel>() {
                     override fun handleSuccess(responseModel: ResponseModel) {
                         if (responseModel.isOk) {

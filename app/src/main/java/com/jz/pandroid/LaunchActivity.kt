@@ -38,15 +38,17 @@ class LaunchActivity : AppCompatActivity() {
         if (partnerLoginCall == null) {
             Log.i(TAG, "Creating Call")
             val pandoraAPI = buildPandoraAPI().create(PandoraAPI::class.java)
-            partnerLoginCall = pandoraAPI.attemptPOST(PartnerLogin.methodName, requestModel = PartnerLogin.getRequestBody())
+            partnerLoginCall = pandoraAPI.attemptPOST(PartnerLogin.methodName, encrypted = false, requestModel = PartnerLogin.getRequestBody())
 
             Log.i(TAG, "Making Call")
             partnerLoginCall?.enqueue(object : BasicCallback<ResponseModel>() {
                 override fun handleSuccess(responseModel: ResponseModel) {
                     if (responseModel.isOk) {
                         Log.i(TAG, "Handling success")
-
-                        Preferences.syncTime = decryptSyncTime(responseModel.result["syncTime"].toString())
+                        // Following Pithos impl. Differs from docs.
+                        Preferences.syncTimeOffset = decryptSyncTime(responseModel.result["syncTime"].toString()).toLong() - (System.currentTimeMillis() / 1000L)
+                        Preferences.partnerId = responseModel.result["partnerId"].toString()
+                        Preferences.partnerAuthToken = responseModel.result["partnerAuthToken"].toString()
                         goToMain()
                     } else {
                         handleCommonError()

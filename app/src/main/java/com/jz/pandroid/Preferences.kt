@@ -8,5 +8,7 @@ import com.marcinmoskala.kotlinpreferences.PreferenceHolder
  */
 
 object Preferences : PreferenceHolder() {
-    var syncTime: String? by bindToPreferenceFieldNullable()
+    var syncTimeOffset: Long? by bindToPreferenceFieldNullable()
+    var partnerId: String? by bindToPreferenceFieldNullable()
+    var partnerAuthToken: String? by bindToPreferenceFieldNullable()
 }
