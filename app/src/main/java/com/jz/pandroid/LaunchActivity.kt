@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.content.Intent
 import android.util.Log
 import com.jz.pandroid.request.BasicCallback
-import com.jz.pandroid.request.PandoraAPI
-import com.jz.pandroid.request.buildPandoraAPI
-import com.jz.pandroid.request.crypt.BlowFish
-import com.jz.pandroid.request.model.PartnerLogin
+import com.jz.pandroid.request.Pandora
+import com.jz.pandroid.crypt.BlowFish
+import com.jz.pandroid.request.method.PartnerLogin
 import com.jz.pandroid.request.model.ResponseModel
+import com.jz.pandroid.util.hexStringToByteArray
 import retrofit2.Call
 
 
@@ -26,7 +26,7 @@ class LaunchActivity : AppCompatActivity() {
 
     fun decryptSyncTime(raw: String): String {
         val fugu = BlowFish()
-        val decoded = fugu.hexStringToByteArray(raw)
+        val decoded = raw.hexStringToByteArray()
         var decrypted = fugu.decrypt(decoded)
 
         decrypted = decrypted.copyOfRange(4, decrypted.size)
@@ -37,7 +37,7 @@ class LaunchActivity : AppCompatActivity() {
     fun doPartnerLogin() {
         if (partnerLoginCall == null) {
             Log.i(TAG, "Creating Call")
-            val pandoraAPI = buildPandoraAPI().create(PandoraAPI::class.java)
+            val pandoraAPI = Pandora().API
             partnerLoginCall = pandoraAPI.attemptPOST(PartnerLogin.methodName, encrypted = false, requestModel = PartnerLogin.getRequestBody())
 
             Log.i(TAG, "Making Call")

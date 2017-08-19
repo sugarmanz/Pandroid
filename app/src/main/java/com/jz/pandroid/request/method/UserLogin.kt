@@ -1,4 +1,4 @@
-package com.jz.pandroid.request.model
+package com.jz.pandroid.request.method
 
 /**
  * Created by jzucker on 7/2/17.
@@ -10,7 +10,7 @@ object UserLogin {
         val partnerAuthToken: String,
         val syncTime: Long,
         val loginType: String = "user"
-    ) : EncryptedRequest()
+    )
 
     val methodName: String = "auth.userLogin"
 }

@@ -24,10 +24,9 @@ import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
 import android.util.Log
 import com.jz.pandroid.request.BasicCallback
-import com.jz.pandroid.request.PandoraAPI
-import com.jz.pandroid.request.buildPandoraAPI
+import com.jz.pandroid.request.Pandora
 import com.jz.pandroid.request.model.ResponseModel
-import com.jz.pandroid.request.model.UserLogin
+import com.jz.pandroid.request.method.UserLogin
 
 import kotlinx.android.synthetic.main.activity_auth.*
 import retrofit2.Call
@@ -242,7 +241,7 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             // TODO: attempt authentication against a network service.
 
             try {
-                val pandoraAPI = buildPandoraAPI().create(PandoraAPI::class.java)
+                val pandoraAPI = Pandora().API
                 val requestModel = UserLogin.RequestBody(mEmail, mPassword, Preferences.partnerAuthToken!!, (Preferences.syncTimeOffset!! + (System.currentTimeMillis() / 1000L)))
                 userLoginCall = pandoraAPI.attemptPOST(UserLogin.methodName, partnerId = Preferences.partnerId!!, authToken = Preferences.partnerAuthToken!!, requestModel = requestModel)
 

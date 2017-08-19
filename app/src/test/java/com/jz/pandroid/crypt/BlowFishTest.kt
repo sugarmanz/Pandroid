@@ -1,5 +1,6 @@
-package com.jz.pandroid.request.crypt
+package com.jz.pandroid.crypt
 
+import com.jz.pandroid.crypt.BlowFish
 import org.junit.Assert
 import org.junit.Test
 
