@@ -238,19 +238,19 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     inner class UserLoginTask internal constructor(private val mEmail: String, private val mPassword: String) : AsyncTask<Void, Void, Boolean>() {
 
         override fun doInBackground(vararg params: Void): Boolean? {
-            // TODO: attempt authentication against a network service.
-
             try {
-                val pandoraAPI = Pandora().API
-                val requestModel = UserLogin.RequestBody(mEmail, mPassword, Preferences.partnerAuthToken!!, (Preferences.syncTimeOffset!! + (System.currentTimeMillis() / 1000L)))
-                userLoginCall = pandoraAPI.attemptPOST(UserLogin.methodName, partnerId = Preferences.partnerId!!, authToken = Preferences.partnerAuthToken!!, requestModel = requestModel)
+                // So much prettier <3
+                userLoginCall = Pandora().RequestBuilder(UserLogin.methodName)
+                        .authToken(Preferences.partnerAuthToken)
+                        .body(UserLogin.RequestBody(mEmail, mPassword))
+                        .build()
 
                 Log.i(TAG, "Making Call")
-                Log.i(TAG, Preferences.syncTimeOffset.toString())
                 userLoginCall?.enqueue(object : BasicCallback<ResponseModel>() {
                     override fun handleSuccess(responseModel: ResponseModel) {
                         if (responseModel.isOk) {
                             Log.i(TAG, "Handling success")
+                            Preferences.userId = responseModel.result["userId"] as String?
                         } else {
                             handleCommonError()
                         }

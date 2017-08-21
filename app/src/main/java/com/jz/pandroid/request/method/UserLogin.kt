@@ -1,5 +1,7 @@
 package com.jz.pandroid.request.method
 
+import com.jz.pandroid.request.model.SyncTokenRequestBody
+
 /**
  * Created by jzucker on 7/2/17.
  */
@@ -7,10 +9,8 @@ object UserLogin {
     data class RequestBody(
         val username: String,
         val password: String,
-        val partnerAuthToken: String,
-        val syncTime: Long,
         val loginType: String = "user"
-    )
+    ) : SyncTokenRequestBody(TokenType.PARTNER)
 
     val methodName: String = "auth.userLogin"
 }

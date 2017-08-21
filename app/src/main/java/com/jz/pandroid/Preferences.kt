@@ -11,4 +11,6 @@ object Preferences : PreferenceHolder() {
     var syncTimeOffset: Long? by bindToPreferenceFieldNullable()
     var partnerId: String? by bindToPreferenceFieldNullable()
     var partnerAuthToken: String? by bindToPreferenceFieldNullable()
+    var userAuthToken: String? by bindToPreferenceFieldNullable()
+    var userId: String? by bindToPreferenceFieldNullable()
 }
