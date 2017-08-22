@@ -1,10 +1,12 @@
 package com.jz.pandroid.request.method.auth
 
+import com.jz.pandroid.request.method.Method
+
 /**
  * Created by jzucker on 7/1/17.
  * https://6xq.net/pandora-apidoc/json/authentication/#partner-login
  */
-object PartnerLogin {
+object PartnerLogin: Method() {
     data class RequestBody(
             val username: String = "android",
             val password: String = "AC7IBG09A3DTSYM4R41UJWL07VLN8JI7",
@@ -14,8 +16,6 @@ object PartnerLogin {
             val returnDeviceType: Boolean? = null,
             val returnUpdatePromptVersions: Boolean? = null
     )
-
-    val methodName: String = "auth.partnerLogin"
 }
 
 // TODO: Coming in newer versions of Kotlin (might be better alternative?)

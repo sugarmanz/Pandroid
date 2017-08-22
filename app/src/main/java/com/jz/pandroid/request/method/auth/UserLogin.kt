@@ -1,12 +1,13 @@
 package com.jz.pandroid.request.method.auth
 
+import com.jz.pandroid.request.method.Method
 import com.jz.pandroid.request.model.SyncTokenRequestBody
 
 /**
  * Created by jzucker on 7/2/17.
  * https://6xq.net/pandora-apidoc/json/authentication/#user-login
  */
-object UserLogin {
+object UserLogin: Method() {
     data class RequestBody(
         val username: String,
         val password: String,
@@ -38,6 +39,4 @@ object UserLogin {
         val includeGoogleplay: Boolean? = null,
         val includeShowUserRecommendations: Boolean? = null
     ) : SyncTokenRequestBody(TokenType.PARTNER)
-
-    val methodName: String = "auth.userLogin"
 }

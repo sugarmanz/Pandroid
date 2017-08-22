@@ -13,4 +13,12 @@ object Preferences : PreferenceHolder() {
     var partnerAuthToken: String? by bindToPreferenceFieldNullable()
     var userAuthToken: String? by bindToPreferenceFieldNullable()
     var userId: String? by bindToPreferenceFieldNullable()
+
+    fun reset() {
+        syncTimeOffset = null
+        partnerId = null
+        partnerAuthToken = null
+        userAuthToken = null
+        userId = null
+    }
 }
