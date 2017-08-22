@@ -26,7 +26,7 @@ import android.util.Log
 import com.jz.pandroid.request.BasicCallback
 import com.jz.pandroid.request.Pandora
 import com.jz.pandroid.request.model.ResponseModel
-import com.jz.pandroid.request.method.UserLogin
+import com.jz.pandroid.request.method.auth.UserLogin
 
 import kotlinx.android.synthetic.main.activity_auth.*
 import retrofit2.Call

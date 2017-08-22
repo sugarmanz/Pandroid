@@ -1,4 +1,4 @@
-package com.jz.pandroid.request.method
+package com.jz.pandroid.request.method.auth
 
 import com.jz.pandroid.request.model.SyncTokenRequestBody
 

@@ -1,4 +1,4 @@
-package com.jz.pandroid.request.method
+package com.jz.pandroid.request.method.auth
 
 /**
  * Created by jzucker on 7/1/17.

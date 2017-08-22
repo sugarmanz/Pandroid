@@ -7,7 +7,7 @@ import android.util.Log
 import com.jz.pandroid.request.BasicCallback
 import com.jz.pandroid.request.Pandora
 import com.jz.pandroid.crypt.BlowFish
-import com.jz.pandroid.request.method.PartnerLogin
+import com.jz.pandroid.request.method.auth.PartnerLogin
 import com.jz.pandroid.request.model.ResponseModel
 import com.jz.pandroid.util.hexStringToByteArray
 import retrofit2.Call
