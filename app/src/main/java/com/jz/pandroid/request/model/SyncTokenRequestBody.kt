@@ -7,9 +7,10 @@ import com.jz.pandroid.Preferences
  */
 open class SyncTokenRequestBody(tokenType: TokenType = TokenType.USER) {
 
-    enum class TokenType(val token: String?) {
-        USER(Preferences.userAuthToken),
-        PARTNER(Preferences.partnerAuthToken)
+    enum class TokenType(val getToken: () -> String?) {
+        USER({ Preferences.userAuthToken }),
+        PARTNER({ Preferences.partnerAuthToken }),
+        NONE({ null })
     }
 
     val syncTime: Long = (Preferences.syncTimeOffset ?: 0L) + (System.currentTimeMillis() / 1000L)
@@ -21,10 +22,10 @@ open class SyncTokenRequestBody(tokenType: TokenType = TokenType.USER) {
     init {
         when (tokenType) {
             TokenType.USER -> {
-                userAuthToken = tokenType.token
+                userAuthToken = tokenType.getToken()
             }
             TokenType.PARTNER -> {
-                partnerAuthToken = tokenType.token
+                partnerAuthToken = tokenType.getToken()
             }
         }
     }

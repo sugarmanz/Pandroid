@@ -8,6 +8,7 @@ import com.jz.pandroid.request.BasicCallback
 import com.jz.pandroid.request.Pandora
 import com.jz.pandroid.crypt.BlowFish
 import com.jz.pandroid.request.method.auth.PartnerLogin
+import com.jz.pandroid.request.method.exp.station.GetStation
 import com.jz.pandroid.request.model.ResponseModel
 import com.jz.pandroid.util.hexStringToByteArray
 import retrofit2.Call
@@ -46,12 +47,13 @@ class LaunchActivity : AppCompatActivity() {
             Log.i(TAG, "Making Call")
             partnerLoginCall?.enqueue(object : BasicCallback<ResponseModel>() {
                 override fun handleSuccess(responseModel: ResponseModel) {
-                    if (responseModel.isOk) {
+                    val result = responseModel.getResult<PartnerLogin.ResponseBody>()
+                    if (responseModel.isOk && result != null) {
                         Log.i(TAG, "Handling success")
                         // Following Pithos impl. Differs from docs.
-                        Preferences.syncTimeOffset = decryptSyncTime(responseModel.result["syncTime"].toString()).toLong() - (System.currentTimeMillis() / 1000L)
-                        Preferences.partnerId = responseModel.result["partnerId"] as String?
-                        Preferences.partnerAuthToken = responseModel.result["partnerAuthToken"] as String?
+                        Preferences.syncTimeOffset = decryptSyncTime(result.syncTime).toLong() - (System.currentTimeMillis() / 1000L)
+                        Preferences.partnerId = result.partnerId
+                        Preferences.partnerAuthToken = result.partnerAuthToken
                         goToMain()
                     } else {
                         handleCommonError()

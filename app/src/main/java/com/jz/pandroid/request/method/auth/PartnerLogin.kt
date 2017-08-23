@@ -16,6 +16,12 @@ object PartnerLogin: Method() {
             val returnDeviceType: Boolean? = null,
             val returnUpdatePromptVersions: Boolean? = null
     )
+
+    data class ResponseBody(
+            val syncTime: String,
+            val partnerId: String,
+            val partnerAuthToken: String
+    )
 }
 
 // TODO: Coming in newer versions of Kotlin (might be better alternative?)

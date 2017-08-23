@@ -248,9 +248,10 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 Log.i(TAG, "Making Call")
                 userLoginCall?.enqueue(object : BasicCallback<ResponseModel>() {
                     override fun handleSuccess(responseModel: ResponseModel) {
-                        if (responseModel.isOk) {
+                        val result = responseModel.getResult<UserLogin.ResponseBody>()
+                        if (responseModel.isOk && result != null) {
                             Log.i(TAG, "Handling success")
-                            Preferences.userId = responseModel.result["userId"] as String?
+                            Preferences.userId = result.userId
                         } else {
                             handleCommonError()
                         }

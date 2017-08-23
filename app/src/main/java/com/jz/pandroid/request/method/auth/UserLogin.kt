@@ -39,4 +39,8 @@ object UserLogin: Method() {
         val includeGoogleplay: Boolean? = null,
         val includeShowUserRecommendations: Boolean? = null
     ) : SyncTokenRequestBody(TokenType.PARTNER)
+
+    data class ResponseBody(
+            val userId: String
+    )
 }
