@@ -19,12 +19,11 @@ object PartnerLogin: Method() {
 }
 
 // TODO: Coming in newer versions of Kotlin (might be better alternative?)
-//class PartnerLogin {
+//class PartnerLogin: Method() {
 //    class object {
 //        val username = "android"
 //        val password = "AC7IBG09A3DTSYM4R41UJWL07VLN8JI7"
 //        val deviceModel = "android-generic"
 //        val version = "5"
 //    }
-//    val methodName = "auth.partnerLogin"
 //}
