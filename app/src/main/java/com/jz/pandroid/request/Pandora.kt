@@ -26,10 +26,10 @@ class Pandora {
     // Retrofit2 interface
     private interface PandoraAPI {
         @POST("./")
-        fun attemptPOST(@Query(value = "method", encoded = true) method: String,
-                        @Query(value = "partner_id", encoded = true) partnerId: String?,
-                        @Query(value = "auth_token", encoded = true) authToken: String?,
-                        @Query(value = "user_id", encoded = true) userId: String?,
+        fun attemptPOST(@Query(value = "method") method: String,
+                        @Query(value = "partner_id") partnerId: String?,
+                        @Query(value = "auth_token") authToken: String?,
+                        @Query(value = "user_id") userId: String?,
                         @Header(value = EncryptionInterceptor.ENC_HEADER_TAG) encrypted: Boolean,
                         @Body body: Any?): Call<ResponseModel>
     }
