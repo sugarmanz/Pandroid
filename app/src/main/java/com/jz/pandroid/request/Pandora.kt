@@ -2,6 +2,7 @@ package com.jz.pandroid.request
 
 import com.jz.pandroid.Preferences
 import com.jz.pandroid.crypt.http.EncryptionInterceptor
+import com.jz.pandroid.request.method.Method
 import com.jz.pandroid.request.model.*
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -19,7 +20,7 @@ class Pandora {
 
     // Create companion object to hold constants relative to this domain
     companion object {
-        private const val PANDORA_API_BASE_URL = "https://tuner.pandora.com/services/json/"
+        private const val PANDORA_API_BASE_URL = "http://tuner.pandora.com/services/json/"
     }
 
     // Retrofit2 interface
@@ -61,6 +62,13 @@ class Pandora {
         private var userId: String? = Preferences.userId
         private var encrypted: Boolean = true
         private var body: Any? = null
+
+        constructor(method: Method) : this(method.methodName)
+
+        fun method(method: Method): RequestBuilder {
+            this.method = method.methodName
+            return this
+        }
 
         fun method(method: String): RequestBuilder {
             this.method = method

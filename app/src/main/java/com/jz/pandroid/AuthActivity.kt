@@ -23,10 +23,12 @@ import android.widget.TextView
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
 import android.util.Log
+import com.jz.pandroid.play.Play
 import com.jz.pandroid.request.BasicCallback
 import com.jz.pandroid.request.Pandora
 import com.jz.pandroid.request.model.ResponseModel
 import com.jz.pandroid.request.method.auth.UserLogin
+import com.jz.pandroid.request.method.exp.user.GetStationList
 
 import kotlinx.android.synthetic.main.activity_auth.*
 import retrofit2.Call
@@ -135,7 +137,7 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             cancel = true
         }
 
-        if (cancel) {
+        if (cancel || userLoginCall != null) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView?.requestFocus()
@@ -143,9 +145,61 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true)
-            mAuthTask = UserLoginTask(emailStr, passwordStr)
-            mAuthTask!!.execute(null as Void?)
+            // So much prettier <3
+            userLoginCall = Pandora().RequestBuilder(UserLogin.methodName)
+                    .authToken(Preferences.partnerAuthToken)
+                    .body(UserLogin.RequestBody(emailStr, passwordStr))
+                    .build()
+
+            Log.i(TAG, "Making Call")
+            userLoginCall?.enqueue(object : BasicCallback<ResponseModel>() {
+                override fun handleSuccess(responseModel: ResponseModel) {
+                    val result = responseModel.getResult<UserLogin.ResponseBody>()
+                    if (responseModel.isOk && result != null) {
+                        Log.i(TAG, "Handling success")
+                        Preferences.userId = result.userId
+                        Preferences.userAuthToken = result.userAuthToken
+                        password.error = "Login success!"
+                        password.requestFocus()
+
+                        Play().getStationList(GetStationList.RequestBody()) {
+                            Log.i(TAG, it.stations.map { it.stationName }.toString())
+                        }
+                    } else {
+                        handleCommonError()
+                    }
+                }
+
+                override fun handleConnectionError() {
+                    Log.e(TAG, "Connection Error")
+                    password.error = "Connection Error!"
+                    password.requestFocus()
+                }
+
+                override fun handleStatusError(responseCode: Int) {
+                    Log.e(TAG, responseCode.toString())
+                    password.error = "Status Error!"
+                    password.requestFocus()
+                }
+
+                override fun handleCommonError() {
+                    Log.e(TAG, "Common Error")
+                    password.error = getString(R.string.error_incorrect_password)
+                    password.requestFocus()
+                }
+
+                override fun onFinish() {
+                    Log.i(TAG, "Call finished")
+                    userLoginCall = null
+                    showProgress(false)
+                }
+
+            })
         }
+    }
+
+    private fun printStationList(stationList: GetStationList.ResponseBody) {
+        Log.i(TAG, stationList.stations.toString())
     }
 
     private fun isEmailValid(email: String): Boolean {
@@ -155,7 +209,7 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
     private fun isPasswordValid(password: String): Boolean {
         //TODO: Replace this with your own logic
-        return password.length > 4
+        return password.isNotEmpty()
     }
 
     /**
@@ -235,58 +289,11 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    inner class UserLoginTask internal constructor(private val mEmail: String, private val mPassword: String) : AsyncTask<Void, Void, Boolean>() {
+    inner class UserLoginTask internal constructor() : AsyncTask<Void, Void, Boolean>() {
 
         override fun doInBackground(vararg params: Void): Boolean? {
-            try {
-                // So much prettier <3
-                userLoginCall = Pandora().RequestBuilder(UserLogin.methodName)
-                        .authToken(Preferences.partnerAuthToken)
-                        .body(UserLogin.RequestBody(mEmail, mPassword))
-                        .build()
-
-                Log.i(TAG, "Making Call")
-                userLoginCall?.enqueue(object : BasicCallback<ResponseModel>() {
-                    override fun handleSuccess(responseModel: ResponseModel) {
-                        val result = responseModel.getResult<UserLogin.ResponseBody>()
-                        if (responseModel.isOk && result != null) {
-                            Log.i(TAG, "Handling success")
-                            Preferences.userId = result.userId
-                        } else {
-                            handleCommonError()
-                        }
-                    }
-
-                    override fun handleConnectionError() {
-                        Log.e(TAG, "Connection Error")
-                    }
-
-                    override fun handleStatusError(responseCode: Int) {
-                        Log.e(TAG, responseCode.toString())
-                    }
-
-                    override fun handleCommonError() {
-                        Log.e(TAG, "Common Error")
-                    }
-
-                    override fun onFinish() {
-                        Log.i(TAG, "Call finished")
-                        userLoginCall = null
-                    }
-
-                })
-            } catch (e: InterruptedException) {
-                return false
-            }
-
-            return DUMMY_CREDENTIALS
-                    .map { it.split(":") }
-                    .firstOrNull { it[0] == mEmail }
-                    ?.let {
-                        // Account exists, return true if the password matches.
-                        it[1] == mPassword
-                    }
-                    ?: true
+            // Should Check if logged in
+            return false
         }
 
         override fun onPostExecute(success: Boolean?) {
@@ -313,11 +320,5 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
          * Id to identity READ_CONTACTS permission request.
          */
         private val REQUEST_READ_CONTACTS = 0
-
-        /**
-         * A dummy authentication store containing known user names and passwords.
-         * TODO: remove after connecting to a real authentication system.
-         */
-        private val DUMMY_CREDENTIALS = arrayOf("foo@example.com:hello", "bar@example.com:world")
     }
 }

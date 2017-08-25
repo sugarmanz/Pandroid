@@ -10,13 +10,13 @@ import com.jz.pandroid.request.model.SyncTokenRequestBody
  */
 object GetStationList: Method() {
     data class RequestBody(
-            val includeStationArtUrl: Boolean?,
-            val stationArtSize: String?,
-            val includeAdAttributes: Boolean?,
-            val includeStationSeeds: Boolean?,
-            val includeShuffleInsteadOfQuickMix: Boolean?,
-            val includeRecommendations: Boolean?,
-            val includeExplanations: Boolean?
+            val includeStationArtUrl: Boolean? = null,
+            val stationArtSize: String? = null,
+            val includeAdAttributes: Boolean? = null,
+            val includeStationSeeds: Boolean? = null,
+            val includeShuffleInsteadOfQuickMix: Boolean? = null,
+            val includeRecommendations: Boolean? = null,
+            val includeExplanations: Boolean? = null
     ) : SyncTokenRequestBody(TokenType.USER)
 
     data class ResponseBody(
