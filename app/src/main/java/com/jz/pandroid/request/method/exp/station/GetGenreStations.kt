@@ -10,7 +10,7 @@ import com.jz.pandroid.request.model.*
 object GetGenreStations: Method() {
 
     // TODO: Compare implementations
-    class RequestBodyClass() : SyncTokenRequestBody(TokenType.USER)
+    class RequestBodyClass : SyncTokenRequestBody(TokenType.USER)
     // vs.
     fun RequestBodyFunction() = SyncTokenRequestBody(SyncTokenRequestBody.TokenType.USER)
     // Function vs. Class

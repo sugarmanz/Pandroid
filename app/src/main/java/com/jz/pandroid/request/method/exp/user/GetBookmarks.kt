@@ -1,6 +1,8 @@
 package com.jz.pandroid.request.method.exp.user
 
 import com.jz.pandroid.request.method.Method
+import com.jz.pandroid.request.model.ArtistBookmarkModel
+import com.jz.pandroid.request.model.SongBookmarkModel
 import com.jz.pandroid.request.model.SyncTokenRequestBody
 
 /**
@@ -9,4 +11,9 @@ import com.jz.pandroid.request.model.SyncTokenRequestBody
  */
 object GetBookmarks: Method() {
     fun RequestBody() = SyncTokenRequestBody(SyncTokenRequestBody.TokenType.USER)
+
+    data class ResponseBody(
+            val artists: List<ArtistBookmarkModel>,
+            val songs: List<SongBookmarkModel>
+    )
 }
