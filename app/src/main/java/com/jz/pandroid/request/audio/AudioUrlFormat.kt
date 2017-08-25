@@ -15,8 +15,8 @@ enum class AudioUrlFormat {
     HTTP_32_WMA;
 
     companion object {
-        fun buildAudioUrlString(audioUrls: List<AudioUrlFormat>): String {
-            return audioUrls.joinToString(",") { it.name }
+        fun buildAudioUrlString(audioUrls: List<AudioUrlFormat>?): String? {
+            return audioUrls?.joinToString(",") { it.name }
         }
     }
 }

@@ -29,9 +29,7 @@ object GetPlaylist: Method() {
             val includeTrackOptions: Boolean? = null,
             val audioAdPodCapable: Boolean? = null
     ) : SyncTokenRequestBody(TokenType.USER) {
-        val additionalAudioUrl: String? = if (additionalAudioUrlList != null) {
-                AudioUrlFormat.buildAudioUrlString(additionalAudioUrlList)
-        } else null
+        val additionalAudioUrl: String? = AudioUrlFormat.buildAudioUrlString(additionalAudioUrlList)
     }
 
     data class ResponseBody(
