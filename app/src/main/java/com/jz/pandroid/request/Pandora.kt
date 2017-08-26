@@ -16,12 +16,23 @@ import retrofit2.http.*
  * Created by jzucker on 6/30/17.
  * https://tuner.pandora.com/services/json/
  */
-class Pandora {
+class Pandora(protocol: Protocol = Protocol.HTTPS) {
+
+    enum class Protocol {
+        HTTP,
+        HTTPS;
+
+        fun getProtocolString(): String {
+            return name.toLowerCase() + "://"
+        }
+    }
 
     // Create companion object to hold constants relative to this domain
     companion object {
-        private const val PANDORA_API_BASE_URL = "http://tuner.pandora.com/services/json/"
+        private const val PANDORA_API_BASE_URI = "tuner.pandora.com/services/json/"
     }
+
+    private val PANDORA_API_BASE_URL = protocol.getProtocolString() + PANDORA_API_BASE_URI
 
     // Retrofit2 interface
     private interface PandoraAPI {

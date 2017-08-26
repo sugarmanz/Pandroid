@@ -22,12 +22,16 @@ import android.widget.TextView
 
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
+import android.content.Context
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.util.Log
 import com.jz.pandroid.play.Play
 import com.jz.pandroid.request.BasicCallback
 import com.jz.pandroid.request.Pandora
 import com.jz.pandroid.request.model.ResponseModel
 import com.jz.pandroid.request.method.auth.UserLogin
+import com.jz.pandroid.request.method.exp.station.GetPlaylist
 import com.jz.pandroid.request.method.exp.user.GetStationList
 
 import kotlinx.android.synthetic.main.activity_auth.*
@@ -164,6 +168,10 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
                         Play().getStationList(GetStationList.RequestBody()) {
                             Log.i(TAG, it.stations.map { it.stationName }.toString())
+                            Play().getPlaylist(GetPlaylist.RequestBody(it.stations.last().stationToken)) {
+                                Log.i(TAG, it.items.map { it.songName }.toString())
+                                playSong(it.items.first().audioUrlMap?.highQuality?.audioUrl ?: "")
+                            }
                         }
                     } else {
                         handleCommonError()
@@ -196,6 +204,19 @@ class AuthActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
             })
         }
+    }
+
+    private fun playSong(song: String) {
+        val mp = MediaPlayer()
+        mp.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        mp.setDataSource(song)
+        mp.setOnCompletionListener {
+            Log.i(TAG, "Done w/ mp")
+            mp.stop()
+            mp.reset()
+        }
+        mp.prepare()
+        mp.start()
     }
 
     private fun printStationList(stationList: GetStationList.ResponseBody) {
