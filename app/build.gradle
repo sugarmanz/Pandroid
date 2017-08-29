@@ -8,7 +8,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
-        applicationId "com.jz.pandroid"
+        applicationId "com.jeremiahzucker.pandroid"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1

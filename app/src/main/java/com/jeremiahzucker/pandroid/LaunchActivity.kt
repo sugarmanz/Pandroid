@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.util.Log
+import com.jeremiahzucker.pandroid.auth.AuthActivity
 import com.jeremiahzucker.pandroid.request.BasicCallback
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.crypt.BlowFish

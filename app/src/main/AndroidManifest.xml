@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.jeremiahzucker.pandroid.PandroidApplication"
+        android:name=".PandroidApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,10 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.jeremiahzucker.pandroid.AuthActivity"
-            android:label="@string/app_name"/>
+            android:name=".auth.AuthActivity"
+            android:label="@string/app_name" />
         <activity
-            android:name="com.jeremiahzucker.pandroid.LaunchActivity"
+            android:name=".LaunchActivity"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
