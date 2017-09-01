@@ -4,6 +4,7 @@ import com.jeremiahzucker.pandroid.Preferences
 import com.jeremiahzucker.pandroid.crypt.http.EncryptionInterceptor
 import com.jeremiahzucker.pandroid.request.method.Method
 import com.jeremiahzucker.pandroid.request.model.*
+import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -43,6 +44,14 @@ class Pandora(protocol: Protocol = Protocol.HTTPS) {
                         @Query(value = "user_id") userId: String?,
                         @Header(value = EncryptionInterceptor.ENC_HEADER_TAG) encrypted: Boolean,
                         @Body body: Any?): Call<ResponseModel>
+
+        fun attemptObservable(
+                @Query(value = "method") method: String,
+                @Query(value = "partner_id") partnerId: String?,
+                @Query(value = "auth_token") authToken: String?,
+                @Query(value = "user_id") userId: String?,
+                @Header(value = EncryptionInterceptor.ENC_HEADER_TAG) encrypted: Boolean,
+                @Body body: Any?): Observable<ResponseModel>
     }
 
     private val API: PandoraAPI by lazy {
@@ -118,6 +127,15 @@ class Pandora(protocol: Protocol = Protocol.HTTPS) {
             userId = userId,
             encrypted = encrypted,
             body = body
+        )
+
+        fun buildObservable(): Observable<ResponseModel> = API.attemptObservable(
+                method = method,
+                partnerId = partnerId,
+                authToken = authToken,
+                userId = userId,
+                encrypted = encrypted,
+                body = body
         )
     }
 
