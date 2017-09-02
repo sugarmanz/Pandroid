@@ -6,6 +6,8 @@ import com.jeremiahzucker.pandroid.request.BasicCallback
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.request.method.auth.UserLogin
 import com.jeremiahzucker.pandroid.request.model.ResponseModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 
 
@@ -37,6 +39,19 @@ class AuthPresenter : AuthContract.Presenter {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    fun handleSuccess(result: UserLogin.ResponseBody) {
+        Log.i(TAG, "Handling success")
+        // TODO: Pass to model? Maybe?
+        Preferences.userId = result.userId
+        Preferences.userAuthToken = result.userAuthToken
+
+        view?.showMain()
+    }
+
+    fun handleCommonError(throwable: Throwable? = null) {
+        // Oh no!
+    }
+
     override fun attemptLogin(username: String?, password: String?) {
         if (view == null)
             return
@@ -58,47 +73,58 @@ class AuthPresenter : AuthContract.Presenter {
             view?.showProgress(true)
 
             // So much prettier <3 && TODO: Convert into store call
-            userLoginCall = Pandora().RequestBuilder(UserLogin.methodName)
+//            userLoginCall = Pandora().RequestBuilder(UserLogin.methodName)
+//                    .authToken(Preferences.partnerAuthToken)
+//                    .body(UserLogin.RequestBody(username, password))
+//                    .build()
+
+            val observable  = Pandora().RequestBuilder(UserLogin.methodName)
                     .authToken(Preferences.partnerAuthToken)
                     .body(UserLogin.RequestBody(username, password))
-                    .build()
+                    .buildObservable()
+
+            observable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter { it.isOk }
+                    .map { it.getResult<UserLogin.ResponseBody>() }
+                    .subscribe(this::handleSuccess, this::handleCommonError)
 
             Log.i(TAG, "Making Call")
-            userLoginCall?.enqueue(object : BasicCallback<ResponseModel>() {
-                override fun handleSuccess(responseModel: ResponseModel) {
-                    val result = responseModel.getResult<UserLogin.ResponseBody>()
-                    if (responseModel.isOk && result != null) {
-                        Log.i(TAG, "Handling success")
-                        // TODO: Pass to model? Maybe?
-                        Preferences.userId = result.userId
-                        Preferences.userAuthToken = result.userAuthToken
-
-                        view?.showMain()
-                    } else {
-                        handleCommonError()
-                    }
-                }
-
-                override fun handleConnectionError() {
-                    Log.e(TAG, "Connection Error")
-                }
-
-                override fun handleStatusError(responseCode: Int) {
-                    Log.e(TAG, "Status Error: " + responseCode.toString())
-                }
-
-                override fun handleCommonError() {
-                    Log.e(TAG, "Common Error")
-                    view?.showErrorPasswordIncorrect()
-                }
-
-                override fun onFinish() {
-                    Log.i(TAG, "Call finished")
-                    userLoginCall = null
-                    view?.showProgress(false)
-                }
-
-            })
+//            userLoginCall?.enqueue(object : BasicCallback<ResponseModel>() {
+//                override fun handleSuccess(responseModel: ResponseModel) {
+//                    val result = responseModel.getResult<UserLogin.ResponseBody>()
+//                    if (responseModel.isOk && result != null) {
+//                        Log.i(TAG, "Handling success")
+//                        // TODO: Pass to model? Maybe?
+//                        Preferences.userId = result.userId
+//                        Preferences.userAuthToken = result.userAuthToken
+//
+//                        view?.showMain()
+//                    } else {
+//                        handleCommonError()
+//                    }
+//                }
+//
+//                override fun handleConnectionError() {
+//                    Log.e(TAG, "Connection Error")
+//                }
+//
+//                override fun handleStatusError(responseCode: Int) {
+//                    Log.e(TAG, "Status Error: " + responseCode.toString())
+//                }
+//
+//                override fun handleCommonError() {
+//                    Log.e(TAG, "Common Error")
+//                    view?.showErrorPasswordIncorrect()
+//                }
+//
+//                override fun onFinish() {
+//                    Log.i(TAG, "Call finished")
+//                    userLoginCall = null
+//                    view?.showProgress(false)
+//                }
+//
+//            })
         }
     }
 
