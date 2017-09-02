@@ -58,4 +58,7 @@ dependencies {
 
     // Misc.
     implementation 'com.github.marcinmoskala:PreferenceHolder:1.4'
+
+    // Testing
+    testImplementation "org.mockito:mockito-core:2.+"
 }

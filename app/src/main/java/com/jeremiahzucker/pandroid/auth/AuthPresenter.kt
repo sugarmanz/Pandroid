@@ -31,6 +31,9 @@ class AuthPresenter : AuthContract.Presenter {
     }
 
     override fun checkAuth() {
+        if (view == null)
+            return
+
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
