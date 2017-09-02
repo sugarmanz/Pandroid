@@ -2,7 +2,6 @@ package com.jeremiahzucker.pandroid.auth
 
 import android.util.Log // TODO: Remove android class
 import com.jeremiahzucker.pandroid.Preferences
-import com.jeremiahzucker.pandroid.request.BasicCallback
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.request.method.auth.UserLogin
 import com.jeremiahzucker.pandroid.request.model.ResponseModel
@@ -39,19 +38,6 @@ class AuthPresenter : AuthContract.Presenter {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun handleSuccess(result: UserLogin.ResponseBody) {
-        Log.i(TAG, "Handling success")
-        // TODO: Pass to model? Maybe?
-        Preferences.userId = result.userId
-        Preferences.userAuthToken = result.userAuthToken
-
-        view?.showMain()
-    }
-
-    fun handleCommonError(throwable: Throwable? = null) {
-        // Oh no!
-    }
-
     override fun attemptLogin(username: String?, password: String?) {
         if (view == null)
             return
@@ -73,59 +59,33 @@ class AuthPresenter : AuthContract.Presenter {
             view?.showProgress(true)
 
             // So much prettier <3 && TODO: Convert into store call
-//            userLoginCall = Pandora().RequestBuilder(UserLogin.methodName)
-//                    .authToken(Preferences.partnerAuthToken)
-//                    .body(UserLogin.RequestBody(username, password))
-//                    .build()
-
             val observable  = Pandora().RequestBuilder(UserLogin.methodName)
                     .authToken(Preferences.partnerAuthToken)
                     .body(UserLogin.RequestBody(username, password))
                     .buildObservable()
 
+            Log.i(TAG, "Making Call")
             observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .filter { it.isOk }
                     .map { it.getResult<UserLogin.ResponseBody>() }
-                    .subscribe(this::handleSuccess, this::handleCommonError)
-
-            Log.i(TAG, "Making Call")
-//            userLoginCall?.enqueue(object : BasicCallback<ResponseModel>() {
-//                override fun handleSuccess(responseModel: ResponseModel) {
-//                    val result = responseModel.getResult<UserLogin.ResponseBody>()
-//                    if (responseModel.isOk && result != null) {
-//                        Log.i(TAG, "Handling success")
-//                        // TODO: Pass to model? Maybe?
-//                        Preferences.userId = result.userId
-//                        Preferences.userAuthToken = result.userAuthToken
-//
-//                        view?.showMain()
-//                    } else {
-//                        handleCommonError()
-//                    }
-//                }
-//
-//                override fun handleConnectionError() {
-//                    Log.e(TAG, "Connection Error")
-//                }
-//
-//                override fun handleStatusError(responseCode: Int) {
-//                    Log.e(TAG, "Status Error: " + responseCode.toString())
-//                }
-//
-//                override fun handleCommonError() {
-//                    Log.e(TAG, "Common Error")
-//                    view?.showErrorPasswordIncorrect()
-//                }
-//
-//                override fun onFinish() {
-//                    Log.i(TAG, "Call finished")
-//                    userLoginCall = null
-//                    view?.showProgress(false)
-//                }
-//
-//            })
+                    .subscribe(this::handleUserLoginSuccess, this::handleUserLoginError)
         }
+    }
+
+    private fun handleUserLoginSuccess(result: UserLogin.ResponseBody) {
+        Log.i(TAG, "Handling success")
+        Log.i(TAG, result.toString())
+        // TODO: Pass to model? Maybe?
+        Preferences.userId = result.userId
+        Preferences.userAuthToken = result.userAuthToken
+
+        view?.showMain()
+    }
+
+    private fun handleUserLoginError(throwable: Throwable? = null) {
+        // Oh no!
+        Log.e(TAG, throwable?.message ?: "Error!", throwable)
     }
 
     private fun isPasswordValid(password: String) = password.length > 4

@@ -25,7 +25,7 @@ abstract class BasicCallback<T> : Callback<T> {
 //            JimmifyApplication.showToast(genericName + " (" + response.code() + ")")
             handleStatusError(response.code())
         } else {
-            handleSuccess(response.body())
+            handleSuccess(response.body() as T)
         }
         onFinish()
     }

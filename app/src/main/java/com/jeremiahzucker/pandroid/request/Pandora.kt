@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.http.*
 
 
@@ -45,6 +46,7 @@ class Pandora(protocol: Protocol = Protocol.HTTPS) {
                         @Header(value = EncryptionInterceptor.ENC_HEADER_TAG) encrypted: Boolean,
                         @Body body: Any?): Call<ResponseModel>
 
+        @POST("./")
         fun attemptObservable(
                 @Query(value = "method") method: String,
                 @Query(value = "partner_id") partnerId: String?,
@@ -59,6 +61,7 @@ class Pandora(protocol: Protocol = Protocol.HTTPS) {
                 .baseUrl(PANDORA_API_BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
                 .create(PandoraAPI::class.java)
     }
