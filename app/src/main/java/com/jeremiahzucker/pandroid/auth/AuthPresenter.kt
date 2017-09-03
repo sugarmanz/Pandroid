@@ -19,9 +19,8 @@ import retrofit2.Call
  */
 class AuthPresenter : AuthContract.Presenter {
 
-    val TAG: String = AuthPresenter::class.java.simpleName
+    private val TAG: String = AuthPresenter::class.java.simpleName
     var view: AuthContract.View? = null
-    var userLoginCall: Call<ResponseModel>? = null
 
     override fun attach(view: AuthContract.View) {
         this.view = view

@@ -10,9 +10,17 @@ import retrofit2.Call
 /**
  * Created by Jeremiah Zucker on 8/25/2017.
  */
-class Play {
+class PlayPresenter : PlayContract.Presenter {
 
-    private val TAG = Play::class.java.simpleName
+    override fun attach(view: PlayContract.View) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun detach() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private val TAG = PlayPresenter::class.java.simpleName
 
     private var getStationListCall: Call<ResponseModel>? = null
     private var getPlaylistCall: Call<ResponseModel>? = null

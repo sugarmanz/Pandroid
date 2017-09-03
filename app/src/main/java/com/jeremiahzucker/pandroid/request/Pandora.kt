@@ -1,5 +1,6 @@
 package com.jeremiahzucker.pandroid.request
 
+import com.jeremiahzucker.pandroid.BuildConfig
 import com.jeremiahzucker.pandroid.Preferences
 import com.jeremiahzucker.pandroid.crypt.http.EncryptionInterceptor
 import com.jeremiahzucker.pandroid.request.method.Method
@@ -67,16 +68,18 @@ class Pandora(protocol: Protocol = Protocol.HTTPS) {
     }
 
     private val client: OkHttpClient by lazy {
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        val builder = OkHttpClient.Builder()
+
+        // Ensure the logging interceptor is in the chain before the encryption interceptor
+        if (BuildConfig.DEBUG) {
+            val loggingInterceptor = HttpLoggingInterceptor()
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            builder.addInterceptor(loggingInterceptor)
+        }
 
         val encryptionInterceptor = EncryptionInterceptor()
-
-        OkHttpClient.Builder()
-            // Ensure the logging interceptor is in the chain before the encryption interceptor
-            .addInterceptor(loggingInterceptor)
-            .addInterceptor(encryptionInterceptor)
-            .build()
+        builder.addInterceptor(encryptionInterceptor)
+        builder.build()
     }
 
     inner class RequestBuilder(private var method: String) {
