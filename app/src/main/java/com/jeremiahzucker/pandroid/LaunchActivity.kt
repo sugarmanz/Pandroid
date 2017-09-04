@@ -14,7 +14,7 @@ import com.jeremiahzucker.pandroid.util.hexStringToByteArray
 import retrofit2.Call
 
 
-class LaunchActivity : AppCompatActivity() {
+class LaunchActivity : BaseActivity() {
 
     val TAG = "LaunchActivity"
     var partnerLoginCall: Call<ResponseModel>? = null

@@ -17,7 +17,7 @@ import com.jeremiahzucker.pandroid.station.StationListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 
-class MainActivity : AppCompatActivity(), StationListFragment.OnListFragmentInteractionListener, PlayFragment.OnFragmentInteractionListener {
+class MainActivity : BaseActivity(), StationListFragment.OnListFragmentInteractionListener, PlayFragment.OnFragmentInteractionListener {
     override fun onFragmentInteraction(uri: Uri) {
 //        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -71,10 +71,10 @@ class MainActivity : AppCompatActivity(), StationListFragment.OnListFragmentInte
             }
         }
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+//        fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null).show()
+//        }
 
         radio_button_station_list.isChecked = true
     }

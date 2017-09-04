@@ -5,7 +5,39 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    
+    <!-- Common -->
+    <dimen name="common.divider.line">1px</dimen>
+    <dimen name="common.divider.small">4dp</dimen>
+    <dimen name="common.divider.normal">8dp</dimen>
+    <dimen name="common.divider.large">16dp</dimen>
+    <dimen name="common.divider.xlarge">24dp</dimen>
 
-    <dimen name="shape.divider.large">16dp</dimen>
-    <dimen name="shape.divider.xlarge">24dp</dimen>
+    <dimen name="common.padding.small">4dp</dimen>
+    <dimen name="common.padding.normal">8dp</dimen>
+    <dimen name="common.padding.large">16dp</dimen>
+    <dimen name="common.padding.xlarge">24dp</dimen>
+
+    <dimen name="common.margin.small">4dp</dimen>
+    <dimen name="common.margin.normal">8dp</dimen>
+    <dimen name="common.margin.large">16dp</dimen>
+    <dimen name="common.margin.xlarge">24dp</dimen>
+
+    <dimen name="common.text.list.title">14sp</dimen>
+    <dimen name="common.text.list.hint">12sp</dimen>
+    <dimen name="common.text.hint">12sp</dimen>
+
+    <dimen name="common.toolbar.paddingTop">0dp</dimen>
+
+    <dimen name="common.material.marginLeft">72dp</dimen>
+
+    <dimen name="common.list.itemHeight">54dp</dimen>
+    <dimen name="common.list.scrollbarSize">4dp</dimen>
+    
+    <!-- Play -->
+    <dimen name="play.album.size">260dp</dimen>
+    <dimen name="play.seekBar.marginTop">50dp</dimen>
+    <dimen name="play.controls.marginTop">24dp</dimen>
+    <dimen name="play.controls.marginBottom">8dp</dimen>
+
 </resources>

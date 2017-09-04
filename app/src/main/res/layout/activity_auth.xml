@@ -28,7 +28,17 @@
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_launcher"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common.list.itemHeight" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"

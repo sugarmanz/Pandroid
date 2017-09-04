@@ -4,11 +4,11 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
+import com.jeremiahzucker.pandroid.BaseActivity
 import com.jeremiahzucker.pandroid.MainActivity
 import com.jeremiahzucker.pandroid.R
 import kotlinx.android.synthetic.main.activity_auth.*
@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_auth.*
  * Date:   8/29/2017
  * Desc:   A login screen that offers login via username/password.
  */
-class AuthActivity : AppCompatActivity(), AuthContract.View {
+class AuthActivity : BaseActivity(), AuthContract.View {
 
     private val TAG: String = AuthActivity::class.java.simpleName
     private var presenter: AuthContract.Presenter = AuthPresenter() // TODO: Inject

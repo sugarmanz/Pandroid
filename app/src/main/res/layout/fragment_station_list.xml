@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     >
 
+    <View
+        android:id="@+id/divider"
+        style="@style/AppTheme.Widget.Divider.Line.Vertical"
+        />
+
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
