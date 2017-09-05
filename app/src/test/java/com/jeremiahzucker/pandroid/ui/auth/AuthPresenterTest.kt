@@ -1,7 +1,6 @@
-package com.jeremiahzucker.pandroid.auth
+package com.jeremiahzucker.pandroid.ui.auth
 
-import com.jeremiahzucker.pandroid.auth.AuthContract.*
-import org.junit.Assert
+import com.jeremiahzucker.pandroid.ui.auth.AuthContract.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.*

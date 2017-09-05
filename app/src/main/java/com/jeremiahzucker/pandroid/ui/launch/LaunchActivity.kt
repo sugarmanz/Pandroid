@@ -1,15 +1,16 @@
-package com.jeremiahzucker.pandroid
+package com.jeremiahzucker.pandroid.ui.launch
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.util.Log
-import com.jeremiahzucker.pandroid.auth.AuthActivity
+import com.jeremiahzucker.pandroid.Preferences
+import com.jeremiahzucker.pandroid.ui.auth.AuthActivity
 import com.jeremiahzucker.pandroid.request.BasicCallback
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.crypt.BlowFish
 import com.jeremiahzucker.pandroid.request.method.auth.PartnerLogin
 import com.jeremiahzucker.pandroid.request.model.ResponseModel
+import com.jeremiahzucker.pandroid.ui.base.BaseActivity
 import com.jeremiahzucker.pandroid.util.hexStringToByteArray
 import retrofit2.Call
 

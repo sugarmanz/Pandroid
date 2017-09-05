@@ -1,12 +1,8 @@
-package com.jeremiahzucker.pandroid.station
+package com.jeremiahzucker.pandroid.ui.station
 
 import android.util.Log
-import com.jeremiahzucker.pandroid.auth.AuthContract
-import com.jeremiahzucker.pandroid.request.BasicCallback
 import com.jeremiahzucker.pandroid.request.Pandora
-import com.jeremiahzucker.pandroid.request.method.auth.UserLogin
 import com.jeremiahzucker.pandroid.request.method.exp.user.GetStationList
-import com.jeremiahzucker.pandroid.request.model.ResponseModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -20,7 +16,7 @@ import io.reactivex.schedulers.Schedulers
 class StationListPresenter : StationListContract.Presenter {
 
     private val TAG: String = StationListPresenter::class.java.simpleName
-    var view: StationListContract.View? = null
+    private var view: StationListContract.View? = null
 
     override fun attach(view: StationListContract.View) {
         this.view = view
@@ -53,6 +49,11 @@ class StationListPresenter : StationListContract.Presenter {
     private fun handleGetStationListError(throwable: Throwable? = null) {
         // Oh no!
         Log.e(TAG, throwable?.message ?: "Error!", throwable)
+
+        if (view == null)
+            return
+
+        view?.showProgress(false)
     }
 
 }

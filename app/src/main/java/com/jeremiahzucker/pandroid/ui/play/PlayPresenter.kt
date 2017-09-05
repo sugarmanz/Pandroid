@@ -1,4 +1,4 @@
-package com.jeremiahzucker.pandroid.play
+package com.jeremiahzucker.pandroid.ui.play
 
 import com.jeremiahzucker.pandroid.request.BasicCallback
 import com.jeremiahzucker.pandroid.request.Pandora

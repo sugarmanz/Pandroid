@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jeremiahzucker.pandroid.LaunchActivity"
+    tools:context="com.jeremiahzucker.pandroid.ui.launch.LaunchActivity"
     android:theme="@style/AppTheme.Splash">
 
 </android.support.constraint.ConstraintLayout>

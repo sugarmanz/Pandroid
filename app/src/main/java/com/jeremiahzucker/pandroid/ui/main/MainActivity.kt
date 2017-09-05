@@ -1,29 +1,29 @@
-package com.jeremiahzucker.pandroid
+package com.jeremiahzucker.pandroid.ui.main
 
 import android.net.Uri
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.os.Bundle
 import android.support.v4.view.ViewPager
-import com.jeremiahzucker.pandroid.play.PlayFragment
+import com.jeremiahzucker.pandroid.R
+import com.jeremiahzucker.pandroid.ui.play.PlayFragment
 import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
-import com.jeremiahzucker.pandroid.settings.SettingsFragment
-import com.jeremiahzucker.pandroid.station.StationListFragment
+import com.jeremiahzucker.pandroid.ui.settings.SettingsFragment
+import com.jeremiahzucker.pandroid.ui.base.BaseActivity
+import com.jeremiahzucker.pandroid.ui.station.StationListFragment
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 
-class MainActivity : BaseActivity(), StationListFragment.OnListFragmentInteractionListener, PlayFragment.OnFragmentInteractionListener {
+class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnListFragmentInteractionListener, PlayFragment.OnFragmentInteractionListener {
     override fun onFragmentInteraction(uri: Uri) {
 //        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onListFragmentInteraction(item: ExpandedStationModel) {
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        showPlayer()
     }
 
     private val TAG: String = MainActivity::class.java.simpleName
@@ -84,6 +84,18 @@ class MainActivity : BaseActivity(), StationListFragment.OnListFragmentInteracti
         toolbar.title = adapter?.getPageTitle(position) ?: toolbar.title
     }
 
+    override fun showStationList() {
+        radio_button_station_list.isChecked = true
+    }
+
+    override fun showPlayer() {
+        radio_button_play.isChecked = true
+    }
+
+    override fun showSettings() {
+        radio_button_settings.isChecked = true
+    }
+
     inner class MainPagerAdapter(
             fm: FragmentManager,
             private val fragments: List<Fragment>,
@@ -93,4 +105,5 @@ class MainActivity : BaseActivity(), StationListFragment.OnListFragmentInteracti
         override fun getPageTitle(position: Int) = titles[position]
         override fun getCount() = titles.size
     }
+
 }

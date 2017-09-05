@@ -1,7 +1,7 @@
-package com.jeremiahzucker.pandroid.play
+package com.jeremiahzucker.pandroid.ui.play
 
-import com.jeremiahzucker.pandroid.BasePresenter
-import com.jeremiahzucker.pandroid.BaseView
+import com.jeremiahzucker.pandroid.ui.base.BasePresenter
+import com.jeremiahzucker.pandroid.ui.base.BaseView
 
 /**
  * PlayContract

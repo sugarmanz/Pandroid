@@ -1,4 +1,4 @@
-package com.jeremiahzucker.pandroid.station
+package com.jeremiahzucker.pandroid.ui.station
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter

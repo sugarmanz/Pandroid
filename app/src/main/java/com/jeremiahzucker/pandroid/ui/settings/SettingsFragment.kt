@@ -1,4 +1,4 @@
-package com.jeremiahzucker.pandroid.settings
+package com.jeremiahzucker.pandroid.ui.settings
 
 import android.os.Bundle
 import android.support.v4.app.Fragment

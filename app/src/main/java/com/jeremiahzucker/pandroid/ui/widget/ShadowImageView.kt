@@ -1,4 +1,4 @@
-package com.jeremiahzucker.pandroid.ui
+package com.jeremiahzucker.pandroid.ui.widget
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator

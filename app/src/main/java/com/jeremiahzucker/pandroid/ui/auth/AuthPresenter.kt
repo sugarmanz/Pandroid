@@ -1,13 +1,11 @@
-package com.jeremiahzucker.pandroid.auth
+package com.jeremiahzucker.pandroid.ui.auth
 
 import android.util.Log // TODO: Remove android class
 import com.jeremiahzucker.pandroid.Preferences
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.request.method.auth.UserLogin
-import com.jeremiahzucker.pandroid.request.model.ResponseModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
 
 
 /**

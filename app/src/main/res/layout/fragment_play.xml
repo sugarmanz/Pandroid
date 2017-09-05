@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:padding="@dimen/common.padding.large"
     android:gravity="center_horizontal"
-    tools:context="com.jeremiahzucker.pandroid.play.PlayFragment"
+    tools:context=".ui.play.PlayFragment"
     >
 
     <RelativeLayout
@@ -17,7 +17,7 @@
         android:layout_weight="1"
         >
 
-        <com.jeremiahzucker.pandroid.ui.ShadowImageView
+        <com.jeremiahzucker.pandroid.ui.widget.ShadowImageView
             android:id="@+id/image_view_album"
             android:layout_width="@dimen/play.album.size"
             android:layout_height="@dimen/play.album.size"

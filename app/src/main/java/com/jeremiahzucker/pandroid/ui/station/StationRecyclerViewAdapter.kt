@@ -1,4 +1,4 @@
-package com.jeremiahzucker.pandroid.station
+package com.jeremiahzucker.pandroid.ui.station
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,12 +8,11 @@ import android.widget.TextView
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
 
-import com.jeremiahzucker.pandroid.station.StationListFragment.OnListFragmentInteractionListener
+import com.jeremiahzucker.pandroid.ui.station.StationListFragment.OnListFragmentInteractionListener
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
  * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
  */
 class StationRecyclerViewAdapter(private var stations: List<ExpandedStationModel>, private val mListener: OnListFragmentInteractionListener?) : RecyclerView.Adapter<StationRecyclerViewAdapter.ViewHolder>() {
 

@@ -1,4 +1,4 @@
-package com.jeremiahzucker.pandroid.play
+package com.jeremiahzucker.pandroid.ui.play
 
 import android.content.Context
 import android.media.AudioManager
@@ -103,10 +103,7 @@ class PlayFragment : Fragment(), PlayContract.View {
     }
 
     companion object {
-        // TODO: Rename parameter arguments, choose names that match
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-        private val ARG_PARAM1 = "param1"
-        private val ARG_PARAM2 = "param2"
+        private val UPDATE_PROGRESS_INTERVAL = 1000
 
         /**
          * Use this factory method to create a new instance of
@@ -120,8 +117,8 @@ class PlayFragment : Fragment(), PlayContract.View {
         fun newInstance(param1: String, param2: String): PlayFragment {
             val fragment = PlayFragment()
             val args = Bundle()
-            args.putString(ARG_PARAM1, param1)
-            args.putString(ARG_PARAM2, param2)
+//            args.putString(ARG_PARAM1, param1)
+//            args.putString(ARG_PARAM2, param2)
             fragment.arguments = args
             return fragment
         }

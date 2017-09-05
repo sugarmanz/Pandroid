@@ -1,8 +1,9 @@
-package com.jeremiahzucker.pandroid
+package com.jeremiahzucker.pandroid.ui.base
 
 import android.graphics.PixelFormat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.util.setBackgroundGradient
 
 /**

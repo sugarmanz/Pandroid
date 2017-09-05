@@ -1,7 +1,7 @@
-package com.jeremiahzucker.pandroid.station
+package com.jeremiahzucker.pandroid.ui.station
 
-import com.jeremiahzucker.pandroid.BasePresenter
-import com.jeremiahzucker.pandroid.BaseView
+import com.jeremiahzucker.pandroid.ui.base.BasePresenter
+import com.jeremiahzucker.pandroid.ui.base.BaseView
 import com.jeremiahzucker.pandroid.request.method.exp.user.GetStationList
 import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
 

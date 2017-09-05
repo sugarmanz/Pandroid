@@ -1,4 +1,4 @@
-package com.jeremiahzucker.pandroid.auth
+package com.jeremiahzucker.pandroid.ui.auth
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -8,8 +8,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
-import com.jeremiahzucker.pandroid.BaseActivity
-import com.jeremiahzucker.pandroid.MainActivity
+import com.jeremiahzucker.pandroid.ui.base.BaseActivity
+import com.jeremiahzucker.pandroid.ui.main.MainActivity
 import com.jeremiahzucker.pandroid.R
 import kotlinx.android.synthetic.main.activity_auth.*
 

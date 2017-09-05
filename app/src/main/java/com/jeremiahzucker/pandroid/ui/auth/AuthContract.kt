@@ -1,7 +1,7 @@
-package com.jeremiahzucker.pandroid.auth
+package com.jeremiahzucker.pandroid.ui.auth
 
-import com.jeremiahzucker.pandroid.BasePresenter
-import com.jeremiahzucker.pandroid.BaseView
+import com.jeremiahzucker.pandroid.ui.base.BasePresenter
+import com.jeremiahzucker.pandroid.ui.base.BaseView
 
 /**
  * Created by Jeremiah Zucker on 8/28/2017.
