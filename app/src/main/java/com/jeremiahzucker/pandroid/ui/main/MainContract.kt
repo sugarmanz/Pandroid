@@ -15,7 +15,7 @@ interface MainContract {
     interface View : BaseView<Presenter> {
 
         fun showStationList()
-        fun showPlayer()
+        fun showPlayer(stationToken: String? = null)
         fun showSettings()
 
     }

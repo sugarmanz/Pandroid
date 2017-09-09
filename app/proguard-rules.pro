@@ -32,3 +32,6 @@
     @icepick.* <fields>;
 }
 -keepnames class * { @icepick.State *;}
+
+# Picasso
+-dontwarn com.squareup.okhttp.**

@@ -106,7 +106,7 @@ class StationListFragment : Fragment(), StationListContract.View {
 
     override fun updateStationList(stations: List<ExpandedStationModel>) {
         Log.i(TAG, "Updating station list")
-        (recycler_view_station_list.adapter as StationRecyclerViewAdapter).updateStationList(stations)
+        (recycler_view_station_list.adapter as StationListAdapter).updateStationList(stations)
     }
 
     private fun setupRecyclerView() {
@@ -117,7 +117,7 @@ class StationListFragment : Fragment(), StationListContract.View {
             recycler_view_station_list.layoutManager = GridLayoutManager(context, mColumnCount)
         }
         // TODO: Setup local persistence and initially load from local storage
-        recycler_view_station_list.adapter = StationRecyclerViewAdapter(listOf(), mListener)
+        recycler_view_station_list.adapter = StationListAdapter(context, listOf(), mListener)
     }
 
     /**

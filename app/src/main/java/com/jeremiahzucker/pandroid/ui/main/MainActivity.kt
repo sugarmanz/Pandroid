@@ -7,11 +7,15 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+import android.util.Log
 import com.jeremiahzucker.pandroid.R
+import com.jeremiahzucker.pandroid.request.method.exp.station.GetPlaylist
+import com.jeremiahzucker.pandroid.request.method.exp.user.GetStationList
 import com.jeremiahzucker.pandroid.ui.play.PlayFragment
 import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.ui.settings.SettingsFragment
 import com.jeremiahzucker.pandroid.ui.base.BaseActivity
+import com.jeremiahzucker.pandroid.ui.play.PlayPresenter
 import com.jeremiahzucker.pandroid.ui.station.StationListFragment
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,7 +27,7 @@ class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnLi
     }
 
     override fun onListFragmentInteraction(item: ExpandedStationModel) {
-        showPlayer()
+        showPlayer(item.stationId)
     }
 
     private val TAG: String = MainActivity::class.java.simpleName
@@ -88,8 +92,12 @@ class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnLi
         radio_button_station_list.isChecked = true
     }
 
-    override fun showPlayer() {
+    override fun showPlayer(stationToken: String?) {
         radio_button_play.isChecked = true
+
+        if (stationToken != null) {
+            (adapter?.getItem(1) as PlayFragment).setStation(stationToken)
+        }
     }
 
     override fun showSettings() {

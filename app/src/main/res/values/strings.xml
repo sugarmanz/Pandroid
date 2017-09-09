@@ -21,6 +21,6 @@
 
     <string name="play.default_duration">00:00</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="station_list.footer.add">Add play list</string>
+    <string name="station_list.footer.end_summary_formatter">%d play lists in total</string>
 </resources>

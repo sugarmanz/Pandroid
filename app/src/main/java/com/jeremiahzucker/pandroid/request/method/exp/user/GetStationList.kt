@@ -10,7 +10,7 @@ import com.jeremiahzucker.pandroid.request.model.SyncTokenRequestBody
  */
 object GetStationList: Method() {
     data class RequestBody(
-            val includeStationArtUrl: Boolean? = null,
+            val includeStationArtUrl: Boolean? = true,
             val stationArtSize: String? = null,
             val includeAdAttributes: Boolean? = null,
             val includeStationSeeds: Boolean? = null,

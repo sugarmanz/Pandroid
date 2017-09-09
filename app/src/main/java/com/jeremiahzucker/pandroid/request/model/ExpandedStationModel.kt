@@ -18,16 +18,17 @@ data class ExpandedStationModel(
         val allowAddMusic: Boolean,
         val quickMixStationIds: List<String>,
         val allowDelete: Boolean,
-        val allowEditDescription: Boolean
+        val allowEditDescription: Boolean,
+        val artUrl: String
 ) {
     /**
      * Prepare to play
      */
-    fun prepare(): Boolean {
-        if (songs.isEmpty()) return false
-        if (playingIndex == NO_POSITION) {
-            playingIndex = 0
-        }
-        return true
-    }
+//    fun prepare(): Boolean {
+//        if (songs.isEmpty()) return false
+//        if (playingIndex == NO_POSITION) {
+//            playingIndex = 0
+//        }
+//        return true
+//    }
 }
