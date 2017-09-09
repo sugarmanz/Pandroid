@@ -23,7 +23,7 @@
     <dimen name="common.margin.large">16dp</dimen>
     <dimen name="common.margin.xlarge">24dp</dimen>
 
-    <dimen name="common.text.list.title">14sp</dimen>
+    <dimen name="common.text.list.title">16sp</dimen>
     <dimen name="common.text.list.hint">12sp</dimen>
     <dimen name="common.text.hint">12sp</dimen>
 

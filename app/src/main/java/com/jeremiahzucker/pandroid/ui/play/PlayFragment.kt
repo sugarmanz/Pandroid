@@ -83,7 +83,8 @@ class PlayFragment : Fragment(), PlayContract.View {
                 override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                     image_view_album.cancelRotateAnimation()
                     image_view_album.setImageBitmap(bitmap?.getCroppedBitmap())
-                    image_view_album.startRotateAnimation()
+                    if (mediaPlayer.isPlaying)
+                        image_view_album.startRotateAnimation()
                 }
             })
         }
@@ -138,7 +139,7 @@ class PlayFragment : Fragment(), PlayContract.View {
 
     private fun playCurrentSong() {
         mediaPlayer.start()
-        image_view_album.startRotateAnimation()
+        image_view_album.resumeRotateAnimation()
         seekProgressHandler.post(this::updateSeekProgress)
         button_play_toggle.setImageResource(R.drawable.ic_pause)
         paused = false

@@ -17,10 +17,9 @@
     <string name="title_activity_auth">Sign in</string>
     <string name="title_activity_main">Pandroid</string>
     <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
 
     <string name="play.default_duration">00:00</string>
 
-    <string name="station_list.footer.add">Add play list</string>
-    <string name="station_list.footer.end_summary_formatter">%d play lists in total</string>
+    <string name="station_list.footer.add">Add station</string>
+    <string name="station_list.footer.end_summary_formatter">%d stations in total</string>
 </resources>

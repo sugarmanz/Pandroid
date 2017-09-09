@@ -9,7 +9,7 @@
     >
 
     <FrameLayout
-        android:id="@+id/layout_add_play_list"
+        android:id="@+id/layout_add_station"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common.list.itemHeight"
         android:background="@color/common.list.background"
@@ -48,6 +48,6 @@
 
     <TextView
         style="@style/AppTheme.TextAppearance.List.EndSummary"
-        tools:text="3 play lists in total"
+        tools:text="3 stations in total"
         />
 </LinearLayout>
