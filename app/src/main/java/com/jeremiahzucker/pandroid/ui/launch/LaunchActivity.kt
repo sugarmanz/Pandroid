@@ -40,7 +40,7 @@ class LaunchActivity : BaseActivity() {
     fun doPartnerLogin() {
         if (partnerLoginCall == null) {
             Log.i(TAG, "Creating Call")
-            partnerLoginCall = Pandora().RequestBuilder(PartnerLogin.methodName)
+            partnerLoginCall = Pandora().RequestBuilder(PartnerLogin)
                     .body(PartnerLogin.RequestBody())
                     .encrypted(false)
                     .build()

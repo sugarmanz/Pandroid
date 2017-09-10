@@ -7,7 +7,8 @@ package com.jeremiahzucker.pandroid.request.method
 abstract class Method {
 
     private val subclass get() = this::class.java
-    private val prefix get() = subclass.`package`.toString().split(".").last()
+    private val regex get() = Regex("package [a-zA-Z.]*")
+    private val prefix get() = regex.find(subclass.`package`.toString())?.value?.split(".")?.last()
     private val postfix get() = subclass.simpleName.decapitalize()
     val methodName: String get() = arrayOf(prefix, postfix).joinToString(".")
 
