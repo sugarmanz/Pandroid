@@ -1,6 +1,8 @@
 package com.jeremiahzucker.pandroid.ui.play
 
+import android.content.ComponentName
 import android.content.Context
+import android.content.ServiceConnection
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.media.AudioManager
@@ -9,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.IBinder
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,8 +19,8 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.jeremiahzucker.pandroid.R
-import com.jeremiahzucker.pandroid.request.method.exp.station.GetPlaylist
-import com.jeremiahzucker.pandroid.request.method.exp.user.GetStationList
+import com.jeremiahzucker.pandroid.player.PlayerInterface
+import com.jeremiahzucker.pandroid.player.PlayerService
 import com.jeremiahzucker.pandroid.request.model.TrackModel
 import com.jeremiahzucker.pandroid.ui.main.MainActivity
 import com.jeremiahzucker.pandroid.util.formatDuration
@@ -34,7 +37,7 @@ import kotlinx.android.synthetic.main.fragment_play.*
  * Use the [PlayFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class PlayFragment : Fragment(), PlayContract.View {
+class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
 
     private val seekProgressHandler = Handler()
     private val mediaPlayer = MediaPlayer()
@@ -42,6 +45,17 @@ class PlayFragment : Fragment(), PlayContract.View {
     private var station: String? = null
     private var songs: List<TrackModel> = ArrayList(0)
     private var currentSong: TrackModel? = null
+    private var player: PlayerInterface? = null
+
+    override fun onPlaybackServiceBound(service: PlayerService) {
+        player = service
+        player?.registerCallback(this)
+    }
+
+    override fun onPlaybackServiceUnbound() {
+        player?.unregisterCallback(this)
+        player = null
+    }
 
     override fun updateSeekProgress() {
         if (isDetached) return
@@ -113,10 +127,11 @@ class PlayFragment : Fragment(), PlayContract.View {
     }
 
     fun getMoreSongs() {
-        PlayPresenter().getPlaylist(GetPlaylist.RequestBody(station ?: "")) {
-            Log.i(TAG, it.items.map { it.songName }.toString())
-            playSongs(it.items.filter { it.trackToken != null })
-        }
+        PlayPresenter().loadPlaylist(station ?: "")
+//        {
+//            Log.i(TAG, it.items.map { it.songName }.toString())
+//            playSongs(it.items.filter { it.trackToken != null })
+//        }
     }
 
     fun playNextSong() {

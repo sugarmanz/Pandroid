@@ -1,5 +1,6 @@
 package com.jeremiahzucker.pandroid.ui.play
 
+import com.jeremiahzucker.pandroid.player.PlayerService
 import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.ui.base.BasePresenter
 import com.jeremiahzucker.pandroid.ui.base.BaseView
@@ -17,15 +18,15 @@ interface PlayContract {
 
         fun updateSeekProgress()
 
+        fun onPlaybackServiceBound(service: PlayerService)
+
+        fun onPlaybackServiceUnbound()
+
     }
 
     interface Presenter : BasePresenter<View> {
 
-        fun play(): Boolean
-
-        fun play(station: ExpandedStationModel): Boolean
-
-        fun pause(): Boolean
+        fun loadPlaylist(stationToken: String)
 
     }
 

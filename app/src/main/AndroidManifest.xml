@@ -36,6 +36,16 @@
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
+
+        <service android:name=".player.PlayerService">
+            <intent-filter>
+                <action android:name="com.jeremiahzucker.pandroid.player.ACTION.PLAY_TOGGLE"/>
+                <action android:name="com.jeremiahzucker.pandroid.player.ACTION.PLAY_NEXT"/>
+                <action android:name="com.jeremiahzucker.pandroid.player.ACTION.PLAY_LAST"/>
+                <action android:name="com.jeremiahzucker.pandroid.player.ACTION.STOP_SERVICE"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
