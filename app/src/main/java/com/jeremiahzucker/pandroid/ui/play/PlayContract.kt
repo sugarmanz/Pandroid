@@ -1,7 +1,9 @@
 package com.jeremiahzucker.pandroid.ui.play
 
+import com.jeremiahzucker.pandroid.player.PlayMode
 import com.jeremiahzucker.pandroid.player.PlayerService
 import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.request.model.TrackModel
 import com.jeremiahzucker.pandroid.ui.base.BasePresenter
 import com.jeremiahzucker.pandroid.ui.base.BaseView
 
@@ -16,17 +18,32 @@ interface PlayContract {
 
     interface View : BaseView<Presenter> {
 
-        fun updateSeekProgress()
+        fun updateSeekCallback()
 
-        fun onPlaybackServiceBound(service: PlayerService)
+        fun onPlayerServiceBound(service: PlayerService)
 
-        fun onPlaybackServiceUnbound()
+        fun onPlayerServiceUnbound()
+
+        fun onTrackSetAsFavorite(track: TrackModel)
+
+        fun onTrackUpdated(track: TrackModel?)
+
+        fun updatePlayMode(playMode: PlayMode)
+
+        fun updatePlayToggle(play: Boolean)
+
+        fun updateFavoriteToggle(favorite: Boolean)
 
     }
 
     interface Presenter : BasePresenter<View> {
 
-        fun loadPlaylist(stationToken: String)
+        // TODO: Convert to thumbs up/down terminology
+        fun setTrackAsFavorite(track: TrackModel, favorite: Boolean)
+
+        fun bindPlayerService()
+
+        fun unbindPlayerService()
 
     }
 

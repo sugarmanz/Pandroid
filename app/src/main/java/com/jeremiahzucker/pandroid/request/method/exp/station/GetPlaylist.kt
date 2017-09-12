@@ -17,7 +17,7 @@ object GetPlaylist: Method() {
             @Expose(serialize = false)
             val additionalAudioUrlList: List<AudioUrlFormat>? = null,
             val stationIsStarting: Boolean? = null,
-            val includeTrackLength: Boolean? = null,
+            val includeTrackLength: Boolean? = true,
             val includeAudioToken: Boolean? = null,
             val xplatfromAdCapable: Boolean? = null,
             val includeAudioReceiptUrl: Boolean? = null,

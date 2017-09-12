@@ -1,5 +1,6 @@
 package com.jeremiahzucker.pandroid.ui.main
 
+import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.ui.base.BasePresenter
 import com.jeremiahzucker.pandroid.ui.base.BaseView
 
@@ -15,7 +16,7 @@ interface MainContract {
     interface View : BaseView<Presenter> {
 
         fun showStationList()
-        fun showPlayer(stationToken: String? = null)
+        fun showPlayer(station: ExpandedStationModel? = null)
         fun showSettings()
 
     }

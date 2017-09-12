@@ -12,6 +12,8 @@ interface PlayerInterface {
 
     val progress: Int
 
+    val duration: Int
+
     val currentTrack: TrackModel?
 
     var station: ExpandedStationModel?

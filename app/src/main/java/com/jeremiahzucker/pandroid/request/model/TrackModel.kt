@@ -27,5 +27,6 @@ data class TrackModel(
         val allowFeedback: Boolean?,
         val amazonSongDigitalAsin: String?,
         val nowPlayingStationAdUrl: String?,
-        val adToken: String?
+        val adToken: String?,
+        val trackLength: Int?
 )

@@ -1,5 +1,6 @@
 package com.jeremiahzucker.pandroid.player
 
+import android.app.Notification
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
@@ -18,6 +19,7 @@ import com.squareup.picasso.Picasso
  */
 class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
 
+    private var notification: Notification? = null
     private var mContentViewBig: RemoteViews? = null
     private var mContentViewSmall: RemoteViews? = null
 
@@ -99,6 +101,8 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
 
     override val progress get() = Player.progress
 
+    override val duration get() = Player.duration
+
     override val currentTrack get() = Player.currentTrack
 
     override fun seekTo(progress: Int) = Player.seekTo(progress)
@@ -129,16 +133,28 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
         // The PendingIntent to launch our activity if the user selects this notification
         val contentIntent = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), 0)
 
+        // Cache content views for album art
+        val smallRemoteView = smallContentView
+        val bigRemoteView = bigContentView
+
         // Set the info for the views that show in the notification panel.
-        val notification = NotificationCompat.Builder(this)
+        notification = NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notification_app_logo)  // the status icon
                 .setWhen(System.currentTimeMillis())  // the time stamp
                 .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
-                .setCustomContentView(smallContentView)
-                .setCustomBigContentView(bigContentView)
+                .setCustomContentView(smallRemoteView)
+                .setCustomBigContentView(bigRemoteView)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setOngoing(true)
                 .build()
+
+        val albumArtUrl = currentTrack?.albumArtUrl ?: ""
+        if (!albumArtUrl.isNullOrEmpty()) {
+            Picasso.with(applicationContext).load(albumArtUrl)
+                    .into(smallRemoteView, R.id.image_view_album, NOTIFICATION_ID, notification)
+            Picasso.with(applicationContext).load(albumArtUrl) // TODO: Hopefully caching is smert
+                    .into(bigRemoteView, R.id.image_view_album, NOTIFICATION_ID, notification)
+        }
 
         // Send the notification.
         startForeground(NOTIFICATION_ID, notification)
@@ -180,18 +196,18 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
         if (currentTrack != null) {
             remoteView.setTextViewText(R.id.text_view_name, currentTrack.songName)
             remoteView.setTextViewText(R.id.text_view_artist, currentTrack.artistName)
+
+            remoteView.setImageViewResource(R.id.image_view_album, R.mipmap.ic_launcher)
+//            if (!currentTrack.albumArtUrl.isNullOrEmpty()) {
+//                Picasso.with(applicationContext).load(currentTrack.albumArtUrl)
+//                        .into(remoteView, R.id.image_view_album, NOTIFICATION_ID, notification)
+//            }
         }
         remoteView.setImageViewResource(R.id.image_view_play_toggle,
                 if (isPlaying) R.drawable.ic_remote_view_pause else R.drawable.ic_remote_view_play)
 
         // TODO: Do album cover loading
-//        val album = Picasso.with(applicationContext).load(currentTrack)
-//        if (album == null) {
-//            remoteView.setImageViewResource(R.id.image_view_album, R.mipmap.ic_launcher)
-//        } else {
-//            remoteView.setImageViewBitmap(R.id.image_view_album, album)
-//
-//        }
+
     }
 
     // PendingIntent

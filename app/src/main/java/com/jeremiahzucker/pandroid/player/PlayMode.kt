@@ -14,9 +14,9 @@ enum class PlayMode {
         val default: PlayMode = SINGLE
         fun nextMode(curr: PlayMode?): PlayMode =
             when (curr) {
-                SINGLE -> LOOP
-                LOOP -> LIST
-                LIST -> SHUFFLE
+                SINGLE -> LIST
+//                LOOP -> LIST
+//                LIST -> SHUFFLE
                 else -> default
             }
     }

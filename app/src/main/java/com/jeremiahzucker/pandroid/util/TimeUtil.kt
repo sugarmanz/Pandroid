@@ -7,12 +7,13 @@ package com.jeremiahzucker.pandroid.util
  * Date:   9/6/2017
  * Desc:   TODO: Complete
  */
-fun Int.formatDuration(): String {
-    val temp = this / 1000 // milliseconds into seconds
-    var minute = temp/ 60
+fun Int.formatDurationFromMilliseconds() = (this / 1000).formatDurationFromSeconds()
+
+fun Int.formatDurationFromSeconds(): String {
+    var minute = this / 60
     val hour = minute / 60
     minute %= 60
-    val second = temp % 60
+    val second = this % 60
     return if (hour != 0)
         String.format("%2d:%02d:%02d", hour, minute, second)
     else

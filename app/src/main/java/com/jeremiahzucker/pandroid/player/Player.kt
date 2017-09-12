@@ -1,6 +1,7 @@
 package com.jeremiahzucker.pandroid.player
 
 import android.media.MediaPlayer
+import android.util.Log
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.request.method.exp.station.GetPlaylist
 import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
@@ -11,8 +12,9 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by sugarmanz on 9/10/17.
  */
-object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
+internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
 
+    private val TAG: String = Player::class.java.simpleName
     // TODO: Consider faster alternatives to MediaPlayer
     private val mediaPlayer = MediaPlayer()
     private val callbacks = ArrayList<PlayerInterface.Callback>()
@@ -28,22 +30,25 @@ object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
 
     override var station: ExpandedStationModel? = null
         set(value) {
-            field = value
-            clearPlaylist()
-            loadPlaylist()
-            play()
+            if (field?.stationToken != value?.stationToken) {
+                field = value
+                clearPlaylist()
+                loadPlaylist()
+            }
         }
 
     override var currentTrack: TrackModel? = null
         private set
 
-    override val isPlaying: Boolean
-        get() = mediaPlayer.isPlaying
+    override val isPlaying get() = mediaPlayer.isPlaying
+    override val progress get() = mediaPlayer.currentPosition
+    override val duration get() = mediaPlayer.duration
 
-    override val progress: Int
-        get() = mediaPlayer.currentPosition
+    init {
+        mediaPlayer.setOnCompletionListener(this)
+    }
 
-    // Assumes that currentTrack has been set already
+    // IMPORTANT: Assumes that currentTrack has been set already
     override fun play(): Boolean {
         if (isPaused) {
             isPaused = false
@@ -56,6 +61,9 @@ object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
             mediaPlayer.prepare() // TODO: PrepareAsync?????
             mediaPlayer.start()
             notifyPlayStatusChanged(true)
+
+            if (!hasNext)
+                loadPlaylist()
             return true
         }
         return false
@@ -111,7 +119,6 @@ object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
         return false
     }
 
-    // TODO: Verify seekTo functionality
     override fun seekTo(progress: Int): Boolean {
         if (currentTrack != null) {
             if (mediaPlayer.duration <= progress) {
@@ -199,10 +206,12 @@ object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
             .subscribe(this::loadPlaylistSuccess, this::loadPlaylistError)
 
     private fun loadPlaylistSuccess(response: GetPlaylist.ResponseBody) {
-        tracks.addAll(response.items.filter { it.audioUrlMap?.highQuality?.audioUrl != null })
+        tracks.addAll(response.items.filter { it.trackToken != null })
         if (currentTrack == null) {
             index = 0
             currentTrack = tracks[0]
+            play()
+            notifyComplete(currentTrack)
         }
     }
     private fun loadPlaylistError(throwable: Throwable) {

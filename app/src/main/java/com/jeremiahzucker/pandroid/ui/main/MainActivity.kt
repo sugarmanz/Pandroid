@@ -1,33 +1,24 @@
 package com.jeremiahzucker.pandroid.ui.main
 
-import android.net.Uri
-
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.os.Bundle
 import android.support.v4.view.ViewPager
-import android.util.Log
 import com.jeremiahzucker.pandroid.R
-import com.jeremiahzucker.pandroid.request.method.exp.station.GetPlaylist
-import com.jeremiahzucker.pandroid.request.method.exp.user.GetStationList
 import com.jeremiahzucker.pandroid.ui.play.PlayFragment
 import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.ui.settings.SettingsFragment
 import com.jeremiahzucker.pandroid.ui.base.BaseActivity
-import com.jeremiahzucker.pandroid.ui.play.PlayPresenter
 import com.jeremiahzucker.pandroid.ui.station.StationListFragment
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 
-class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnListFragmentInteractionListener, PlayFragment.OnFragmentInteractionListener {
-    override fun onFragmentInteraction(uri: Uri) {
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnListFragmentInteractionListener {
 
     override fun onListFragmentInteraction(item: ExpandedStationModel) {
-        showPlayer(item.stationId)
+        showPlayer(item)
     }
 
     private val TAG: String = MainActivity::class.java.simpleName
@@ -92,11 +83,11 @@ class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnLi
         radio_button_station_list.isChecked = true
     }
 
-    override fun showPlayer(stationToken: String?) {
+    override fun showPlayer(station: ExpandedStationModel?) {
         radio_button_play.isChecked = true
 
-        if (stationToken != null) {
-            (adapter?.getItem(1) as PlayFragment).setStation(stationToken)
+        if (station != null) {
+            (adapter?.getItem(1) as PlayFragment).setStation(station)
         }
     }
 

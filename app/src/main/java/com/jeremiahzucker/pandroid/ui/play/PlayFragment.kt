@@ -1,29 +1,26 @@
 package com.jeremiahzucker.pandroid.ui.play
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.ServiceConnection
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.media.AudioManager
-import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.IBinder
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 
 import com.jeremiahzucker.pandroid.R
+import com.jeremiahzucker.pandroid.player.PlayMode
 import com.jeremiahzucker.pandroid.player.PlayerInterface
 import com.jeremiahzucker.pandroid.player.PlayerService
+import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.request.model.TrackModel
 import com.jeremiahzucker.pandroid.ui.main.MainActivity
-import com.jeremiahzucker.pandroid.util.formatDuration
+import com.jeremiahzucker.pandroid.util.formatDurationFromMilliseconds
+import com.jeremiahzucker.pandroid.util.formatDurationFromSeconds
 import com.jeremiahzucker.pandroid.util.getCroppedBitmap
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
@@ -39,155 +36,30 @@ import kotlinx.android.synthetic.main.fragment_play.*
  */
 class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
 
+    private val TAG: String = PlayFragment::class.java.simpleName
     private val seekProgressHandler = Handler()
-    private val mediaPlayer = MediaPlayer()
-    private var paused = false
-    private var station: String? = null
-    private var songs: List<TrackModel> = ArrayList(0)
-    private var currentSong: TrackModel? = null
     private var player: PlayerInterface? = null
-
-    override fun onPlaybackServiceBound(service: PlayerService) {
-        player = service
-        player?.registerCallback(this)
-    }
-
-    override fun onPlaybackServiceUnbound() {
-        player?.unregisterCallback(this)
-        player = null
-    }
-
-    override fun updateSeekProgress() {
-        if (isDetached) return
-
-        Log.i(TAG, "::updateSeekProgress")
-
-        if (mediaPlayer.isPlaying) {
-            val progress: Int = (seek_bar.max *(mediaPlayer.currentPosition.toFloat() / mediaPlayer.duration.toFloat())).toInt()
-            text_view_progress.text = mediaPlayer.currentPosition.formatDuration()
-            if (progress >= 0 && progress <= seek_bar.max) {
-                updateSeekProgress(progress, true)
-
-                seekProgressHandler.postDelayed(this::updateSeekProgress, UPDATE_PROGRESS_INTERVAL)
+    private lateinit var presenter: PlayContract.Presenter
+    private val albumTarget = object : Target {
+        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+        override fun onBitmapFailed(errorDrawable: Drawable?) {}
+        override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+            if (bitmap != null) {
+                image_view_album.cancelRotateAnimation()
+                image_view_album.setImageBitmap(bitmap.getCroppedBitmap())
+                if (player?.isPlaying == true)
+                    image_view_album.startRotateAnimation()
             }
         }
     }
 
-    fun updateSeekProgress(progress: Int, animate: Boolean) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            seek_bar.setProgress(progress, animate)
-        else
-            seek_bar.progress = progress
-    }
-
-    private val TAG: String = PlayFragment::class.java.simpleName
-    fun playSong(song: TrackModel) {
-        Log.i(TAG, song.toString())
-
-        currentSong = song
-        text_view_song.text = song.songName
-        text_view_artist.text = song.artistName
-        text_view_duration.text = "00:00"
-        image_view_album.setImageResource(R.drawable.default_record_album)
-
-        if (!song.albumArtUrl.isNullOrEmpty()) {
-            Picasso.with(context).load(song.albumArtUrl).into(object : Target {
-                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
-                override fun onBitmapFailed(errorDrawable: Drawable?) {}
-                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                    image_view_album.cancelRotateAnimation()
-                    image_view_album.setImageBitmap(bitmap?.getCroppedBitmap())
-                    if (mediaPlayer.isPlaying)
-                        image_view_album.startRotateAnimation()
-                }
-            })
-        }
-
-//        if (mediaPlayer.isPlaying)
-//            mediaPlayer.stop()
-        paused = false
-        mediaPlayer.reset()
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
-        mediaPlayer.setDataSource(song.audioUrlMap?.highQuality?.audioUrl)
-        mediaPlayer.setOnCompletionListener {
-            resetPlayer()
-            onSongComplete()
-        }
-        mediaPlayer.setOnPreparedListener {
-            text_view_duration.text = mediaPlayer.duration.formatDuration()
-            playCurrentSong()
-        }
-
-        mediaPlayer.prepareAsync()
-    }
-
-    fun setStation(station: String) {
-        this.station = station
-        getMoreSongs()
-    }
-
-    fun getMoreSongs() {
-        PlayPresenter().loadPlaylist(station ?: "")
-//        {
-//            Log.i(TAG, it.items.map { it.songName }.toString())
-//            playSongs(it.items.filter { it.trackToken != null })
-//        }
-    }
-
-    fun playNextSong() {
-        resetPlayer()
-        onSongComplete()
-    }
-
-    fun playSongFromBeginning() {
-        image_view_album.cancelRotateAnimation()
-        mediaPlayer.seekTo(0)
-        updateSeekProgress(0, false)
-        image_view_album.startRotateAnimation()
-    }
-
-    private fun resetPlayer() {
-        seekProgressHandler.removeCallbacks(this::updateSeekProgress)
-        image_view_album.cancelRotateAnimation()
-        mediaPlayer.reset()
-    }
-
-    private fun playCurrentSong() {
-        mediaPlayer.start()
-        image_view_album.resumeRotateAnimation()
-        seekProgressHandler.post(this::updateSeekProgress)
-        button_play_toggle.setImageResource(R.drawable.ic_pause)
-        paused = false
-    }
-
-    private fun pauseCurrentSong() {
-        mediaPlayer.pause()
-        image_view_album.pauseRotateAnimation()
-        seekProgressHandler.removeCallbacks(this::updateSeekProgress)
-        button_play_toggle.setImageResource(R.drawable.ic_play)
-        paused = true
-    }
-
-    fun onSongComplete() {
-        if (songs.isEmpty())
-            getMoreSongs()
-        else {
-            val song = songs[0]
-            songs = songs.subList(1, songs.size)
-            playSong(song)
-        }
-    }
-
-    fun playSongs(songs: List<TrackModel>) {
-        val song = songs[0]
-        this.songs = songs.subList(1, songs.size)
-        playSong(song)
-    }
-
-    private var mListener: OnFragmentInteractionListener? = null
+    // Need to use an actual Runnable object so that removeCallbacks will werk
+    private val progressCallback = Runnable { updateSeekCallback() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        presenter = PlayPresenter(activity.applicationContext) // TODO: Refactor presenter creation
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -195,59 +67,178 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
         // Inflate the layout for this fragment
         val view = inflater!!.inflate(R.layout.fragment_play, container, false)
 
+        (view.findViewById(R.id.seek_bar) as SeekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    val scaledProgress = ((progress.toFloat() / seek_bar.max) * player!!.duration.toFloat()).toInt()
+                    text_view_progress.text = scaledProgress.formatDurationFromMilliseconds()
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                seekProgressHandler.removeCallbacks(progressCallback)
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                player?.seekTo(getDurationFromProgress(seekBar.progress))
+                if (player?.isPlaying == true) {
+                    seekProgressHandler.removeCallbacks(progressCallback)
+                    seekProgressHandler.post(progressCallback)
+                }
+            }
+        })
+
         view.findViewById(R.id.button_play_toggle).setOnClickListener {
-            when {
-                mediaPlayer.isPlaying -> pauseCurrentSong()
-                paused -> playCurrentSong()
-                else -> (activity as MainActivity).showStationList()
+            // If player is not null and player fails to pause and player fails to play,
+            // show station list. This will work because player will return true if it is
+            // able to pause or play correctly
+            if (player != null && !player!!.pause() && !player!!.play()) {
+                (activity as MainActivity).showStationList()
             }
         }
 
-        view.findViewById(R.id.button_play_next).setOnClickListener { playNextSong() }
-        view.findViewById(R.id.button_play_last).setOnClickListener { playSongFromBeginning() }
+        view.findViewById(R.id.button_play_mode_toggle).setOnClickListener {
+            val playMode = PlayMode.nextMode(player?.playMode)
+            player?.playMode = playMode
+            updatePlayMode(playMode)
+        }
+        view.findViewById(R.id.button_play_next).setOnClickListener { player?.playNext() }
+        view.findViewById(R.id.button_play_last).setOnClickListener { player?.playLast() }
 
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.attach(this)
+
+        if (player != null) {
+            updatePlayMode(player!!.playMode)
+        }
+    }
+
     override fun onPause() {
         super.onPause()
-        seekProgressHandler.removeCallbacks(this::updateSeekProgress)
+        presenter.detach()
+        seekProgressHandler.removeCallbacks(progressCallback)
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        if (mListener != null) {
-            mListener!!.onFragmentInteraction(uri)
-        }
+    override fun onPlayerServiceBound(service: PlayerService) {
+        player = service
+        player?.registerCallback(this)
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            mListener = context
+    override fun onPlayerServiceUnbound() {
+        player?.unregisterCallback(this)
+        player = null
+    }
+
+    override fun onTrackUpdated(track: TrackModel?) {
+        if (track == null) {
+            image_view_album.cancelRotateAnimation()
+            button_play_toggle.setImageResource(R.drawable.ic_play)
+            seek_bar.progress = 0
+            text_view_progress.text = 0.formatDurationFromMilliseconds()
+            player?.seekTo(0)
+            seekProgressHandler.removeCallbacks(progressCallback)
         } else {
-            throw RuntimeException(context!!.toString() + " must implement OnFragmentInteractionListener")
+            // Step 1: Song name and artist
+            text_view_song.text = track.songName
+            text_view_artist.text = track.artistName
+            // Step 2: favorite
+            button_favorite_toggle.setImageResource(if (track.songRating == 1) R.drawable.ic_favorite_yes else R.drawable.ic_favorite_no)
+            // Step 3: Duration
+            text_view_duration.text = track.trackLength?.formatDurationFromSeconds()
+            // Step 4: Keep these things updated
+            // - Album rotation
+            // - Progress(textViewProgress & seekBarProgress)
+            image_view_album.pauseRotateAnimation()
+            image_view_album.setImageResource(R.drawable.default_record_album)
+            if (!track.albumArtUrl.isNullOrEmpty()) {
+                Picasso.with(context).load(track.albumArtUrl).into(albumTarget)
+            }
+
+            seekProgressHandler.removeCallbacks(progressCallback)
+            if (player?.isPlaying == true) {
+                image_view_album.startRotateAnimation()
+                seekProgressHandler.post(progressCallback)
+                button_play_toggle.setImageResource(R.drawable.ic_pause)
+            }
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        mListener = null
+    override fun updateSeekCallback() {
+        if (isDetached) return
+
+        if (player != null && player?.isPlaying == true) {
+            val progress: Int = (seek_bar.max * (player!!.progress.toFloat() / player!!.duration.toFloat())).toInt()
+            text_view_progress.text = player!!.progress.formatDurationFromMilliseconds()
+            if (progress >= 0 && progress <= seek_bar.max) {
+                updateSeekProgress(progress, true)
+
+                seekProgressHandler.postDelayed(progressCallback, UPDATE_PROGRESS_INTERVAL)
+            }
+        }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
-     */
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
+    private fun updateSeekProgress(progress: Int, animate: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            seek_bar.setProgress(progress, animate)
+        else
+            seek_bar.progress = progress
     }
+
+    override fun onTrackSetAsFavorite(track: TrackModel) {
+        button_favorite_toggle.isEnabled = true
+        updateFavoriteToggle(true)
+    }
+
+    override fun updatePlayMode(playMode: PlayMode) {
+        button_play_mode_toggle.setImageResource(when (playMode) {
+            PlayMode.SINGLE -> R.drawable.ic_play_mode_single
+            PlayMode.LOOP -> R.drawable.ic_play_mode_loop
+            PlayMode.LIST -> R.drawable.ic_play_mode_list
+            PlayMode.SHUFFLE -> R.drawable.ic_play_mode_shuffle
+        })
+    }
+
+    override fun updatePlayToggle(play: Boolean) {
+        button_play_toggle.setImageResource(if (play) R.drawable.ic_pause else R.drawable.ic_play)
+    }
+
+    override fun onSwitchLast(last: TrackModel?) {
+        onTrackUpdated(last)
+    }
+
+    override fun updateFavoriteToggle(favorite: Boolean) {
+        button_favorite_toggle.setImageResource(if (favorite) R.drawable.ic_favorite_yes else R.drawable.ic_favorite_no)
+    }
+
+    override fun onSwitchNext(next: TrackModel?) {
+        onTrackUpdated(next)
+    }
+
+    override fun onComplete(next: TrackModel?) {
+        onTrackUpdated(next)
+    }
+
+    override fun onPlayStatusChanged(isPlaying: Boolean) {
+        updatePlayToggle(isPlaying)
+        if (isPlaying) {
+            image_view_album.resumeRotateAnimation()
+            seekProgressHandler.removeCallbacks(progressCallback)
+            seekProgressHandler.post(progressCallback)
+        } else {
+            image_view_album.pauseRotateAnimation()
+            seekProgressHandler.removeCallbacks(progressCallback)
+        }
+    }
+
+    fun setStation(station: ExpandedStationModel) {
+        player?.station = station
+    }
+
+    private fun getDurationFromProgress(progress: Int) = ((player?.duration ?: 0) * (progress.toFloat() / seek_bar.max)).toInt()
 
     companion object {
         private val UPDATE_PROGRESS_INTERVAL = 1000L
@@ -260,12 +251,9 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
          * @param param2 Parameter 2.
          * @return A new instance of fragment PlayFragment.
          */
-        // TODO: Rename and change types and number of parameters
-        fun newInstance(param1: String, param2: String): PlayFragment {
+        fun newInstance(): PlayFragment {
             val fragment = PlayFragment()
             val args = Bundle()
-//            args.putString(ARG_PARAM1, param1)
-//            args.putString(ARG_PARAM2, param2)
             fragment.arguments = args
             return fragment
         }
