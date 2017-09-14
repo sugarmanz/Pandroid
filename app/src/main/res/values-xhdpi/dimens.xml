@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>   <!-- Music -->
+    <dimen name="play.seekBar.marginTop">16dp</dimen>
+    <dimen name="play.controls.marginTop">12dp</dimen>
+    <dimen name="play.controls.marginBottom">0dp</dimen>
+</resources>

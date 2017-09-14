@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jz.pandroid">
+    package="com.jeremiahzucker.pandroid">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -17,10 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".AuthActivity"
-            android:label="@string/app_name"/>
-        <activity
-            android:name=".LaunchActivity"
+            android:name=".ui.launch.LaunchActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +26,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.jeremiahzucker.pandroid.ui.auth.AuthActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
+
+        <service android:name=".player.PlayerService">
+            <intent-filter>
+                <action android:name="com.jeremiahzucker.pandroid.player.ACTION.PLAY_TOGGLE"/>
+                <action android:name="com.jeremiahzucker.pandroid.player.ACTION.PLAY_NEXT"/>
+                <action android:name="com.jeremiahzucker.pandroid.player.ACTION.PLAY_LAST"/>
+                <action android:name="com.jeremiahzucker.pandroid.player.ACTION.STOP_SERVICE"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
