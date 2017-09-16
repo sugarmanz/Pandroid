@@ -16,14 +16,14 @@ interface AuthContract {
         fun showErrorPasswordRequired()
         fun showErrorPasswordInvalid()
         fun showErrorPasswordIncorrect()
+        fun showErrorNetwork(throwable: Throwable)
         fun clearErrors()
-        fun showMain() // TODO: Rename
+        fun showMain()
 
     }
 
     interface Presenter : BasePresenter<View> {
 
-        fun checkAuth()
         fun attemptLogin(username: String?, password: String?)
 
     }

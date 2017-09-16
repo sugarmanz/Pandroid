@@ -6,7 +6,8 @@ import com.jeremiahzucker.pandroid.crypt.http.EncryptionInterceptor
 import com.jeremiahzucker.pandroid.request.method.Method
 import com.jeremiahzucker.pandroid.request.model.*
 import io.reactivex.Observable
-import retrofit2.Call
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import okhttp3.OkHttpClient
@@ -40,15 +41,7 @@ class Pandora(protocol: Protocol = Protocol.HTTPS) {
     // Retrofit2 interface
     private interface PandoraAPI {
         @POST("./")
-        fun attemptPOST(@Query(value = "method") method: String,
-                        @Query(value = "partner_id") partnerId: String?,
-                        @Query(value = "auth_token") authToken: String?,
-                        @Query(value = "user_id") userId: String?,
-                        @Header(value = EncryptionInterceptor.ENC_HEADER_TAG) encrypted: Boolean,
-                        @Body body: Any?): Call<ResponseModel>
-
-        @POST("./")
-        fun attemptObservable(
+        fun attemptPOST(
                 @Query(value = "method") method: String,
                 @Query(value = "partner_id") partnerId: String?,
                 @Query(value = "auth_token") authToken: String?,
@@ -126,23 +119,18 @@ class Pandora(protocol: Protocol = Protocol.HTTPS) {
             return this
         }
 
-        fun build(): Call<ResponseModel> = API.attemptPOST(
-            method = method,
-            partnerId = partnerId,
-            authToken = authToken,
-            userId = userId,
-            encrypted = encrypted,
-            body = body
-        )
-
-        fun buildObservable(): Observable<ResponseModel> = API.attemptObservable(
+        fun buildResponseModel(): Observable<ResponseModel> = API.attemptPOST(
                 method = method,
                 partnerId = partnerId,
                 authToken = authToken,
                 userId = userId,
                 encrypted = encrypted,
                 body = body
-        )
+        ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+
+        inline fun <reified T> build(): Observable<T> = buildResponseModel()
+                .filter { it.isOk }
+                .map { it.getResult<T>() }
     }
 
 }

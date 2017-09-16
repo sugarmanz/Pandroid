@@ -18,11 +18,11 @@ interface MainContract {
         fun showStationList()
         fun showPlayer(station: ExpandedStationModel? = null)
         fun showSettings()
+        fun showAuth()
 
     }
 
     interface Presenter : BasePresenter<View> {
-
 
         fun onStationClicked()
 

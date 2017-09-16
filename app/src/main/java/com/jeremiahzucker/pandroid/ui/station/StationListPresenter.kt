@@ -30,11 +30,7 @@ class StationListPresenter : StationListContract.Presenter {
         Pandora(Pandora.Protocol.HTTP)
                 .RequestBuilder(GetStationList)
                 .body(body)
-                .buildObservable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter { it.isOk }
-                .map { it.getResult<GetStationList.ResponseBody>() }
+                .build<GetStationList.ResponseBody>()
                 .subscribe(this::handleGetStationListSuccess, this::handleGetStationListError)
     }
 

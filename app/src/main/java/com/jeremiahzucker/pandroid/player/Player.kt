@@ -1,13 +1,10 @@
 package com.jeremiahzucker.pandroid.player
 
 import android.media.MediaPlayer
-import android.util.Log
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.request.method.exp.station.GetPlaylist
 import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.request.model.TrackModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by sugarmanz on 9/10/17.
@@ -144,7 +141,7 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
     }
 
     override fun releasePlayer() {
-        mediaPlayer.reset()
+//        mediaPlayer.reset()
         mediaPlayer.release()
     }
 
@@ -198,11 +195,7 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
     private fun loadPlaylist() = Pandora(Pandora.Protocol.HTTP)
             .RequestBuilder(GetPlaylist)
             .body(GetPlaylist.RequestBody(station?.stationToken ?: ""))
-            .buildObservable()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .filter { it.isOk }
-            .map { it.getResult<GetPlaylist.ResponseBody>() }
+            .build<GetPlaylist.ResponseBody>()
             .subscribe(this::loadPlaylistSuccess, this::loadPlaylistError)
 
     private fun loadPlaylistSuccess(response: GetPlaylist.ResponseBody) {

@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -93,6 +94,9 @@ class AuthActivity : BaseActivity(), AuthContract.View {
     override fun showErrorPasswordRequired() = showErrorOnField(password, getString(R.string.error_field_required))
     override fun showErrorPasswordInvalid() = showErrorOnField(password, getString(R.string.error_invalid_password))
     override fun showErrorPasswordIncorrect() = showErrorOnField(password, getString(R.string.error_incorrect_password))
+    override fun showErrorNetwork(throwable: Throwable) {
+        Snackbar.make(auth_root, throwable.message.toString(), Snackbar.LENGTH_LONG)
+    }
 
     private fun showErrorOnField(view: EditText, error: String) {
         view.error = error

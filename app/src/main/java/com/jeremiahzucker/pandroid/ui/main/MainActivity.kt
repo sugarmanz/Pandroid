@@ -1,13 +1,16 @@
 package com.jeremiahzucker.pandroid.ui.main
 
+import android.content.Intent
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+import com.jeremiahzucker.pandroid.Preferences
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.ui.play.PlayFragment
 import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.ui.auth.AuthActivity
 import com.jeremiahzucker.pandroid.ui.settings.SettingsFragment
 import com.jeremiahzucker.pandroid.ui.base.BaseActivity
 import com.jeremiahzucker.pandroid.ui.station.StationListFragment
@@ -66,11 +69,6 @@ class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnLi
             }
         }
 
-//        fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show()
-//        }
-
         radio_button_station_list.isChecked = true
     }
 
@@ -93,6 +91,13 @@ class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnLi
 
     override fun showSettings() {
         radio_button_settings.isChecked = true
+    }
+
+    override fun showAuth() {
+        Preferences.reset()
+        val intent = Intent(this, AuthActivity::class.java)
+        startActivity(intent) // should probs use no history
+        finish()
     }
 
     inner class MainPagerAdapter(

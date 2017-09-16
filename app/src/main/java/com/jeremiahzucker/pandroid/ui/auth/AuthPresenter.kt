@@ -2,10 +2,11 @@ package com.jeremiahzucker.pandroid.ui.auth
 
 import android.util.Log // TODO: Remove android class
 import com.jeremiahzucker.pandroid.Preferences
+import com.jeremiahzucker.pandroid.crypt.BlowFish
 import com.jeremiahzucker.pandroid.request.Pandora
+import com.jeremiahzucker.pandroid.request.method.auth.PartnerLogin
 import com.jeremiahzucker.pandroid.request.method.auth.UserLogin
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.jeremiahzucker.pandroid.util.hexStringToByteArray
 
 
 /**
@@ -18,21 +19,16 @@ import io.reactivex.schedulers.Schedulers
 class AuthPresenter : AuthContract.Presenter {
 
     private val TAG: String = AuthPresenter::class.java.simpleName
-    var view: AuthContract.View? = null
+    private var view: AuthContract.View? = null
 
     override fun attach(view: AuthContract.View) {
         this.view = view
+
+        doPartnerLogin().subscribe(this::handlePartnerLoginSuccess)
     }
 
     override fun detach() {
         this.view = null
-    }
-
-    override fun checkAuth() {
-        if (view == null)
-            return
-
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun attemptLogin(username: String?, password: String?) {
@@ -55,24 +51,28 @@ class AuthPresenter : AuthContract.Presenter {
             // perform the user login attempt.
             view?.showProgress(true)
 
-            // So much prettier <3 && TODO: Convert into store call
-            val observable  = Pandora().RequestBuilder(UserLogin.methodName)
-                    .authToken(Preferences.partnerAuthToken)
-                    .body(UserLogin.RequestBody(username, password))
-                    .buildObservable()
-
-            Log.i(TAG, "Making Call")
-            observable.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .filter { it.isOk }
-                    .map { it.getResult<UserLogin.ResponseBody>() }
-                    .subscribe(this::handleUserLoginSuccess, this::handleUserLoginError)
+            // TODO: Implement piggybacking in order preserve networking resources
+            if (Preferences.partnerAuthToken == null)
+                doPartnerLogin().subscribe({
+                    handlePartnerLoginSuccess(it)
+                    doUserLogin(username, password)
+                }, view!!::showErrorNetwork)
+            else
+                doUserLogin(username, password)
         }
     }
 
+    private fun isPasswordValid(password: String) = password.length > 4
+    private fun isUsernameValid(username: String) = username.any { it == '@' }
+
+    // So much prettier <3 && TODO: Convert into store call (well, not for login call)
+    private fun doUserLogin(username: String, password: String) = Pandora().RequestBuilder(UserLogin)
+            .authToken(Preferences.partnerAuthToken)
+            .body(UserLogin.RequestBody(username, password))
+            .build<UserLogin.ResponseBody>()
+            .subscribe(this::handleUserLoginSuccess, this::handleUserLoginError)
+
     private fun handleUserLoginSuccess(result: UserLogin.ResponseBody) {
-        Log.i(TAG, "Handling success")
-        Log.i(TAG, result.toString())
         // TODO: Pass to model? Maybe?
         Preferences.userId = result.userId
         Preferences.userAuthToken = result.userAuthToken
@@ -80,11 +80,36 @@ class AuthPresenter : AuthContract.Presenter {
         view?.showMain()
     }
 
-    private fun handleUserLoginError(throwable: Throwable? = null) {
+    private fun handleUserLoginError(throwable: Throwable) {
         // Oh no!
-        Log.e(TAG, throwable?.message ?: "Error!", throwable)
+        Log.e(TAG, throwable.message, throwable)
+        view?.showErrorNetwork(throwable)
     }
 
-    private fun isPasswordValid(password: String) = password.length > 4
-    private fun isUsernameValid(username: String) = username.any { it == '@' }
+    private fun doPartnerLogin() = Pandora().RequestBuilder(PartnerLogin)
+                .body(PartnerLogin.RequestBody())
+                .encrypted(false)
+                .build<PartnerLogin.ResponseBody>()
+
+    private fun handlePartnerLoginSuccess(result: PartnerLogin.ResponseBody) {
+        // Following Pithos impl. Differs from docs.
+        Preferences.syncTimeOffset = decryptSyncTime(result.syncTime).toLong() - (System.currentTimeMillis() / 1000L)
+        Preferences.partnerId = result.partnerId
+        Preferences.partnerAuthToken = result.partnerAuthToken
+    }
+
+    private fun handlePartnerLoginError(throwable: Throwable) {
+        view?.showErrorNetwork(throwable)
+    }
+
+    private fun decryptSyncTime(raw: String): String {
+        val fugu = BlowFish()
+        val decoded = raw.hexStringToByteArray()
+        var decrypted = fugu.decrypt(decoded)
+
+        decrypted = decrypted.copyOfRange(4, decrypted.size)
+
+        return String(decrypted, Charsets.UTF_8)
+    }
+
 }
