@@ -30,7 +30,8 @@
             android:name="com.jeremiahzucker.pandroid.ui.auth.AuthActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/title_activity_main"

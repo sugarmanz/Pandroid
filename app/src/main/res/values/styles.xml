@@ -10,7 +10,7 @@
         <item name="android:textColorPrimary">@color/theme.dark_blue.textColorPrimary</item>
         <item name="android:textColorSecondary">@color/theme.dark_blue.textColorSecondary</item>
 
-        <item name="android:windowBackground">@color/theme.dark_blue.background</item>
+        <item name="android:windowBackground">@drawable/gradient</item>
 
         <item name="colorControlNormal">?attr/colorAccent</item>
         <item name="colorControlActivated">@color/theme.dark_blue.colorControlActivated</item>
