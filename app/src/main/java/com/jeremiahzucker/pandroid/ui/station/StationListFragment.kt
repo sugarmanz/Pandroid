@@ -48,7 +48,7 @@ class StationListFragment : Fragment(), StationListContract.View {
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_station_list, container, false)
 
-        presenter.getStationList()
+//        presenter.getStationList()
 
         return view
     }
@@ -105,7 +105,7 @@ class StationListFragment : Fragment(), StationListContract.View {
     }
 
     override fun updateStationList(stations: List<ExpandedStationModel>) {
-        Log.i(TAG, "Updating station list")
+        Log.i(TAG, stations.toString())
         (recycler_view_station_list.adapter as StationListAdapter).updateStationList(stations)
     }
 

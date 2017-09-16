@@ -3,8 +3,8 @@ package com.jeremiahzucker.pandroid.ui.station
 import android.util.Log
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.request.method.exp.user.GetStationList
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
+import io.realm.Realm
 
 /**
  * StationListPresenter
@@ -20,6 +20,23 @@ class StationListPresenter : StationListContract.Presenter {
 
     override fun attach(view: StationListContract.View) {
         this.view = view
+
+        val realm = Realm.getDefaultInstance()
+        realm.executeTransaction {
+            realm.delete(ExpandedStationModel::class.java)
+            realm.createObject(ExpandedStationModel::class.java, "SLFDJK").stationName
+        }
+
+        Log.i(TAG, realm.where(ExpandedStationModel::class.java).findAll().toString())
+        view.updateStationList(realm.where(ExpandedStationModel::class.java).findAll().toList())
+        // 1. Try to load stations from database
+            // 1. Upon success, check station checksum
+                // 1. If no difference, hooray
+                // 2. If difference, send network request
+            // 2. Upon failure, send network request
+        // 2.
+
+        realm.close()
     }
 
     override fun detach() {
