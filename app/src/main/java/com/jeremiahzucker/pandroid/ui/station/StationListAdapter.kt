@@ -7,11 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.jeremiahzucker.pandroid.Preferences
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
 
 import com.jeremiahzucker.pandroid.ui.station.StationListFragment.OnListFragmentInteractionListener
 import com.squareup.picasso.Picasso
+import io.realm.Realm
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
@@ -40,6 +42,13 @@ class StationListAdapter(private val context: Context, private var stations: Lis
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position == stations.size) {
             footerSummary = holder.footerSummary
+            footerSummary?.setOnClickListener {
+                Realm.getDefaultInstance().executeTransaction {
+                    it.delete(ExpandedStationModel::class.java)
+                    Preferences.stationListChecksum = null
+                    updateStationList(it.where(ExpandedStationModel::class.java).findAll())
+                }
+            }
             updateFooter()
         } else {
             holder.stationModel = stations[position]
