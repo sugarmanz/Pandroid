@@ -24,16 +24,4 @@ open class ExpandedStationModel(
         var allowDelete: Boolean? = null,
         var allowEditDescription: Boolean? = null,
         var artUrl: String? = null
-) : RealmObject() {
-
-    /**
-     * Prepare to play
-     */
-//    fun prepare(): Boolean {
-//        if (songs.isEmpty()) return false
-//        if (playingIndex == NO_POSITION) {
-//            playingIndex = 0
-//        }
-//        return true
-//    }
-}
+) : RealmObject()
