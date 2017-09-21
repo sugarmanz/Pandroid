@@ -1,7 +1,7 @@
 package com.jeremiahzucker.pandroid.request
 
 import com.jeremiahzucker.pandroid.BuildConfig
-import com.jeremiahzucker.pandroid.Preferences
+//import com.jeremiahzucker.pandroid.Preferences
 import com.jeremiahzucker.pandroid.crypt.http.EncryptionInterceptor
 import com.jeremiahzucker.pandroid.request.method.Method
 import com.jeremiahzucker.pandroid.request.model.*
@@ -20,28 +20,25 @@ import retrofit2.http.*
  * Created by jzucker on 6/30/17.
  * https://tuner.pandora.com/services/json/
  */
-class Pandora(protocol: Protocol = Protocol.HTTPS) {
+object Pandora {
 
     enum class Protocol {
         HTTP,
         HTTPS;
 
-        fun getProtocolString(): String {
-            return name.toLowerCase() + "://"
-        }
+        fun getProtocolString() = name.toLowerCase() + "://"
+        fun buildURL(uri: String = PANDORA_API_BASE_URI) = getProtocolString() + uri
     }
 
     // Create companion object to hold constants relative to this domain
-    companion object {
-        private const val PANDORA_API_BASE_URI = "tuner.pandora.com/services/json/"
-    }
-
-    private val PANDORA_API_BASE_URL = protocol.getProtocolString() + PANDORA_API_BASE_URI
+    private const val PANDORA_API_BASE_URI = "tuner.pandora.com/services/json/"
+    val inflightRequests = hashMapOf<RequestBuilder, Observable<ResponseModel>>()
 
     // Retrofit2 interface
     private interface PandoraAPI {
-        @POST("./")
+        @POST
         fun attemptPOST(
+                @Url url: String,
                 @Query(value = "method") method: String,
                 @Query(value = "partner_id") partnerId: String?,
                 @Query(value = "auth_token") authToken: String?,
@@ -52,7 +49,7 @@ class Pandora(protocol: Protocol = Protocol.HTTPS) {
 
     private val API: PandoraAPI by lazy {
         Retrofit.Builder()
-                .baseUrl(PANDORA_API_BASE_URL)
+                .baseUrl(Protocol.HTTPS.buildURL())
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -75,14 +72,20 @@ class Pandora(protocol: Protocol = Protocol.HTTPS) {
         builder.build()
     }
 
-    inner class RequestBuilder(private var method: String) {
-        private var partnerId: String? = Preferences.partnerId
-        private var authToken: String? = Preferences.userAuthToken
-        private var userId: String? = Preferences.userId
+    data class RequestBuilder(private var method: String) {
+        private var protocol: Protocol = Protocol.HTTPS
+        private var partnerId: String? = null//Preferences.partnerId
+        private var authToken: String? = null//Preferences.userAuthToken
+        private var userId: String? = null//Preferences.userId
         private var encrypted: Boolean = true
         private var body: Any? = null
 
         constructor(method: Method) : this(method.methodName)
+
+        fun protocol(protocol: Protocol): RequestBuilder {
+            this.protocol = protocol
+            return this
+        }
 
         fun method(method: Method): RequestBuilder {
             this.method = method.methodName
@@ -119,14 +122,18 @@ class Pandora(protocol: Protocol = Protocol.HTTPS) {
             return this
         }
 
-        fun buildResponseModel(): Observable<ResponseModel> = API.attemptPOST(
-                method = method,
-                partnerId = partnerId,
-                authToken = authToken,
-                userId = userId,
-                encrypted = encrypted,
-                body = body
-        ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        fun buildResponseModel() = inflightRequests.getOrPut(this) {
+            API.attemptPOST(
+                    url = protocol.buildURL(),
+                    method = method,
+                    partnerId = partnerId,
+                    authToken = authToken,
+                    userId = userId,
+                    encrypted = encrypted,
+                    body = body
+            ).subscribeOn(Schedulers.io()).observeOn(Schedulers.computation()).share().replay()
+        }
+
 
         inline fun <reified T> build(): Observable<T> = buildResponseModel()
                 .filter { it.isOk }

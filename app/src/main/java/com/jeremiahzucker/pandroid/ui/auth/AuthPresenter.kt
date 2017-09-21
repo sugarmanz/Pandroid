@@ -66,7 +66,7 @@ class AuthPresenter : AuthContract.Presenter {
     private fun isUsernameValid(username: String) = username.any { it == '@' }
 
     // So much prettier <3 && TODO: Convert into store call (well, not for login call)
-    private fun doUserLogin(username: String, password: String) = Pandora().RequestBuilder(UserLogin)
+    private fun doUserLogin(username: String, password: String) = Pandora.RequestBuilder(UserLogin)
             .authToken(Preferences.partnerAuthToken)
             .body(UserLogin.RequestBody(username, password))
             .build<UserLogin.ResponseBody>()
@@ -86,7 +86,7 @@ class AuthPresenter : AuthContract.Presenter {
         view?.showErrorNetwork(throwable)
     }
 
-    private fun doPartnerLogin() = Pandora().RequestBuilder(PartnerLogin)
+    private fun doPartnerLogin() = Pandora.RequestBuilder(PartnerLogin)
                 .body(PartnerLogin.RequestBody())
                 .encrypted(false)
                 .build<PartnerLogin.ResponseBody>()

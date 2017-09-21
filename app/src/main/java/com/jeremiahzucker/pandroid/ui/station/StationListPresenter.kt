@@ -43,8 +43,8 @@ class StationListPresenter : StationListContract.Presenter {
     }
 
     override fun getStationList(body: GetStationList.RequestBody) {
-        Pandora(Pandora.Protocol.HTTP)
-                .RequestBuilder(GetStationList)
+        Pandora.RequestBuilder(GetStationList)
+                .protocol(Pandora.Protocol.HTTP)
                 .body(body)
                 .build<GetStationList.ResponseBody>()
                 .subscribe(this::handleGetStationListSuccess, this::handleGetStationListError)
@@ -69,7 +69,8 @@ class StationListPresenter : StationListContract.Presenter {
     }
 
     private fun verifyChecksum() {
-        Pandora(Pandora.Protocol.HTTP).RequestBuilder(GetStationListChecksum)
+        Pandora.RequestBuilder(GetStationListChecksum)
+                .protocol(Pandora.Protocol.HTTP)
                 .body(GetStationListChecksum.RequestBody())
                 .build<GetStationListChecksum.ResponseBody>()
                 .subscribe(this::handleGetStationListChecksumSuccess, this::handleGetStationListChecksumError)

@@ -192,8 +192,9 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
         currentTrack = null
     }
 
-    private fun loadPlaylist() = Pandora(Pandora.Protocol.HTTP)
+    private fun loadPlaylist() = Pandora
             .RequestBuilder(GetPlaylist)
+            .protocol(Pandora.Protocol.HTTP)
             .body(GetPlaylist.RequestBody(station?.stationToken ?: ""))
             .build<GetPlaylist.ResponseBody>()
             .subscribe(this::loadPlaylistSuccess, this::loadPlaylistError)
