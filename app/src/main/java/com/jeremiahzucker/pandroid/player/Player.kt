@@ -37,7 +37,13 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
     override var currentTrack: TrackModel? = null
         private set
 
-    override val isPlaying get() = mediaPlayer.isPlaying
+    override val isPlaying: Boolean get() {
+        return try {
+            mediaPlayer.isPlaying
+        } catch (e: IllegalStateException) {
+            false
+        }
+    }
     override val progress get() = mediaPlayer.currentPosition
     override val duration get() = mediaPlayer.duration
 
@@ -142,7 +148,7 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
 
     override fun releasePlayer() {
 //        mediaPlayer.reset()
-        mediaPlayer.release()
+//        mediaPlayer.release()
     }
 
     private fun notifyPlayStatusChanged(isPlaying: Boolean) {

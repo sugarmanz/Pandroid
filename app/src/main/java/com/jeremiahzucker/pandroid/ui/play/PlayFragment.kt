@@ -45,10 +45,10 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
         override fun onBitmapFailed(errorDrawable: Drawable?) {}
         override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
             if (bitmap != null) {
-                image_view_album.cancelRotateAnimation()
-                image_view_album.setImageBitmap(bitmap.getCroppedBitmap())
+                image_view_album?.cancelRotateAnimation()
+                image_view_album?.setImageBitmap(bitmap.getCroppedBitmap())
                 if (player?.isPlaying == true)
-                    image_view_album.startRotateAnimation()
+                    image_view_album?.startRotateAnimation()
             }
         }
     }
@@ -71,7 +71,7 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     val scaledProgress = ((progress.toFloat() / seek_bar.max) * player!!.duration.toFloat()).toInt()
-                    text_view_progress.text = scaledProgress.formatDurationFromMilliseconds()
+                    text_view_progress?.text = scaledProgress.formatDurationFromMilliseconds()
                 }
             }
 
@@ -135,34 +135,34 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
 
     override fun onTrackUpdated(track: TrackModel?) {
         if (track == null) {
-            image_view_album.cancelRotateAnimation()
-            button_play_toggle.setImageResource(R.drawable.ic_play)
+            image_view_album?.cancelRotateAnimation()
+            button_play_toggle?.setImageResource(R.drawable.ic_play)
             seek_bar.progress = 0
-            text_view_progress.text = 0.formatDurationFromMilliseconds()
+            text_view_progress?.text = 0.formatDurationFromMilliseconds()
             player?.seekTo(0)
             seekProgressHandler.removeCallbacks(progressCallback)
         } else {
             // Step 1: Song name and artist
-            text_view_song.text = track.songName
-            text_view_artist.text = track.artistName
+            text_view_song?.text = track.songName
+            text_view_artist?.text = track.artistName
             // Step 2: favorite
-            button_favorite_toggle.setImageResource(if (track.songRating == 1) R.drawable.ic_favorite_yes else R.drawable.ic_favorite_no)
+            button_favorite_toggle?.setImageResource(if (track.songRating == 1) R.drawable.ic_favorite_yes else R.drawable.ic_favorite_no)
             // Step 3: Duration
-            text_view_duration.text = track.trackLength?.formatDurationFromSeconds()
+            text_view_duration?.text = track.trackLength?.formatDurationFromSeconds()
             // Step 4: Keep these things updated
             // - Album rotation
             // - Progress(textViewProgress & seekBarProgress)
-            image_view_album.pauseRotateAnimation()
-            image_view_album.setImageResource(R.drawable.default_record_album)
+            image_view_album?.pauseRotateAnimation()
+            image_view_album?.setImageResource(R.drawable.default_record_album)
             if (!track.albumArtUrl.isNullOrEmpty()) {
                 Picasso.with(context).load(track.albumArtUrl).into(albumTarget)
             }
 
             seekProgressHandler.removeCallbacks(progressCallback)
             if (player?.isPlaying == true) {
-                image_view_album.startRotateAnimation()
+                image_view_album?.startRotateAnimation()
                 seekProgressHandler.post(progressCallback)
-                button_play_toggle.setImageResource(R.drawable.ic_pause)
+                button_play_toggle?.setImageResource(R.drawable.ic_pause)
             }
         }
     }
@@ -172,7 +172,7 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
 
         if (player != null && player?.isPlaying == true) {
             val progress: Int = (seek_bar.max * (player!!.progress.toFloat() / player!!.duration.toFloat())).toInt()
-            text_view_progress.text = player!!.progress.formatDurationFromMilliseconds()
+            text_view_progress?.text = player!!.progress.formatDurationFromMilliseconds()
             if (progress >= 0 && progress <= seek_bar.max) {
                 updateSeekProgress(progress, true)
 
@@ -183,18 +183,18 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
 
     private fun updateSeekProgress(progress: Int, animate: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            seek_bar.setProgress(progress, animate)
+            seek_bar?.setProgress(progress, animate)
         else
-            seek_bar.progress = progress
+            seek_bar?.progress = progress
     }
 
     override fun onTrackSetAsFavorite(track: TrackModel) {
-        button_favorite_toggle.isEnabled = true
+        button_favorite_toggle?.isEnabled = true
         updateFavoriteToggle(true)
     }
 
     override fun updatePlayMode(playMode: PlayMode) {
-        button_play_mode_toggle.setImageResource(when (playMode) {
+        button_play_mode_toggle?.setImageResource(when (playMode) {
             PlayMode.SINGLE -> R.drawable.ic_play_mode_single
             PlayMode.LOOP -> R.drawable.ic_play_mode_loop
             PlayMode.LIST -> R.drawable.ic_play_mode_list
@@ -203,7 +203,7 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
     }
 
     override fun updatePlayToggle(play: Boolean) {
-        button_play_toggle.setImageResource(if (play) R.drawable.ic_pause else R.drawable.ic_play)
+        button_play_toggle?.setImageResource(if (play) R.drawable.ic_pause else R.drawable.ic_play)
     }
 
     override fun onSwitchLast(last: TrackModel?) {
@@ -211,7 +211,7 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
     }
 
     override fun updateFavoriteToggle(favorite: Boolean) {
-        button_favorite_toggle.setImageResource(if (favorite) R.drawable.ic_favorite_yes else R.drawable.ic_favorite_no)
+        button_favorite_toggle?.setImageResource(if (favorite) R.drawable.ic_favorite_yes else R.drawable.ic_favorite_no)
     }
 
     override fun onSwitchNext(next: TrackModel?) {
@@ -225,11 +225,11 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
     override fun onPlayStatusChanged(isPlaying: Boolean) {
         updatePlayToggle(isPlaying)
         if (isPlaying) {
-            image_view_album.resumeRotateAnimation()
+            image_view_album?.resumeRotateAnimation()
             seekProgressHandler.removeCallbacks(progressCallback)
             seekProgressHandler.post(progressCallback)
         } else {
-            image_view_album.pauseRotateAnimation()
+            image_view_album?.pauseRotateAnimation()
             seekProgressHandler.removeCallbacks(progressCallback)
         }
     }

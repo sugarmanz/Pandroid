@@ -29,16 +29,10 @@ class AuthPresenterTest {
         presenter.attach(view)
     }
 
-    @Test(expected = NotImplementedError::class)
-    fun testCheckAuth() {
-        presenter.checkAuth()
-    }
-
     @Test
     fun testMethodsAfterDetach() {
         presenter.detach()
         presenter.attemptLogin(null, null)
-        presenter.checkAuth()
 
         verifyZeroInteractions(view)
     }

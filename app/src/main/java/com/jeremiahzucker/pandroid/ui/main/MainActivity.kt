@@ -8,20 +8,26 @@ import android.os.Bundle
 import android.support.v4.view.ViewPager
 import com.jeremiahzucker.pandroid.Preferences
 import com.jeremiahzucker.pandroid.R
+import com.jeremiahzucker.pandroid.request.method.exp.music.Search
 import com.jeremiahzucker.pandroid.ui.play.PlayFragment
 import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.ui.auth.AuthActivity
 import com.jeremiahzucker.pandroid.ui.settings.SettingsFragment
 import com.jeremiahzucker.pandroid.ui.base.BaseActivity
+import com.jeremiahzucker.pandroid.ui.search.SearchFragment
 import com.jeremiahzucker.pandroid.ui.station.StationListFragment
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 
-class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnListFragmentInteractionListener {
+class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnListFragmentInteractionListener, SearchFragment.OnListFragmentInteractionListener {
 
     override fun onListFragmentInteraction(item: ExpandedStationModel) {
         showPlayer(item)
+    }
+
+    override fun onListFragmentInteraction(item: Search.SearchResult) {
+        showPlayer(null)
     }
 
     private val TAG: String = MainActivity::class.java.simpleName
@@ -34,16 +40,19 @@ class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnLi
 
         // Setup fragments
         val fragments = listOf(
+                SearchFragment(),
                 StationListFragment(),
                 PlayFragment(),
                 SettingsFragment()
         )
         val titles = listOf(
+                "Search",
                 "Station List",
                 "Play",
                 "Settings"
         )
         val buttons = listOf(
+                radio_button_search,
                 radio_button_station_list,
                 radio_button_play,
                 radio_button_settings

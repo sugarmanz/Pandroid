@@ -1,6 +1,7 @@
 package com.jeremiahzucker.pandroid.request.method.exp.station
 
 import com.jeremiahzucker.pandroid.request.method.Method
+import com.jeremiahzucker.pandroid.request.model.DateModel
 import com.jeremiahzucker.pandroid.request.model.SyncTokenRequestBody
 
 /**
@@ -15,21 +16,40 @@ object CreateStation: Method() {
     }
 
     data class RequestBody private constructor(
-            val trackToken: String?,
             val musicToken: String?,
-            val musicType: String?
+            val trackToken: String? = null,
+            val musicType: String? = null
     ) : SyncTokenRequestBody(TokenType.USER) {
 
-        constructor(trackToken: String) : this(
-                trackToken = trackToken,
-                musicToken = null,
+        constructor(musicToken: String) : this(
+                musicToken = musicToken,
+                trackToken = null,
                 musicType = null
         )
 
-        constructor(musicToken: String, musicType: MusicType) : this(
-                trackToken = null,
-                musicToken = musicToken,
+        constructor(trackToken: String, musicType: MusicType) : this(
+                musicToken = null,
+                trackToken = trackToken,
                 musicType = musicType.name.toLowerCase()
         )
     }
+
+    data class ResponseBody(
+            val suppressVideoAds: Boolean,
+            val stationId: String,
+            val allowAddMusic: Boolean,
+            val dateCreated: DateModel,
+            val stationDetailUrl: String,
+            val allowEditDescription: Boolean,
+            val requiresCleanAds: Boolean,
+            val isGenreStation: Boolean,
+            val stationToken: String,
+            val stationName: String,
+            val isShared: Boolean,
+            val allowDelete: Boolean,
+            val genre: List<String>, // TODO: Verify type
+            val isQuickMix: Boolean,
+            val allowRename: Boolean,
+            val stationSharingUrl: String
+    )
 }
