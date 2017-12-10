@@ -5,9 +5,7 @@ package com.jeremiahzucker.pandroid.player
  */
 enum class PlayMode {
     SINGLE,
-    LOOP,
-    LIST,
-    SHUFFLE;
+    LIST;
     // TODO: I'm pretty sure we only need single and list
 
     companion object {
@@ -15,8 +13,6 @@ enum class PlayMode {
         fun nextMode(curr: PlayMode?): PlayMode =
             when (curr) {
                 SINGLE -> LIST
-//                LOOP -> LIST
-//                LIST -> SHUFFLE
                 else -> default
             }
     }

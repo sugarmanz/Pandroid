@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.jeremiahzucker.pandroid.Preferences
+import com.jeremiahzucker.pandroid.persist.Preferences
 import com.jeremiahzucker.pandroid.R
-import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 
 import com.jeremiahzucker.pandroid.ui.station.StationListFragment.OnListFragmentInteractionListener
 import com.squareup.picasso.Picasso

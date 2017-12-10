@@ -2,11 +2,12 @@ package com.jeremiahzucker.pandroid.player
 
 import android.media.MediaPlayer
 import com.jeremiahzucker.pandroid.request.Pandora
-import com.jeremiahzucker.pandroid.request.method.exp.station.GetPlaylist
-import com.jeremiahzucker.pandroid.request.method.exp.station.GetStation
-import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
-import com.jeremiahzucker.pandroid.request.model.FeedbackModel
-import com.jeremiahzucker.pandroid.request.model.TrackModel
+import com.jeremiahzucker.pandroid.request.json.v5.method.station.GetPlaylist
+import com.jeremiahzucker.pandroid.request.json.v5.method.station.GetStation
+import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.request.json.v5.model.FeedbackModel
+import com.jeremiahzucker.pandroid.request.json.v5.model.TrackModel
+import kotlin.reflect.KProperty
 
 /**
  * Created by sugarmanz on 9/10/17.
@@ -15,6 +16,10 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
 
     private val TAG: String = Player::class.java.simpleName
     // TODO: Consider faster alternatives to MediaPlayer
+    // At the moment, I am considering simply downloading the mp3 files
+    // and using the MediaPlayer to play them. This will hopefully solve
+    // the issues with prepareAsync being super slow and will allow for
+    // offline use.
     private var mediaPlayer = MediaPlayer()
     private val callbacks = ArrayList<PlayerInterface.Callback>()
     private val tracks = ArrayList<TrackModel>()
@@ -30,10 +35,14 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
 
     override var station: ExpandedStationModel? = null
         set(value) {
+            // Only bother setting if changing stations
             if (field?.stationToken != value?.stationToken) {
                 field = value
+                // Reset playlist
                 clearPlaylist()
+                // Load feedbacks first
                 loadFeedback()
+                // Load initial playlist
                 loadPlaylist()
             }
         }
@@ -41,31 +50,19 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
     override var currentTrack: TrackModel? = null
         private set
 
-    override val isPlaying: Boolean get() {
-        return try {
-            mediaPlayer.isPlaying
-        } catch (e: IllegalStateException) {
-            mediaPlayer.release()
-            mediaPlayer = MediaPlayer()
-            false
-        }
-    }
-    override val progress: Int get() {
-        return try {
-            mediaPlayer.currentPosition
-        } catch (e: IllegalStateException) {
-            mediaPlayer.release()
-            mediaPlayer = MediaPlayer()
-            0
-        }
-    }
-    override val duration: Int get() {
-        return try {
-            mediaPlayer.duration
-        } catch (e: IllegalStateException) {
-            mediaPlayer.release()
-            mediaPlayer = MediaPlayer()
-            0
+    override val isPlaying: Boolean by HandleIllegalStateDelegate(false) { mediaPlayer.isPlaying }
+    override val progress: Int by HandleIllegalStateDelegate(0) { mediaPlayer.currentPosition }
+    override val duration: Int by HandleIllegalStateDelegate(0) { mediaPlayer.duration }
+
+    internal class HandleIllegalStateDelegate<out T>(private val defaultValue: T, private val getter: () -> T) {
+        operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
+            return try {
+                getter()
+            } catch (e: IllegalStateException) {
+                mediaPlayer.release()
+                mediaPlayer = MediaPlayer()
+                defaultValue
+            }
         }
     }
 
@@ -169,32 +166,23 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
     }
 
     override fun releasePlayer() {
-//        mediaPlayer.reset()
         mediaPlayer.release()
     }
 
     private fun notifyPlayStatusChanged(isPlaying: Boolean) {
-        for (callback in callbacks) {
-            callback.onPlayStatusChanged(isPlaying)
-        }
+        callbacks.forEach { it.onPlayStatusChanged(isPlaying) }
     }
 
     private fun notifyPlayLast(song: TrackModel) {
-        for (callback in callbacks) {
-            callback.onSwitchLast(song)
-        }
+        callbacks.forEach { it.onSwitchLast(song) }
     }
 
     private fun notifyPlayNext(song: TrackModel) {
-        for (callback in callbacks) {
-            callback.onSwitchNext(song)
-        }
+        callbacks.forEach { it.onSwitchNext(song) }
     }
 
     private fun notifyComplete(song: TrackModel?) {
-        for (callback in callbacks) {
-            callback.onComplete(song)
-        }
+        callbacks.forEach { it.onComplete(song) }
     }
 
     override fun onCompletion(mediaPlayer: MediaPlayer?) {

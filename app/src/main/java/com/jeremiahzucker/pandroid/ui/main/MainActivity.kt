@@ -6,10 +6,10 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.os.Bundle
 import android.support.v4.view.ViewPager
-import com.jeremiahzucker.pandroid.Preferences
+import com.jeremiahzucker.pandroid.persist.Preferences
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.ui.play.PlayFragment
-import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.ui.auth.AuthActivity
 import com.jeremiahzucker.pandroid.ui.settings.SettingsFragment
 import com.jeremiahzucker.pandroid.ui.base.BaseActivity

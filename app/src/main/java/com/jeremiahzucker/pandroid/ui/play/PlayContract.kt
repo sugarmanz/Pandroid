@@ -3,8 +3,7 @@ package com.jeremiahzucker.pandroid.ui.play
 import android.content.Context
 import com.jeremiahzucker.pandroid.player.PlayMode
 import com.jeremiahzucker.pandroid.player.PlayerService
-import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
-import com.jeremiahzucker.pandroid.request.model.TrackModel
+import com.jeremiahzucker.pandroid.request.json.v5.model.TrackModel
 import com.jeremiahzucker.pandroid.ui.base.BasePresenter
 import com.jeremiahzucker.pandroid.ui.base.BaseView
 

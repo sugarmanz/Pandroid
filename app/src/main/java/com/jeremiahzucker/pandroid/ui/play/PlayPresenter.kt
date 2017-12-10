@@ -5,12 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
-import android.util.Log
 import com.jeremiahzucker.pandroid.player.PlayerService
 import com.jeremiahzucker.pandroid.request.Pandora
-import com.jeremiahzucker.pandroid.request.method.exp.station.AddFeedback
-import com.jeremiahzucker.pandroid.request.method.exp.station.DeleteFeedback
-import com.jeremiahzucker.pandroid.request.model.ResponseModel
+import com.jeremiahzucker.pandroid.request.json.v5.method.station.AddFeedback
+import com.jeremiahzucker.pandroid.request.json.v5.method.station.DeleteFeedback
+import com.jeremiahzucker.pandroid.request.json.v5.model.ResponseModel
 
 /**
  * Created by Jeremiah Zucker on 8/25/2017.

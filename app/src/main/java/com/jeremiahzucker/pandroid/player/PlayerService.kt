@@ -9,8 +9,8 @@ import android.os.IBinder
 import android.support.v7.app.NotificationCompat
 import android.widget.RemoteViews
 import com.jeremiahzucker.pandroid.R
-import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
-import com.jeremiahzucker.pandroid.request.model.TrackModel
+import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.request.json.v5.model.TrackModel
 import com.jeremiahzucker.pandroid.ui.main.MainActivity
 import com.squareup.picasso.Picasso
 

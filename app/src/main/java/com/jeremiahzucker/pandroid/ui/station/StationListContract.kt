@@ -2,8 +2,8 @@ package com.jeremiahzucker.pandroid.ui.station
 
 import com.jeremiahzucker.pandroid.ui.base.BasePresenter
 import com.jeremiahzucker.pandroid.ui.base.BaseView
-import com.jeremiahzucker.pandroid.request.method.exp.user.GetStationList
-import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.request.json.v5.method.user.GetStationList
+import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 
 /**
  * StationListContract

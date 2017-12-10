@@ -1,11 +1,11 @@
 package com.jeremiahzucker.pandroid.ui.station
 
 import android.util.Log
-import com.jeremiahzucker.pandroid.Preferences
+import com.jeremiahzucker.pandroid.persist.Preferences
 import com.jeremiahzucker.pandroid.request.Pandora
-import com.jeremiahzucker.pandroid.request.method.exp.user.GetStationList
-import com.jeremiahzucker.pandroid.request.method.exp.user.GetStationListChecksum
-import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.request.json.v5.method.user.GetStationList
+import com.jeremiahzucker.pandroid.request.json.v5.method.user.GetStationListChecksum
+import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 import io.realm.Realm
 
 /**

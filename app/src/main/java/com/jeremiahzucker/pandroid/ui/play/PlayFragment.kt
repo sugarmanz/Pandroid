@@ -16,8 +16,8 @@ import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.player.PlayMode
 import com.jeremiahzucker.pandroid.player.PlayerInterface
 import com.jeremiahzucker.pandroid.player.PlayerService
-import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
-import com.jeremiahzucker.pandroid.request.model.TrackModel
+import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.request.json.v5.model.TrackModel
 import com.jeremiahzucker.pandroid.ui.main.MainActivity
 import com.jeremiahzucker.pandroid.util.formatDurationFromMilliseconds
 import com.jeremiahzucker.pandroid.util.formatDurationFromSeconds
@@ -204,9 +204,7 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
     override fun updatePlayMode(playMode: PlayMode) {
         button_play_mode_toggle.setImageResource(when (playMode) {
             PlayMode.SINGLE -> R.drawable.ic_play_mode_single
-            PlayMode.LOOP -> R.drawable.ic_play_mode_loop
             PlayMode.LIST -> R.drawable.ic_play_mode_list
-            PlayMode.SHUFFLE -> R.drawable.ic_play_mode_shuffle
         })
     }
 

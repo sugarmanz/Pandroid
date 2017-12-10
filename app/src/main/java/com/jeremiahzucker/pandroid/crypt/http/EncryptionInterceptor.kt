@@ -16,14 +16,11 @@ class EncryptionInterceptor: Interceptor {
         const val ENC_HEADER_TAG = "ENCRYPT_ME_PLZ"
     }
 
-    // TODO: Should this belong in the companion object?
     private val TAG = EncryptionInterceptor::class.java.simpleName
 
     override fun intercept(chain: Interceptor.Chain?): Response {
         var request = chain?.request()
         if (request != null && request.header(ENC_HEADER_TAG) == "true") {
-            Log.d(TAG, "Encrypting body!")
-
             // Get body as string
             val oldBody = request.body()
             val buffer = Buffer()
@@ -44,8 +41,6 @@ class EncryptionInterceptor: Interceptor {
                     .header("Content-Length", newRequestBody.contentLength().toString())
                     .method(request.method(), newRequestBody)
                     .build()
-        } else {
-            Log.d(TAG, "Not encrypting!")
         }
         return chain!!.proceed(request)
     }

@@ -1,6 +1,6 @@
 package com.jeremiahzucker.pandroid.ui.main
 
-import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.ui.base.BasePresenter
 import com.jeremiahzucker.pandroid.ui.base.BaseView
 

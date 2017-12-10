@@ -12,6 +12,6 @@
         android:layout_centerInParent="true"
         android:textSize="24sp"
         android:textColor="?attr/colorAccent"
-        android:text="Settings"
+        android:text="Sign out"
         />
 </RelativeLayout>

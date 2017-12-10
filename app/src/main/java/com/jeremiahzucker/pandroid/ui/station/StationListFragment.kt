@@ -13,7 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.jeremiahzucker.pandroid.R
-import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 import kotlinx.android.synthetic.main.fragment_station_list.*
 
 /**

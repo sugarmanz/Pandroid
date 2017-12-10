@@ -1,7 +1,7 @@
 package com.jeremiahzucker.pandroid.player
 
-import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
-import com.jeremiahzucker.pandroid.request.model.TrackModel
+import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.request.json.v5.model.TrackModel
 
 /**
  * Created by sugarmanz on 9/10/17.

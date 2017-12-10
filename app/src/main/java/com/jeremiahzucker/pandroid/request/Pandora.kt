@@ -1,10 +1,9 @@
 package com.jeremiahzucker.pandroid.request
 
 import com.jeremiahzucker.pandroid.BuildConfig
-import com.jeremiahzucker.pandroid.Preferences
+import com.jeremiahzucker.pandroid.persist.Preferences
 import com.jeremiahzucker.pandroid.crypt.http.EncryptionInterceptor
-import com.jeremiahzucker.pandroid.request.method.Method
-import com.jeremiahzucker.pandroid.request.model.*
+import com.jeremiahzucker.pandroid.request.json.v5.model.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -82,9 +81,9 @@ class Pandora(protocol: Protocol = Protocol.HTTPS) {
         private var encrypted: Boolean = true
         private var body: Any? = null
 
-        constructor(method: Method) : this(method.methodName)
+        constructor(method: BaseMethod) : this(method.methodName)
 
-        fun method(method: Method): RequestBuilder {
+        fun method(method: BaseMethod): RequestBuilder {
             this.method = method.methodName
             return this
         }
