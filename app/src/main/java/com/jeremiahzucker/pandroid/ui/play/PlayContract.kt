@@ -25,7 +25,7 @@ interface PlayContract {
 
         fun onPlayerServiceUnbound()
 
-        fun onTrackSetAsFavorite(track: TrackModel)
+        fun onTrackSetAsFavorite(favorite: Boolean, feedbackId: String?)
 
         fun onTrackUpdated(track: TrackModel?)
 
@@ -42,7 +42,9 @@ interface PlayContract {
     interface Presenter : BasePresenter<View> {
 
         // TODO: Convert to thumbs up/down terminology
-        fun setTrackAsFavorite(track: TrackModel, favorite: Boolean)
+        fun setTrackAsFavorite(stationToken: String, trackToken: String)
+
+        fun removeTrackAsFavorite(feedbackId: String)
 
         fun bindPlayerService()
 

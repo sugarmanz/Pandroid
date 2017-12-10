@@ -7,7 +7,10 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import android.util.Log
 import com.jeremiahzucker.pandroid.player.PlayerService
-import com.jeremiahzucker.pandroid.request.model.TrackModel
+import com.jeremiahzucker.pandroid.request.Pandora
+import com.jeremiahzucker.pandroid.request.method.exp.station.AddFeedback
+import com.jeremiahzucker.pandroid.request.method.exp.station.DeleteFeedback
+import com.jeremiahzucker.pandroid.request.model.ResponseModel
 
 /**
  * Created by Jeremiah Zucker on 8/25/2017.
@@ -61,8 +64,34 @@ object PlayPresenter : PlayContract.Presenter {
         view = null
     }
 
-    override fun setTrackAsFavorite(track: TrackModel, favorite: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun setTrackAsFavorite(stationToken: String, trackToken: String) {
+        Pandora().RequestBuilder(AddFeedback)
+                .body(AddFeedback.RequestBody(stationToken, trackToken, true))
+                .build<AddFeedback.ResponseBody>()
+                .subscribe(this::setTrackAsFavoriteSuccess, this::setTrackAsFavoriteError)
+    }
+
+    private fun setTrackAsFavoriteSuccess(response: AddFeedback.ResponseBody) {
+        view?.onTrackSetAsFavorite(true, response.feedbackId)
+    }
+
+    private fun setTrackAsFavoriteError(throwable: Throwable) {
+        throwable.printStackTrace()
+    }
+
+    override fun removeTrackAsFavorite(feedbackId: String) {
+        Pandora().RequestBuilder(DeleteFeedback)
+                .body(DeleteFeedback.RequestBody(feedbackId))
+                .build<ResponseModel>()
+                .subscribe(this::removeTrackAsFavoriteSuccess, this::removeTrackAsFavoriteError)
+    }
+
+    private fun removeTrackAsFavoriteSuccess(response: ResponseModel) {
+        view?.onTrackSetAsFavorite(false, null)
+    }
+
+    private fun removeTrackAsFavoriteError(throwable: Throwable) {
+        throwable.printStackTrace()
     }
 
     override fun bindPlayerService() {

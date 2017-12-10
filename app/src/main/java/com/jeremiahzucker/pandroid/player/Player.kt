@@ -3,7 +3,9 @@ package com.jeremiahzucker.pandroid.player
 import android.media.MediaPlayer
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.request.method.exp.station.GetPlaylist
+import com.jeremiahzucker.pandroid.request.method.exp.station.GetStation
 import com.jeremiahzucker.pandroid.request.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.request.model.FeedbackModel
 import com.jeremiahzucker.pandroid.request.model.TrackModel
 
 /**
@@ -16,6 +18,7 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
     private var mediaPlayer = MediaPlayer()
     private val callbacks = ArrayList<PlayerInterface.Callback>()
     private val tracks = ArrayList<TrackModel>()
+    private val feedbacks = mutableMapOf<String, FeedbackModel>()
     private var index = 0
     private val hasNext get() = index < tracks.size - 1
     private val hasLast get() = tracks.isNotEmpty()
@@ -30,6 +33,7 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
             if (field?.stationToken != value?.stationToken) {
                 field = value
                 clearPlaylist()
+                loadFeedback()
                 loadPlaylist()
             }
         }
@@ -213,6 +217,7 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
         mediaPlayer.reset()
         index = 0
         tracks.clear()
+        feedbacks.clear()
         currentTrack = null
     }
 
@@ -223,6 +228,10 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
             .subscribe(this::loadPlaylistSuccess, this::loadPlaylistError)
 
     private fun loadPlaylistSuccess(response: GetPlaylist.ResponseBody) {
+        // Add feedback id if it exists
+        response.items.forEach { it.feedbackId = feedbacks[it.trackToken]?.feedbackId }
+
+        // Add the tracks to the queue
         tracks.addAll(response.items.filter { it.trackToken != null })
         if (currentTrack == null) {
             index = 0
@@ -232,6 +241,19 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
         }
     }
     private fun loadPlaylistError(throwable: Throwable) {
+        throwable.printStackTrace()
+    }
+
+    private fun loadFeedback() = Pandora()
+            .RequestBuilder(GetStation)
+            .body(GetStation.RequestBody(station?.stationToken ?: "", true))
+            .build<GetStation.ResponseBody>()
+            .subscribe(this::loadFeedbackSuccess, this::loadFeedbackError)
+
+    private fun loadFeedbackSuccess(response: GetStation.ResponseBody) {
+        response.feedback.thumbsUp.associateBy { it.musicToken }
+    }
+    private fun loadFeedbackError(throwable: Throwable) {
         throwable.printStackTrace()
     }
 

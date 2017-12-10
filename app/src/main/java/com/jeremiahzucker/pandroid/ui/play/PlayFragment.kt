@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -100,6 +101,14 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
         }
         button_play_next.setOnClickListener { player?.playNext() }
         button_play_last.setOnClickListener { player?.playLast() }
+        button_favorite_toggle.setOnClickListener {
+            Log.i(TAG, player?.currentTrack?.feedbackId ?: "None")
+            Log.i(TAG, player?.currentTrack?.songRating.toString())
+            if (player?.currentTrack?.songRating == 1)
+                presenter.removeTrackAsFavorite(player?.currentTrack?.feedbackId ?: "")
+            else
+                presenter.setTrackAsFavorite(player?.station?.stationToken ?: "", player?.currentTrack?.trackToken ?: "")
+        }
     }
 
     override fun onResume() {
@@ -140,7 +149,7 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
             text_view_song.text = track.songName
             text_view_artist.text = track.artistName
             // Step 2: favorite
-            button_favorite_toggle.setImageResource(if (track.songRating == 1) R.drawable.ic_favorite_yes else R.drawable.ic_favorite_no)
+            updateFavoriteToggle(track.songRating == 1)
             // Step 3: Duration
             text_view_duration.text = track.trackLength?.formatDurationFromSeconds()
             // Step 4: Keep these things updated
@@ -182,9 +191,14 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
             seek_bar.progress = progress
     }
 
-    override fun onTrackSetAsFavorite(track: TrackModel) {
+    override fun onTrackSetAsFavorite(favorite: Boolean, feedbackId: String?) {
+        player?.currentTrack?.songRating = if (favorite) 1 else 0
+        player?.currentTrack?.feedbackId = feedbackId
+
+        // TODO: Update feedbacks in Player instance
+
         button_favorite_toggle.isEnabled = true
-        updateFavoriteToggle(true)
+        updateFavoriteToggle(favorite)
     }
 
     override fun updatePlayMode(playMode: PlayMode) {

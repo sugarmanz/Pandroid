@@ -21,12 +21,15 @@ data class TrackModel(
         val albumDetailUrl: String?,
         val songDetailUrl: String?,
         val stationId: String?,
-        val songRating: Int?,
+        var songRating: Int?,
         val trackGain: String?,
         val albumExplorerUrl: String?,
         val allowFeedback: Boolean?,
         val amazonSongDigitalAsin: String?,
         val nowPlayingStationAdUrl: String?,
         val adToken: String?,
-        val trackLength: Int?
+        val trackLength: Int?,
+
+        // Not returned, but manually combined
+        var feedbackId: String?
 )

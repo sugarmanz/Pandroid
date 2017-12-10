@@ -10,7 +10,7 @@ import com.jeremiahzucker.pandroid.request.model.SyncTokenRequestBody
 object DeleteFeedback: Method() {
 
     data class RequestBody(
-            val stationToken: String
+            val feedbackId: String
     ) : SyncTokenRequestBody(TokenType.USER)
 
 }
