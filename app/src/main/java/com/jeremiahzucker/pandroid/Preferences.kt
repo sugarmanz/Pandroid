@@ -13,6 +13,7 @@ object Preferences : PreferenceHolder() {
     var partnerAuthToken: String? by bindToPreferenceFieldNullable()
     var userAuthToken: String? by bindToPreferenceFieldNullable()
     var userId: String? by bindToPreferenceFieldNullable()
+    var stationListChecksum: String? by bindToPreferenceFieldNullable()
 
     fun reset() {
         syncTimeOffset = null
@@ -20,5 +21,6 @@ object Preferences : PreferenceHolder() {
         partnerAuthToken = null
         userAuthToken = null
         userId = null
+        stationListChecksum = null
     }
 }
