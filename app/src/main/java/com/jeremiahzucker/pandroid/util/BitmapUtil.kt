@@ -11,8 +11,7 @@ import android.graphics.*
  */
 // TODO: Should convert into transformation
 fun Bitmap.getCroppedBitmap(): Bitmap {
-    val output = Bitmap.createBitmap(width,
-            height, Bitmap.Config.ARGB_8888)
+    val output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(output)
 
     val color = 0xff424242.toInt()
@@ -22,12 +21,18 @@ fun Bitmap.getCroppedBitmap(): Bitmap {
     paint.isAntiAlias = true
     canvas.drawARGB(0, 0, 0, 0)
     paint.color = color
-    // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-    canvas.drawCircle((width / 2).toFloat(), (height / 2).toFloat(),
-            (width / 2).toFloat(), paint)
+
+    canvas.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), (width / 2).toFloat(), paint)
+
+//    TODO: Make a decision on whether or not we want this center hole
+//    val transparentPaint = Paint()
+//    transparentPaint.color = 0x507E9F.toInt()
+//    transparentPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+//    canvas.drawCircle((width / 2).toFloat(), (height / 2).toFloat(), (width / 15).toFloat(), transparentPaint)
+
     paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
     canvas.drawBitmap(this, rect, rect, paint)
-    //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
+
     //return _bmp;
     return output
 }
