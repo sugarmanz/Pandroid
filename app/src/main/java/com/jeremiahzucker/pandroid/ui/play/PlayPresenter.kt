@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import android.util.Log
 import com.jeremiahzucker.pandroid.player.PlayerService
 import com.jeremiahzucker.pandroid.request.model.TrackModel
 
@@ -54,7 +55,7 @@ object PlayPresenter : PlayContract.Presenter {
     }
 
     override fun detach() {
-        unbindPlayerService()
+//        unbindPlayerService()
         // Release context reference
 //        context = null
         view = null

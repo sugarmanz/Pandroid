@@ -40,7 +40,7 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
     private val TAG: String = PlayFragment::class.java.simpleName
     private val seekProgressHandler = Handler()
     private var player: PlayerInterface? = null
-    private lateinit var presenter: PlayContract.Presenter
+    private val presenter: PlayContract.Presenter = PlayPresenter
     private val albumTarget = object : Target {
         override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
         override fun onBitmapFailed(errorDrawable: Drawable?) {}
@@ -57,18 +57,15 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
     // Need to use an actual Runnable object so that removeCallbacks will werk
     private val progressCallback = Runnable { updateSeekCallback() }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        presenter = PlayPresenter // TODO: Refactor presenter creation
-    }
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val view = inflater!!.inflate(R.layout.fragment_play, container, false)
+        return inflater!!.inflate(R.layout.fragment_play, container, false)
+    }
 
-        (view.findViewById(R.id.seek_bar) as SeekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+    override fun onStart() {
+        super.onStart()
+        seek_bar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     val scaledProgress = ((progress.toFloat() / seek_bar.max) * player!!.duration.toFloat()).toInt()
@@ -88,8 +85,7 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
                 }
             }
         })
-
-        view.findViewById(R.id.button_play_toggle).setOnClickListener {
+        button_play_toggle.setOnClickListener {
             // If player is not null and player fails to pause and player fails to play,
             // show station list. This will work because player will return true if it is
             // able to pause or play correctly
@@ -97,16 +93,13 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
                 (activity as MainActivity).showStationList()
             }
         }
-
-        view.findViewById(R.id.button_play_mode_toggle).setOnClickListener {
+        button_play_mode_toggle.setOnClickListener {
             val playMode = PlayMode.nextMode(player?.playMode)
             player?.playMode = playMode
             updatePlayMode(playMode)
         }
-        view.findViewById(R.id.button_play_next).setOnClickListener { player?.playNext() }
-        view.findViewById(R.id.button_play_last).setOnClickListener { player?.playLast() }
-
-        return view
+        button_play_next.setOnClickListener { player?.playNext() }
+        button_play_last.setOnClickListener { player?.playLast() }
     }
 
     override fun onResume() {

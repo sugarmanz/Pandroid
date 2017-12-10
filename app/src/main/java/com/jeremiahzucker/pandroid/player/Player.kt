@@ -13,7 +13,7 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
 
     private val TAG: String = Player::class.java.simpleName
     // TODO: Consider faster alternatives to MediaPlayer
-    private val mediaPlayer = MediaPlayer()
+    private var mediaPlayer = MediaPlayer()
     private val callbacks = ArrayList<PlayerInterface.Callback>()
     private val tracks = ArrayList<TrackModel>()
     private var index = 0
@@ -37,9 +37,33 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
     override var currentTrack: TrackModel? = null
         private set
 
-    override val isPlaying get() = mediaPlayer.isPlaying
-    override val progress get() = mediaPlayer.currentPosition
-    override val duration get() = mediaPlayer.duration
+    override val isPlaying: Boolean get() {
+        return try {
+            mediaPlayer.isPlaying
+        } catch (e: IllegalStateException) {
+            mediaPlayer.release()
+            mediaPlayer = MediaPlayer()
+            false
+        }
+    }
+    override val progress: Int get() {
+        return try {
+            mediaPlayer.currentPosition
+        } catch (e: IllegalStateException) {
+            mediaPlayer.release()
+            mediaPlayer = MediaPlayer()
+            0
+        }
+    }
+    override val duration: Int get() {
+        return try {
+            mediaPlayer.duration
+        } catch (e: IllegalStateException) {
+            mediaPlayer.release()
+            mediaPlayer = MediaPlayer()
+            0
+        }
+    }
 
     init {
         mediaPlayer.setOnCompletionListener(this)
@@ -107,7 +131,7 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
     }
 
     override fun pause(): Boolean {
-        if (mediaPlayer.isPlaying) {
+        if (isPlaying) {
             mediaPlayer.pause()
             isPaused = true
             notifyPlayStatusChanged(false)
@@ -118,7 +142,7 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
 
     override fun seekTo(progress: Int): Boolean {
         if (currentTrack != null) {
-            if (mediaPlayer.duration <= progress) {
+            if (duration <= progress) {
                 onCompletion(mediaPlayer)
             } else {
                 mediaPlayer.seekTo(progress)
