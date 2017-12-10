@@ -11,7 +11,7 @@ import com.jeremiahzucker.pandroid.request.model.TrackModel
 /**
  * Created by Jeremiah Zucker on 8/25/2017.
  */
-class PlayPresenter(private var context: Context? = null) : PlayContract.Presenter {
+object PlayPresenter : PlayContract.Presenter {
 
     private val TAG = PlayPresenter::class.java.simpleName
 
@@ -56,7 +56,7 @@ class PlayPresenter(private var context: Context? = null) : PlayContract.Present
     override fun detach() {
         unbindPlayerService()
         // Release context reference
-        context = null
+//        context = null
         view = null
     }
 
@@ -69,14 +69,14 @@ class PlayPresenter(private var context: Context? = null) : PlayContract.Present
         // class name because we want a specific service implementation that
         // we know will be running in our own process (and thus won't be
         // supporting component replacement by other applications).
-        context?.bindService(Intent(context, PlayerService::class.java), connection, Context.BIND_AUTO_CREATE)
+        view?.getContextForService()?.bindService(Intent(view?.getContextForService(), PlayerService::class.java), connection, Context.BIND_AUTO_CREATE)
         serviceBound = true
     }
 
     override fun unbindPlayerService() {
         if (serviceBound) {
             // Detach our existing connection.
-            context?.unbindService(connection)
+            view?.getContextForService()?.unbindService(connection)
             serviceBound = false
         }
     }

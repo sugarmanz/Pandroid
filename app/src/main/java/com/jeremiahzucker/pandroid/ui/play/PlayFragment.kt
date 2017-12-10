@@ -6,7 +6,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +35,8 @@ import kotlinx.android.synthetic.main.fragment_play.*
  */
 class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
 
+    override fun getContextForService() = activity.applicationContext
+
     private val TAG: String = PlayFragment::class.java.simpleName
     private val seekProgressHandler = Handler()
     private var player: PlayerInterface? = null
@@ -59,7 +60,7 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        presenter = PlayPresenter(activity.applicationContext) // TODO: Refactor presenter creation
+        presenter = PlayPresenter // TODO: Refactor presenter creation
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
