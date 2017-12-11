@@ -97,14 +97,14 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
         return true // Not really, lol
     }
 
-    // Will add the song as the next track and then play it
-    override fun play(song: TrackModel): Boolean {
+    // Will add the track as the next track and then play it
+    override fun play(track: TrackModel): Boolean {
         isPaused = false
         return if (tracks.isNotEmpty()) {
-            tracks.add(index + 1, song)
+            tracks.add(index + 1, track)
             playNext()
         } else {
-            tracks.add(song)
+            tracks.add(track)
             play()
         }
     }
@@ -173,16 +173,16 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
         callbacks.forEach { it.onPlayStatusChanged(isPlaying) }
     }
 
-    private fun notifyPlayLast(song: TrackModel) {
-        callbacks.forEach { it.onSwitchLast(song) }
+    private fun notifyPlayLast(track: TrackModel) {
+        callbacks.forEach { it.onSwitchLast(track) }
     }
 
-    private fun notifyPlayNext(song: TrackModel) {
-        callbacks.forEach { it.onSwitchNext(song) }
+    private fun notifyPlayNext(track: TrackModel) {
+        callbacks.forEach { it.onSwitchNext(track) }
     }
 
-    private fun notifyComplete(song: TrackModel?) {
-        callbacks.forEach { it.onComplete(song) }
+    private fun notifyComplete(track: TrackModel?) {
+        callbacks.forEach { it.onComplete(track) }
     }
 
     override fun onCompletion(mediaPlayer: MediaPlayer?) {

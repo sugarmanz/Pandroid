@@ -47,6 +47,7 @@ dependencies {
 
     // State persistence
     implementation 'frankiesardo:icepick:3.2.0'
+    implementation 'com.google.firebase:firebase-crash:11.0.4'
     kapt 'frankiesardo:icepick-processor:3.2.0'
 
     // Reactive extensions
@@ -63,3 +64,5 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
+
+apply plugin: 'com.google.gms.google-services'

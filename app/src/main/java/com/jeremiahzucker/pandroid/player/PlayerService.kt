@@ -87,7 +87,7 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
 
     override fun play() = Player.play()
 
-    override fun play(list: ExpandedStationModel) = Player.play(list)
+    override fun play(station: ExpandedStationModel) = Player.play(station)
 
     override fun play(track: TrackModel) = Player.play(track)
 

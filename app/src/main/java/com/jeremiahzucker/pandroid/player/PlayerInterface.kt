@@ -25,7 +25,7 @@ interface PlayerInterface {
     fun play(station: ExpandedStationModel): Boolean
 
     // TODO: See if this should be included
-    fun play(song: TrackModel): Boolean
+    fun play(track: TrackModel): Boolean
 
     fun playLast(): Boolean
 
