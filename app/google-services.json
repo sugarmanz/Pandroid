@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "87808267094",
+    "firebase_url": "https://pandroid-81770.firebaseio.com",
+    "project_id": "pandroid-81770",
+    "storage_bucket": "pandroid-81770.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87808267094:android:e50c2401e517eecd",
+        "android_client_info": {
+          "package_name": "com.jeremiahzucker.pandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87808267094-1562vflnm6afsku08foahttg40uq800a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jeremiahzucker.pandroid",
+            "certificate_hash": "c2278174c0eb159832a16b2d72eaf66a46d71d27"
+          }
+        },
+        {
+          "client_id": "87808267094-jp5rs759kooe1vlvvl5djvtqqiipsdfp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUP36KVuqfEuaUWN4xtAGkTmTzYtpCj9w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87808267094-jp5rs759kooe1vlvvl5djvtqqiipsdfp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
