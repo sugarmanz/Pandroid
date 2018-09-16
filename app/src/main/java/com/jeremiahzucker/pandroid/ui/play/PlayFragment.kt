@@ -126,12 +126,12 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
         seekProgressHandler.removeCallbacks(progressCallback)
     }
 
-    override fun onPlayerServiceBound(service: PlayerService) {
+    override fun registerWithPlayerService(service: PlayerService) {
         player = service
         player?.registerCallback(this)
     }
 
-    override fun onPlayerServiceUnbound() {
+    override fun unregisterWithPlayerService() {
         player?.unregisterCallback(this)
         player = null
     }

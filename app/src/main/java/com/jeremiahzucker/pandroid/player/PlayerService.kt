@@ -65,6 +65,11 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
         return mBinder
     }
 
+    override fun onUnbind(intent: Intent?): Boolean {
+        Log.i("PlayerService", "onUnbind")
+        return super.onUnbind(intent)
+    }
+
     override fun stopService(name: Intent): Boolean {
         stopForeground(true)
         unregisterCallback(this)
@@ -72,6 +77,8 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
     }
 
     override fun onDestroy() {
+        stopForeground(true)
+        unregisterCallback(this)
         releasePlayer()
         super.onDestroy()
     }
@@ -133,8 +140,9 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
         val channelId = "pandroid_service"
         val channelName = "Pandroid Notification Media Controls"
         val chan = NotificationChannel(channelId,
-                channelName, NotificationManager.IMPORTANCE_HIGH)
-        chan.lightColor = Color.CYAN
+                channelName, NotificationManager.IMPORTANCE_LOW)
+        chan.enableVibration(false)
+        chan.enableLights(false)
         chan.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         service.createNotificationChannel(chan)
@@ -146,7 +154,8 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
      */
     private fun showNotification() {
         // The PendingIntent to launch our activity if the user selects this notification
-        val contentIntent = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), 0)
+        val contentIntent = PendingIntent.getActivity(this, 0,
+                Intent(this, MainActivity::class.java), 0)
 
         // Cache content views for album art
         val smallRemoteView = smallContentView

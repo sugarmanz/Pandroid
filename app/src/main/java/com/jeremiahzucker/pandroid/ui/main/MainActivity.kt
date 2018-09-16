@@ -6,8 +6,11 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+import android.util.Log
 import com.jeremiahzucker.pandroid.persist.Preferences
 import com.jeremiahzucker.pandroid.R
+import com.jeremiahzucker.pandroid.player.Player
+import com.jeremiahzucker.pandroid.player.PlayerService
 import com.jeremiahzucker.pandroid.ui.play.PlayFragment
 import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.ui.auth.AuthActivity
@@ -70,7 +73,7 @@ class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnLi
             }
         }
 
-        radio_button_station_list.isChecked = true
+        (if (Player.isPlaying) radio_button_play else radio_button_station_list).isChecked = true
     }
 
     private fun onItemChecked(position: Int) {
@@ -88,6 +91,11 @@ class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnLi
         if (station != null) {
             (adapter?.getItem(1) as PlayFragment).setStation(station)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopService(Intent(applicationContext, PlayerService::class.java))
     }
 
     override fun showSettings() {

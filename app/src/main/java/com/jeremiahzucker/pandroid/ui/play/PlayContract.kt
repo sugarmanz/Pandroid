@@ -20,9 +20,9 @@ interface PlayContract {
 
         fun updateSeekCallback()
 
-        fun onPlayerServiceBound(service: PlayerService)
+        fun registerWithPlayerService(service: PlayerService)
 
-        fun onPlayerServiceUnbound()
+        fun unregisterWithPlayerService()
 
         fun onTrackSetAsFavorite(favorite: Boolean, feedbackId: String?)
 
