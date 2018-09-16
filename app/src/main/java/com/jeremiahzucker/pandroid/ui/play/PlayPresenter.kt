@@ -57,6 +57,7 @@ object PlayPresenter : PlayContract.Presenter {
     }
 
     override fun detach() {
+        view?.onPlayerServiceUnbound()
 //        unbindPlayerService()
         // Release context reference
 //        context = null
