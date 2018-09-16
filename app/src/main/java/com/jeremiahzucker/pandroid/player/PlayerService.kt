@@ -1,12 +1,15 @@
 package com.jeremiahzucker.pandroid.player
 
-import android.app.Notification
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
+import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
+import android.util.Log
 import android.widget.RemoteViews
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
@@ -125,6 +128,18 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
     override fun onPlayStatusChanged(isPlaying: Boolean) = showNotification()
 
     // Notification
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(): String{
+        val channelId = "pandroid_service"
+        val channelName = "Pandroid Notification Media Controls"
+        val chan = NotificationChannel(channelId,
+                channelName, NotificationManager.IMPORTANCE_HIGH)
+        chan.lightColor = Color.CYAN
+        chan.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+        val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        service.createNotificationChannel(chan)
+        return channelId
+    }
 
     /**
      * Show a notification while this service is running.
@@ -137,8 +152,11 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
         val smallRemoteView = smallContentView
         val bigRemoteView = bigContentView
 
+        val channelId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            createNotificationChannel() else ""
+
         // Set the info for the views that show in the notification panel.
-        notification = NotificationCompat.Builder(this)
+        notification = NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(R.drawable.ic_notification_app_logo)  // the status icon
                 .setWhen(System.currentTimeMillis())  // the time stamp
                 .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
@@ -146,6 +164,7 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
                 .setCustomBigContentView(bigRemoteView)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setOngoing(true)
+                .setOnlyAlertOnce(true)
                 .build()
 
         val albumArtUrl = currentTrack?.albumArtUrl ?: ""
@@ -223,6 +242,6 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
         private val ACTION_PLAY_NEXT = "com.jeremiahzucker.pandroid.player.ACTION.PLAY_NEXT"
         private val ACTION_STOP_SERVICE = "com.jeremiahzucker.pandroid.player.ACTION.STOP_SERVICE"
 
-        private val NOTIFICATION_ID = 1
+        private val NOTIFICATION_ID = 101
     }
 }
