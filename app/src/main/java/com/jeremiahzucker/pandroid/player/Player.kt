@@ -1,6 +1,7 @@
 package com.jeremiahzucker.pandroid.player
 
 import android.media.MediaPlayer
+import android.util.Log
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.request.json.v5.method.station.GetPlaylist
 import com.jeremiahzucker.pandroid.request.json.v5.method.station.GetStation
@@ -192,13 +193,13 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
             // In the end of the list
             // Do nothing, just deliver the callback
         } else if (playMode === PlayMode.SINGLE) {
-            next = currentTrack
+            currentTrack = currentTrack
             play()
         } else if (hasNext) {
-            next = nextTrack
+            currentTrack = nextTrack
             play()
         }
-        notifyComplete(next)
+        notifyComplete(currentTrack)
     }
 
     private fun clearPlaylist() {
@@ -209,7 +210,7 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
         currentTrack = null
     }
 
-    private fun loadPlaylist() = Pandora(Pandora.Protocol.HTTP)
+    private fun loadPlaylist() = Pandora.HTTP
             .RequestBuilder(GetPlaylist)
             .body(GetPlaylist.RequestBody(station?.stationToken ?: ""))
             .build<GetPlaylist.ResponseBody>()
@@ -217,7 +218,10 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
 
     private fun loadPlaylistSuccess(response: GetPlaylist.ResponseBody) {
         // Add feedback id if it exists
-        response.items.forEach { it.feedbackId = feedbacks[it.trackToken]?.feedbackId }
+        response.items.forEach {
+            it.feedbackId = feedbacks[it.trackToken]?.feedbackId
+
+        }
 
         // Add the tracks to the queue
         tracks.addAll(response.items.filter { it.trackToken != null })
@@ -232,7 +236,7 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
         throwable.printStackTrace()
     }
 
-    private fun loadFeedback() = Pandora()
+    private fun loadFeedback() = Pandora.HTTPS
             .RequestBuilder(GetStation)
             .body(GetStation.RequestBody(station?.stationToken ?: "", true))
             .build<GetStation.ResponseBody>()
@@ -244,5 +248,6 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
     private fun loadFeedbackError(throwable: Throwable) {
         throwable.printStackTrace()
     }
+
 
 }

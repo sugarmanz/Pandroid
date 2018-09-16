@@ -3,6 +3,7 @@ package com.jeremiahzucker.pandroid.ui.station
 import android.util.Log
 import com.jeremiahzucker.pandroid.persist.Preferences
 import com.jeremiahzucker.pandroid.request.Pandora
+import com.jeremiahzucker.pandroid.request.json.v5.method.auth.UserLogin
 import com.jeremiahzucker.pandroid.request.json.v5.method.user.GetStationList
 import com.jeremiahzucker.pandroid.request.json.v5.method.user.GetStationListChecksum
 import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
@@ -43,8 +44,7 @@ class StationListPresenter : StationListContract.Presenter {
     }
 
     override fun getStationList(body: GetStationList.RequestBody) {
-        Pandora(Pandora.Protocol.HTTP)
-                .RequestBuilder(GetStationList)
+        Pandora.HTTP.RequestBuilder(GetStationList)
                 .body(body)
                 .build<GetStationList.ResponseBody>()
                 .subscribe(this::handleGetStationListSuccess, this::handleGetStationListError)
@@ -69,7 +69,8 @@ class StationListPresenter : StationListContract.Presenter {
     }
 
     private fun verifyChecksum() {
-        Pandora(Pandora.Protocol.HTTP).RequestBuilder(GetStationListChecksum)
+        Log.i(TAG, "VERIFY")
+        Pandora.HTTP.RequestBuilder(GetStationListChecksum)
                 .body(GetStationListChecksum.RequestBody())
                 .build<GetStationListChecksum.ResponseBody>()
                 .subscribe(this::handleGetStationListChecksumSuccess, this::handleGetStationListChecksumError)
@@ -80,7 +81,28 @@ class StationListPresenter : StationListContract.Presenter {
     }
 
     private fun handleGetStationListChecksumError(throwable: Throwable) {
+        if ("1001" == throwable.message)
+            doUserLogin()
+    }
 
+    private fun doUserLogin() {
+        Pandora.RequestBuilder(UserLogin)
+                .authToken(Preferences.partnerAuthToken)
+                .body(UserLogin.RequestBody(Preferences.username ?: "", Preferences.password ?: ""))
+                .build<UserLogin.ResponseBody>()
+                .subscribe(this::handleUserLoginSuccess, this::handleUserLoginError)
+    }
+
+    private fun handleUserLoginSuccess(result: UserLogin.ResponseBody) {
+        // TODO: Pass to model? Maybe?
+        Preferences.userId = result.userId
+        Preferences.userAuthToken = result.userAuthToken
+
+        verifyChecksum()
+    }
+
+    private fun handleUserLoginError(throwable: Throwable) {
+        view?.showAuth()
     }
 
 }

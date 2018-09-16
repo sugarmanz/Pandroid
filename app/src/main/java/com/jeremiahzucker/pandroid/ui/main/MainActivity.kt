@@ -13,6 +13,7 @@ import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.ui.auth.AuthActivity
 import com.jeremiahzucker.pandroid.ui.settings.SettingsFragment
 import com.jeremiahzucker.pandroid.ui.base.BaseActivity
+import com.jeremiahzucker.pandroid.ui.play.PlayPresenter
 import com.jeremiahzucker.pandroid.ui.station.StationListFragment
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -95,6 +96,9 @@ class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnLi
 
     override fun showAuth() {
         Preferences.reset()
+
+        PlayPresenter.unbindPlayerService()
+
         val intent = Intent(this, AuthActivity::class.java)
         startActivity(intent) // should probs use no history
         finish()

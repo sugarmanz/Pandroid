@@ -14,6 +14,7 @@ import android.view.ViewGroup
 
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.ui.main.MainActivity
 import kotlinx.android.synthetic.main.fragment_station_list.*
 
 /**
@@ -39,12 +40,10 @@ class StationListFragment : Fragment(), StationListContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (arguments != null) {
-            mColumnCount = arguments.getInt(ARG_COLUMN_COUNT)
-        }
+        mColumnCount = arguments?.getInt(ARG_COLUMN_COUNT) ?: 1
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_station_list, container, false)
 
@@ -118,6 +117,10 @@ class StationListFragment : Fragment(), StationListContract.View {
         }
         // TODO: Setup local persistence and initially load from local storage
         recycler_view_station_list.adapter = StationListAdapter(context, listOf(), mListener)
+    }
+
+    override fun showAuth() {
+        (activity as MainActivity).showAuth()
     }
 
     /**

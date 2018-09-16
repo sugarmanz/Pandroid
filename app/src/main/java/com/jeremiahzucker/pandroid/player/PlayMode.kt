@@ -9,7 +9,7 @@ enum class PlayMode {
     // TODO: I'm pretty sure we only need single and list
 
     companion object {
-        val default: PlayMode = SINGLE
+        val default: PlayMode = LIST
         fun nextMode(curr: PlayMode?): PlayMode =
             when (curr) {
                 SINGLE -> LIST

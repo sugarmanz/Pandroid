@@ -10,16 +10,16 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.http.*
-
 
 /**
  * Created by jzucker on 6/30/17.
  * https://tuner.pandora.com/services/json/
  */
-class Pandora(protocol: Protocol = Protocol.HTTPS) {
+class Pandora private constructor(protocol: Protocol = Protocol.HTTPS) {
 
     enum class Protocol {
         HTTP,
@@ -33,6 +33,11 @@ class Pandora(protocol: Protocol = Protocol.HTTPS) {
     // Create companion object to hold constants relative to this domain
     companion object {
         private const val PANDORA_API_BASE_URI = "tuner.pandora.com/services/json/"
+        val HTTP = Pandora()
+        val HTTPS = Pandora(Protocol.HTTPS)
+        fun RequestBuilder(method: BaseMethod, pandora: Pandora = HTTPS) = pandora.RequestBuilder(method)
+        fun RequestBuilder(method: String, pandora: Pandora = HTTPS) = pandora.RequestBuilder(method)
+        fun download(file: String) = HTTPS.API.attemptDownload(file).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
     }
 
     private val PANDORA_API_BASE_URL = protocol.getProtocolString() + PANDORA_API_BASE_URI
@@ -47,6 +52,10 @@ class Pandora(protocol: Protocol = Protocol.HTTPS) {
                 @Query(value = "user_id") userId: String?,
                 @Header(value = EncryptionInterceptor.ENC_HEADER_TAG) encrypted: Boolean,
                 @Body body: Any?): Observable<ResponseModel>
+
+        @Streaming
+        @GET
+        fun attemptDownload(@Url file: String): Observable<ResponseBody>
     }
 
     private val API: PandoraAPI by lazy {
@@ -128,8 +137,13 @@ class Pandora(protocol: Protocol = Protocol.HTTPS) {
         ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 
         inline fun <reified T> build(): Observable<T> = buildResponseModel()
-                .filter { it.isOk }
-                .map { it.getResult<T>() }
+//                .filter { it.isOk }
+                .map {
+                    it.code == 1001 && throw InvalidAuthException(it.code.toString())
+                    it.getResult<T>()
+                }
     }
+
+    class InvalidAuthException(msg: String) : Exception(msg)
 
 }

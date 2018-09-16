@@ -36,7 +36,7 @@ import kotlinx.android.synthetic.main.fragment_play.*
  */
 class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
 
-    override fun getContextForService() = activity.applicationContext
+    override fun getContextForService() = activity!!.applicationContext
 
     private val TAG: String = PlayFragment::class.java.simpleName
     private val seekProgressHandler = Handler()
@@ -58,10 +58,10 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
     // Need to use an actual Runnable object so that removeCallbacks will werk
     private val progressCallback = Runnable { updateSeekCallback() }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_play, container, false)
+        return inflater.inflate(R.layout.fragment_play, container, false)
     }
 
     override fun onStart() {

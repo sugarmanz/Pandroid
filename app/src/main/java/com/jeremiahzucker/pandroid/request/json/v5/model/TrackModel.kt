@@ -31,5 +31,7 @@ data class TrackModel(
         val trackLength: Int?,
 
         // Not returned, but manually combined
-        var feedbackId: String?
+        var feedbackId: String?,
+        var downloaded: Boolean = false,
+        var path: String?
 )

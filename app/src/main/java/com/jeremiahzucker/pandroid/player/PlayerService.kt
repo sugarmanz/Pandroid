@@ -6,7 +6,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import android.support.v7.app.NotificationCompat
+import android.support.v4.app.NotificationCompat
 import android.widget.RemoteViews
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel

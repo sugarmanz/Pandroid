@@ -19,6 +19,8 @@ interface StationListContract {
         fun showProgress(show: Boolean)
         fun updateStationList(stations: List<ExpandedStationModel>)
 
+        fun showAuth()
+
     }
 
     interface Presenter : BasePresenter<View> {

@@ -56,8 +56,7 @@ class AuthPresenter : AuthContract.Presenter {
                     handlePartnerLoginSuccess(it)
                     doUserLogin(username, password)
                 }, view!!::showErrorNetwork)
-            else
-                doUserLogin(username, password)
+            else doUserLogin(username, password)
         }
     }
 
@@ -65,11 +64,15 @@ class AuthPresenter : AuthContract.Presenter {
     private fun isUsernameValid(username: String) = username.any { it == '@' }
 
     // So much prettier <3 && TODO: Convert into store call (well, not for login call)
-    private fun doUserLogin(username: String, password: String) = Pandora().RequestBuilder(UserLogin)
-            .authToken(Preferences.partnerAuthToken)
-            .body(UserLogin.RequestBody(username, password))
-            .build<UserLogin.ResponseBody>()
-            .subscribe(this::handleUserLoginSuccess, this::handleUserLoginError)
+    private fun doUserLogin(username: String, password: String) {
+        Preferences.username = username
+        Preferences.password = password
+        Pandora.HTTPS.RequestBuilder(UserLogin)
+                .authToken(Preferences.partnerAuthToken)
+                .body(UserLogin.RequestBody(username, password))
+                .build<UserLogin.ResponseBody>()
+                .subscribe(this::handleUserLoginSuccess, this::handleUserLoginError)
+    }
 
     private fun handleUserLoginSuccess(result: UserLogin.ResponseBody) {
         // TODO: Pass to model? Maybe?
@@ -85,7 +88,7 @@ class AuthPresenter : AuthContract.Presenter {
         view?.showErrorNetwork(throwable)
     }
 
-    private fun doPartnerLogin() = Pandora().RequestBuilder(PartnerLogin)
+    private fun doPartnerLogin() = Pandora.HTTPS.RequestBuilder(PartnerLogin)
                 .body(PartnerLogin.RequestBody())
                 .encrypted(false)
                 .build<PartnerLogin.ResponseBody>()

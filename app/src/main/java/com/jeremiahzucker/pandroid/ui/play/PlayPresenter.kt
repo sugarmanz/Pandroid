@@ -64,7 +64,7 @@ object PlayPresenter : PlayContract.Presenter {
     }
 
     override fun setTrackAsFavorite(stationToken: String, trackToken: String) {
-        Pandora().RequestBuilder(AddFeedback)
+        Pandora.RequestBuilder(AddFeedback)
                 .body(AddFeedback.RequestBody(stationToken, trackToken, true))
                 .build<AddFeedback.ResponseBody>()
                 .subscribe(this::setTrackAsFavoriteSuccess, this::setTrackAsFavoriteError)
@@ -79,7 +79,7 @@ object PlayPresenter : PlayContract.Presenter {
     }
 
     override fun removeTrackAsFavorite(feedbackId: String) {
-        Pandora().RequestBuilder(DeleteFeedback)
+        Pandora.RequestBuilder(DeleteFeedback)
                 .body(DeleteFeedback.RequestBody(feedbackId))
                 .build<ResponseModel>()
                 .subscribe(this::removeTrackAsFavoriteSuccess, this::removeTrackAsFavoriteError)

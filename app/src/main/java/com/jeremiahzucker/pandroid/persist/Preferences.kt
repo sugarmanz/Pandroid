@@ -14,6 +14,8 @@ object Preferences : PreferenceHolder() {
     var userAuthToken: String? by bindToPreferenceFieldNullable()
     var userId: String? by bindToPreferenceFieldNullable()
     var stationListChecksum: String? by bindToPreferenceFieldNullable()
+    var username: String? by bindToPreferenceFieldNullable(Keys.USERNAME)
+    var password: String? by bindToPreferenceFieldNullable(Keys.PASSWORD)
 
     fun reset() {
         syncTimeOffset = null
@@ -22,5 +24,10 @@ object Preferences : PreferenceHolder() {
         userAuthToken = null
         userId = null
         stationListChecksum = null
+    }
+
+    object Keys {
+        const val USERNAME = "USERNAME_KEY"
+        const val PASSWORD = "PASSWORD_KEY"
     }
 }
