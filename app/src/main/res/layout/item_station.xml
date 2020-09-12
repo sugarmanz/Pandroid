@@ -15,7 +15,7 @@
         android:layout_marginBottom="@dimen/common.divider.line"
         />
 
-    <android.support.v7.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/image_view_album"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -63,7 +63,7 @@
         android:paddingLeft="@dimen/common.margin.large"
         >
 
-        <android.support.v7.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/image_button_action"
             android:layout_width="24dp"
             android:layout_height="24dp"

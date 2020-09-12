@@ -1,7 +1,7 @@
 package com.jeremiahzucker.pandroid.ui.auth
 
 import android.util.Log // TODO: Remove android class
-import com.jeremiahzucker.pandroid.persist.Preferences
+import com.jeremiahzucker.pandroid.PandroidApplication.Companion.Preferences
 import com.jeremiahzucker.pandroid.crypt.BlowFish
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.request.json.v5.method.auth.PartnerLogin

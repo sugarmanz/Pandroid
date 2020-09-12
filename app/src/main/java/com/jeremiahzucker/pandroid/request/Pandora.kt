@@ -1,7 +1,7 @@
 package com.jeremiahzucker.pandroid.request
 
 import com.jeremiahzucker.pandroid.BuildConfig
-import com.jeremiahzucker.pandroid.persist.Preferences
+import com.jeremiahzucker.pandroid.PandroidApplication.Companion.Preferences
 import com.jeremiahzucker.pandroid.crypt.http.EncryptionInterceptor
 import com.jeremiahzucker.pandroid.request.json.v5.model.*
 import io.reactivex.Observable

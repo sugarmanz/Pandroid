@@ -28,7 +28,7 @@
             android:gravity="center_vertical"
             >
 
-            <android.support.v7.widget.AppCompatImageView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/common.padding.large"
@@ -36,7 +36,7 @@
                 app:srcCompat="@drawable/ic_list_add"
                 />
 
-            <android.support.v7.widget.AppCompatTextView
+            <TextView
                 style="@style/AppTheme.TextAppearance.List.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

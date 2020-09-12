@@ -4,11 +4,11 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
+import com.google.android.material.snackbar.Snackbar
 import com.jeremiahzucker.pandroid.ui.base.BaseActivity
 import com.jeremiahzucker.pandroid.ui.main.MainActivity
 import com.jeremiahzucker.pandroid.R

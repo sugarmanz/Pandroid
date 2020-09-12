@@ -7,10 +7,10 @@ import android.graphics.Color
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import android.support.annotation.RequiresApi
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 import android.util.Log
 import android.widget.RemoteViews
+import androidx.annotation.RequiresApi
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.request.json.v5.model.TrackModel

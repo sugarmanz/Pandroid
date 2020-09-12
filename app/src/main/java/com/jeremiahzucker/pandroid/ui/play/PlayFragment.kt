@@ -5,14 +5,16 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 
 import com.jeremiahzucker.pandroid.R
+import com.jeremiahzucker.pandroid.persist.Preferences
 import com.jeremiahzucker.pandroid.player.PlayMode
 import com.jeremiahzucker.pandroid.player.PlayerInterface
 import com.jeremiahzucker.pandroid.player.PlayerService

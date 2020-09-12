@@ -1,6 +1,6 @@
 package com.jeremiahzucker.pandroid.request.json.v5.model
 
-import com.jeremiahzucker.pandroid.persist.Preferences
+import com.jeremiahzucker.pandroid.PandroidApplication.Companion.Preferences
 
 /**
  * Created by Jeremiah Zucker on 8/20/2017.

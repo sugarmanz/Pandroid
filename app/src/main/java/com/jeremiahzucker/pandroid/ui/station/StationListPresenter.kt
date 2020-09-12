@@ -1,7 +1,7 @@
 package com.jeremiahzucker.pandroid.ui.station
 
 import android.util.Log
-import com.jeremiahzucker.pandroid.persist.Preferences
+import com.jeremiahzucker.pandroid.PandroidApplication.Companion.Preferences
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.request.json.v5.method.auth.UserLogin
 import com.jeremiahzucker.pandroid.request.json.v5.method.user.GetStationList

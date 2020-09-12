@@ -1,13 +1,13 @@
 package com.jeremiahzucker.pandroid.ui.station
 
 import android.content.Context
-import android.support.v7.widget.AppCompatImageView
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
-import com.jeremiahzucker.pandroid.persist.Preferences
+import androidx.recyclerview.widget.RecyclerView
+import com.jeremiahzucker.pandroid.PandroidApplication.Companion.Preferences
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 
@@ -91,7 +91,7 @@ class StationListAdapter(private val context: Context, private var stations: Lis
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         val stationName: TextView? = mView.findViewById(R.id.text_view_name) as TextView?
         val stationDetailUrl: TextView? = mView.findViewById(R.id.text_view_info) as TextView?
-        val stationArt: AppCompatImageView? = mView.findViewById(R.id.image_view_album) as AppCompatImageView?
+        val stationArt: ImageView? = mView.findViewById(R.id.image_view_album) as android.widget.ImageView?
         var stationModel: ExpandedStationModel? = null
 
         val footerSummary: TextView? = mView.findViewById(R.id.text_view_summary) as TextView?

@@ -70,7 +70,7 @@
             android:text="@string/play.default_duration"
             />
 
-        <android.support.v7.widget.AppCompatSeekBar
+        <SeekBar
             android:id="@+id/seek_bar"
             style="@style/Widget.AppCompat.SeekBar"
             android:layout_width="0dp"
@@ -103,14 +103,14 @@
         android:gravity="center_vertical"
         >
 
-        <android.support.v7.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/button_play_mode_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:srcCompat="@drawable/ic_play_mode_list" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/button_play_last"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             />
 
-        <android.support.v7.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/button_play_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             />
 
-        <android.support.v7.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/button_play_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             />
 
-        <android.support.v7.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/button_favorite_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

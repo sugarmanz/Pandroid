@@ -1,9 +1,9 @@
 package com.jeremiahzucker.pandroid.util
 
 import android.graphics.drawable.GradientDrawable
-import android.support.annotation.ColorInt
-import android.support.annotation.FloatRange
 import android.view.Window
+import androidx.annotation.ColorInt
+import androidx.annotation.FloatRange
 
 /**
  * WindowUtil
