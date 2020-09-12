@@ -81,9 +81,12 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
         } else if (currentTrack != null) {
             mediaPlayer.reset()
             mediaPlayer.setDataSource(currentTrack?.audioUrlMap?.highQuality?.audioUrl)
-            mediaPlayer.prepare() // TODO: PrepareAsync?????
-            mediaPlayer.start()
-            notifyPlayStatusChanged(true)
+            mediaPlayer.prepareAsync() // TODO: PrepareAsync?????
+
+            mediaPlayer.setOnPreparedListener {
+                mediaPlayer.start()
+                notifyPlayStatusChanged(true)
+            }
 
             if (!hasNext)
                 loadPlaylist()
