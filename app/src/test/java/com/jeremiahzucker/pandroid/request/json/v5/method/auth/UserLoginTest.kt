@@ -12,5 +12,4 @@ class UserLoginTest {
     fun testMethodName() {
         Assert.assertEquals("auth.userLogin", UserLogin.methodName)
     }
-
 }

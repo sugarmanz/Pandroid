@@ -2,7 +2,6 @@ package com.jeremiahzucker.pandroid.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -11,14 +10,13 @@ import com.jeremiahzucker.pandroid.PandroidApplication.Companion.Preferences
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.player.Player
 import com.jeremiahzucker.pandroid.player.PlayerService
-import com.jeremiahzucker.pandroid.ui.play.PlayFragment
 import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.ui.auth.AuthActivity
-import com.jeremiahzucker.pandroid.ui.settings.SettingsFragment
 import com.jeremiahzucker.pandroid.ui.base.BaseActivity
+import com.jeremiahzucker.pandroid.ui.play.PlayFragment
 import com.jeremiahzucker.pandroid.ui.play.PlayPresenter
+import com.jeremiahzucker.pandroid.ui.settings.SettingsFragment
 import com.jeremiahzucker.pandroid.ui.station.StationListFragment
-
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 
@@ -38,19 +36,19 @@ class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnLi
 
         // Setup fragments
         val fragments = listOf(
-                StationListFragment(),
-                PlayFragment(),
-                SettingsFragment()
+            StationListFragment(),
+            PlayFragment(),
+            SettingsFragment()
         )
         val titles = listOf(
-                "Station List",
-                "Play",
-                "Settings"
+            "Station List",
+            "Play",
+            "Settings"
         )
         val buttons = listOf(
-                radio_button_station_list,
-                radio_button_play,
-                radio_button_settings
+            radio_button_station_list,
+            radio_button_play,
+            radio_button_settings
         )
 
         // Create the adapter that will return a fragment for each of the three
@@ -59,17 +57,20 @@ class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnLi
 
         // Set up the ViewPager with the sections adapter.
         container.adapter = adapter
-        container.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {}
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-            override fun onPageSelected(position: Int) {
-                buttons[position].isChecked = true
+        container.addOnPageChangeListener(
+            object : ViewPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) {}
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+                override fun onPageSelected(position: Int) {
+                    buttons[position].isChecked = true
+                }
             }
-        })
+        )
 
         buttons.forEach {
             it.setOnCheckedChangeListener {
-                buttonView, isChecked -> if (isChecked) onItemChecked(buttons.indexOf(buttonView))
+                buttonView, isChecked ->
+                if (isChecked) onItemChecked(buttons.indexOf(buttonView))
             }
         }
 
@@ -113,13 +114,12 @@ class MainActivity : BaseActivity(), MainContract.View, StationListFragment.OnLi
     }
 
     inner class MainPagerAdapter(
-            fm: FragmentManager,
-            private val fragments: List<Fragment>,
-            private val titles: List<String>
+        fm: FragmentManager,
+        private val fragments: List<Fragment>,
+        private val titles: List<String>
     ) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int) = fragments[position]
         override fun getPageTitle(position: Int) = titles[position]
         override fun getCount() = titles.size
     }
-
 }

@@ -4,23 +4,11 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import androidx.datastore.DataStore
-import androidx.datastore.preferences.*
-import androidx.datastore.preferences.Preferences
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KClass
-import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty
 
-//class NullableDatastoreDelegate<V>(private val dataStore: DataStore<Preferences>, private val key: Preferences.Key<V>) {
+// class NullableDatastoreDelegate<V>(private val dataStore: DataStore<Preferences>, private val key: Preferences.Key<V>) {
 //
 //    companion object {
 //        private const val LONG_NULL = Long.MAX_VALUE
@@ -40,9 +28,9 @@ import kotlin.reflect.KProperty
 //    private fun DataStore<Preferences>.editBlocking(transform: suspend (MutablePreferences) -> Unit): Preferences = runBlocking {
 //        edit(transform)
 //    }
-//}
+// }
 //
-//inline fun <reified V : Any> DataStore<Preferences>.bindToPreferenceFieldNullable(prop: KProperty<*>) = NullableDatastoreDelegate<V>(this, preferencesKey(prop.name))
+// inline fun <reified V : Any> DataStore<Preferences>.bindToPreferenceFieldNullable(prop: KProperty<*>) = NullableDatastoreDelegate<V>(this, preferencesKey(prop.name))
 
 class NullableSharedPreferencesDelegate<V : Any>(private val sharedPreferences: SharedPreferences, private val dataClass: KClass<V>) {
 

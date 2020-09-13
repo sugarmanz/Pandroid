@@ -29,5 +29,4 @@ open class SyncTokenRequestBody(tokenType: TokenType = TokenType.USER) {
             }
         }
     }
-
 }

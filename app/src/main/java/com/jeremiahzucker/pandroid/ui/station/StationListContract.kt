@@ -1,9 +1,9 @@
 package com.jeremiahzucker.pandroid.ui.station
 
-import com.jeremiahzucker.pandroid.ui.base.BasePresenter
-import com.jeremiahzucker.pandroid.ui.base.BaseView
 import com.jeremiahzucker.pandroid.request.json.v5.method.user.GetStationList
 import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.ui.base.BasePresenter
+import com.jeremiahzucker.pandroid.ui.base.BaseView
 
 /**
  * StationListContract
@@ -20,13 +20,10 @@ interface StationListContract {
         fun updateStationList(stations: List<ExpandedStationModel>)
 
         fun showAuth()
-
     }
 
     interface Presenter : BasePresenter<View> {
 
         fun getStationList(body: GetStationList.RequestBody = GetStationList.RequestBody())
-
     }
-
 }

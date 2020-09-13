@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
-import android.util.Log
 import com.jeremiahzucker.pandroid.player.PlayerService
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.request.json.v5.method.station.AddFeedback
@@ -65,9 +64,9 @@ object PlayPresenter : PlayContract.Presenter {
 
     override fun setTrackAsFavorite(stationToken: String, trackToken: String) {
         Pandora.RequestBuilder(AddFeedback)
-                .body(AddFeedback.RequestBody(stationToken, trackToken, true))
-                .build<AddFeedback.ResponseBody>()
-                .subscribe(this::setTrackAsFavoriteSuccess, this::setTrackAsFavoriteError)
+            .body(AddFeedback.RequestBody(stationToken, trackToken, true))
+            .build<AddFeedback.ResponseBody>()
+            .subscribe(this::setTrackAsFavoriteSuccess, this::setTrackAsFavoriteError)
     }
 
     private fun setTrackAsFavoriteSuccess(response: AddFeedback.ResponseBody) {
@@ -80,9 +79,9 @@ object PlayPresenter : PlayContract.Presenter {
 
     override fun removeTrackAsFavorite(feedbackId: String) {
         Pandora.RequestBuilder(DeleteFeedback)
-                .body(DeleteFeedback.RequestBody(feedbackId))
-                .build<ResponseModel>()
-                .subscribe(this::removeTrackAsFavoriteSuccess, this::removeTrackAsFavoriteError)
+            .body(DeleteFeedback.RequestBody(feedbackId))
+            .build<ResponseModel>()
+            .subscribe(this::removeTrackAsFavoriteSuccess, this::removeTrackAsFavoriteError)
     }
 
     private fun removeTrackAsFavoriteSuccess(response: ResponseModel) {
@@ -113,5 +112,4 @@ object PlayPresenter : PlayContract.Presenter {
             serviceBound = false
         }
     }
-
 }

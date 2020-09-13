@@ -14,5 +14,4 @@ interface BasePresenter<T> {
      * Unbinds present when View is destroyed.
      */
     fun detach()
-
 }

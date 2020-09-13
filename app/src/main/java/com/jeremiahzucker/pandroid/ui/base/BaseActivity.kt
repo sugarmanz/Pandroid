@@ -1,11 +1,6 @@
 package com.jeremiahzucker.pandroid.ui.base
 
-import android.app.Activity
-import android.graphics.PixelFormat
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.jeremiahzucker.pandroid.R
-import com.jeremiahzucker.pandroid.util.setBackgroundGradient
 
 /**
  * BaseActivity
@@ -32,5 +27,4 @@ abstract class BaseActivity : AppCompatActivity() {
 //        )
 //        window.setFormat(PixelFormat.RGBA_8888)
 //    }
-
 }

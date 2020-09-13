@@ -10,11 +10,14 @@ class PandroidApplication : Application() {
         super.onCreate()
         Realm.init(applicationContext)
 //        Preferences.init(applicationContext)
-        Preferences = Preferences(this)
+        initPreferences()
     }
 
     companion object {
         lateinit var Preferences: Preferences private set
-    }
 
+        fun Application.initPreferences() {
+            Preferences = Preferences(this)
+        }
+    }
 }

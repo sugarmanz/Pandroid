@@ -5,13 +5,13 @@ package com.jeremiahzucker.pandroid.request.json.v5.model
  * TODO: Try to consolidate duplicate fields
  */
 data class SongBookmarkModel(
-        val sampleUrl: String,
-        val sampleGain: String,
-        val albumName: String,
-        val artistName: String,
-        val musicToken: String,
-        val dateCreated: DateModel,
-        val artUrl: String,
-        val bookmarkToken: String,
-        val songName: String
+    val sampleUrl: String,
+    val sampleGain: String,
+    val albumName: String,
+    val artistName: String,
+    val musicToken: String,
+    val dateCreated: DateModel,
+    val artUrl: String,
+    val bookmarkToken: String,
+    val songName: String
 )

@@ -9,9 +9,9 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
+import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.ui.base.BaseActivity
 import com.jeremiahzucker.pandroid.ui.main.MainActivity
-import com.jeremiahzucker.pandroid.R
 import kotlinx.android.synthetic.main.activity_auth.*
 
 /**
@@ -30,13 +30,15 @@ class AuthActivity : BaseActivity(), AuthContract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
         // Set up the login form.
-        password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
-            if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                attemptLogin()
-                return@OnEditorActionListener true
+        password.setOnEditorActionListener(
+            TextView.OnEditorActionListener { _, id, _ ->
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    attemptLogin()
+                    return@OnEditorActionListener true
+                }
+                false
             }
-            false
-        })
+        )
 
         sign_in_button.setOnClickListener { attemptLogin() }
     }
@@ -59,23 +61,27 @@ class AuthActivity : BaseActivity(), AuthContract.View {
 
         login_form.visibility = if (show) View.GONE else View.VISIBLE
         login_form.animate()
-                .setDuration(shortAnimTime)
-                .alpha((if (show) 0 else 1).toFloat())
-                .setListener(object : AnimatorListenerAdapter() {
+            .setDuration(shortAnimTime)
+            .alpha((if (show) 0 else 1).toFloat())
+            .setListener(
+                object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         login_form.visibility = if (show) View.GONE else View.VISIBLE
                     }
-                })
+                }
+            )
 
         login_progress.visibility = if (show) View.VISIBLE else View.GONE
         login_progress.animate()
-                .setDuration(shortAnimTime)
-                .alpha((if (show) 1 else 0).toFloat())
-                .setListener(object : AnimatorListenerAdapter() {
+            .setDuration(shortAnimTime)
+            .alpha((if (show) 1 else 0).toFloat())
+            .setListener(
+                object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         login_progress.visibility = if (show) View.VISIBLE else View.GONE
                     }
-                })
+                }
+            )
     }
 
     override fun showMain() {

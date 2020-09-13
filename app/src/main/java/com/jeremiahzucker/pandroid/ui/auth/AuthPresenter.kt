@@ -52,10 +52,13 @@ class AuthPresenter : AuthContract.Presenter {
 
             // TODO: Implement piggybacking in order preserve networking resources
             if (Preferences.partnerAuthToken == null)
-                doPartnerLogin().subscribe({
-                    handlePartnerLoginSuccess(it)
-                    doUserLogin(username, password)
-                }, view!!::showErrorNetwork)
+                doPartnerLogin().subscribe(
+                    {
+                        handlePartnerLoginSuccess(it)
+                        doUserLogin(username, password)
+                    },
+                    view!!::showErrorNetwork
+                )
             else doUserLogin(username, password)
         }
     }
@@ -68,10 +71,10 @@ class AuthPresenter : AuthContract.Presenter {
         Preferences.username = username
         Preferences.password = password
         Pandora.HTTPS.RequestBuilder(UserLogin)
-                .authToken(Preferences.partnerAuthToken)
-                .body(UserLogin.RequestBody(username, password))
-                .build<UserLogin.ResponseBody>()
-                .subscribe(this::handleUserLoginSuccess, this::handleUserLoginError)
+            .authToken(Preferences.partnerAuthToken)
+            .body(UserLogin.RequestBody(username, password))
+            .build<UserLogin.ResponseBody>()
+            .subscribe(this::handleUserLoginSuccess, this::handleUserLoginError)
     }
 
     private fun handleUserLoginSuccess(result: UserLogin.ResponseBody) {
@@ -89,9 +92,9 @@ class AuthPresenter : AuthContract.Presenter {
     }
 
     private fun doPartnerLogin() = Pandora.HTTPS.RequestBuilder(PartnerLogin)
-                .body(PartnerLogin.RequestBody())
-                .encrypted(false)
-                .build<PartnerLogin.ResponseBody>()
+        .body(PartnerLogin.RequestBody())
+        .encrypted(false)
+        .build<PartnerLogin.ResponseBody>()
 
     private fun handlePartnerLoginSuccess(result: PartnerLogin.ResponseBody) {
         // Following Pithos impl. Differs from docs.
@@ -113,5 +116,4 @@ class AuthPresenter : AuthContract.Presenter {
 
         return String(decrypted, Charsets.UTF_8)
     }
-
 }

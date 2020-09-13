@@ -6,11 +6,14 @@ Pandora android client
 </p>
 
 # TODO
-- Upgrade Gradle
-- Gradle KTS
-- Upgrade to Kotlin 1.4
+- ~Upgrade Gradle~
+- ~Gradle KTS~
+- ~Upgrade to Kotlin 1.4~
 - Add Ktlint
 - RxJava -> Coroutines
-- Support -> AndroidX
+- ~Support -> AndroidX~
 - Navigation Fragment?
 - ViewModels
+
+- Use Auto
+- Setup CICD

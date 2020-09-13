@@ -3,7 +3,11 @@ package com.jeremiahzucker.pandroid.ui.widget
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RadialGradient
+import android.graphics.Shader
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.os.Build
@@ -99,7 +103,8 @@ class ShadowImageView : AppCompatImageView {
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         if (mRotateAnimator !=
-                null) {
+            null
+        ) {
             mRotateAnimator!!.cancel()
             mRotateAnimator = null
         }
@@ -108,7 +113,7 @@ class ShadowImageView : AppCompatImageView {
     /** Draw oval shadow below ImageView under lollipop */
     private inner class OvalShadow(shadowRadius: Int) : OvalShape() {
         private var mRadialGradient: RadialGradient? = null
-        private val mShadowPaint: Paint = Paint()
+        private val mShadowPaint = Paint()
 
         init {
             mShadowRadius = shadowRadius
@@ -128,8 +133,14 @@ class ShadowImageView : AppCompatImageView {
         }
 
         private fun updateRadialGradient(diameter: Int) {
-            mRadialGradient = RadialGradient((diameter / 2).toFloat(), (diameter / 2).toFloat(),
-                    mShadowRadius.toFloat(), intArrayOf(FILL_SHADOW_COLOR, Color.TRANSPARENT), null, Shader.TileMode.CLAMP)
+            mRadialGradient = RadialGradient(
+                (diameter / 2).toFloat(),
+                (diameter / 2).toFloat(),
+                mShadowRadius.toFloat(),
+                intArrayOf(FILL_SHADOW_COLOR, Color.TRANSPARENT),
+                null,
+                Shader.TileMode.CLAMP
+            )
             mShadowPaint.shader = mRadialGradient
         }
     }

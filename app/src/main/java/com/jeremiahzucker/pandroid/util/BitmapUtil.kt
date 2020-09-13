@@ -1,6 +1,11 @@
 package com.jeremiahzucker.pandroid.util
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
 
 /**
  * BitmapUtil
@@ -33,6 +38,6 @@ fun Bitmap.getCroppedBitmap(): Bitmap {
     paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
     canvas.drawBitmap(this, rect, rect, paint)
 
-    //return _bmp;
+    // return _bmp;
     return output
 }

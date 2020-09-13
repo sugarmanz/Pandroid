@@ -7,4 +7,4 @@ import com.jeremiahzucker.pandroid.request.BaseMethod
  * https://6xq.net/pandora-apidoc/json/authentication/#check-licensing
  * TODO: If useful, may require a unique response model
  */
-object CheckLicensing: BaseMethod()
+object CheckLicensing : BaseMethod()

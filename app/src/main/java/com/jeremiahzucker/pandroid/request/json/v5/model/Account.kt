@@ -14,5 +14,4 @@ object Account {
             return this.name.replace(sub, sub.toLowerCase())
         }
     }
-
 }

@@ -14,10 +14,11 @@ import androidx.annotation.FloatRange
  */
 
 fun Window.setBackgroundGradient(
-        @ColorInt startColor: Int,
-        @ColorInt endColor: Int, radius: Int,
-        @FloatRange(from = 0.0, to = 1.0) centerX: Float,
-        @FloatRange(from = 0.0, to = 1.0) centerY: Float
+    @ColorInt startColor: Int,
+    @ColorInt endColor: Int,
+    radius: Int,
+    @FloatRange(from = 0.0, to = 1.0) centerX: Float,
+    @FloatRange(from = 0.0, to = 1.0) centerY: Float
 ) {
     val gradientDrawable = GradientDrawable()
     gradientDrawable.colors = intArrayOf(startColor, endColor)

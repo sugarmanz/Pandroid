@@ -1,7 +1,6 @@
 package com.jeremiahzucker.pandroid.player
 
 import android.media.MediaPlayer
-import android.util.Log
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.request.json.v5.method.station.GetPlaylist
 import com.jeremiahzucker.pandroid.request.json.v5.method.station.GetStation
@@ -214,16 +213,15 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
     }
 
     private fun loadPlaylist() = Pandora.HTTP
-            .RequestBuilder(GetPlaylist)
-            .body(GetPlaylist.RequestBody(station?.stationToken ?: ""))
-            .build<GetPlaylist.ResponseBody>()
-            .subscribe(this::loadPlaylistSuccess, this::loadPlaylistError)
+        .RequestBuilder(GetPlaylist)
+        .body(GetPlaylist.RequestBody(station?.stationToken ?: ""))
+        .build<GetPlaylist.ResponseBody>()
+        .subscribe(this::loadPlaylistSuccess, this::loadPlaylistError)
 
     private fun loadPlaylistSuccess(response: GetPlaylist.ResponseBody) {
         // Add feedback id if it exists
         response.items.forEach {
             it.feedbackId = feedbacks[it.trackToken]?.feedbackId
-
         }
 
         // Add the tracks to the queue
@@ -240,10 +238,10 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
     }
 
     private fun loadFeedback() = Pandora.HTTPS
-            .RequestBuilder(GetStation)
-            .body(GetStation.RequestBody(station?.stationToken ?: "", true))
-            .build<GetStation.ResponseBody>()
-            .subscribe(this::loadFeedbackSuccess, this::loadFeedbackError)
+        .RequestBuilder(GetStation)
+        .body(GetStation.RequestBody(station?.stationToken ?: "", true))
+        .build<GetStation.ResponseBody>()
+        .subscribe(this::loadFeedbackSuccess, this::loadFeedbackError)
 
     private fun loadFeedbackSuccess(response: GetStation.ResponseBody) {
         response.feedback.thumbsUp.associateBy { it.musicToken }
@@ -251,6 +249,4 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
     private fun loadFeedbackError(throwable: Throwable) {
         throwable.printStackTrace()
     }
-
-
 }

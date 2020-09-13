@@ -35,7 +35,6 @@ interface PlayContract {
         fun updateFavoriteToggle(favorite: Boolean)
 
         fun getContextForService(): Context
-
     }
 
     interface Presenter : BasePresenter<View> {
@@ -48,7 +47,5 @@ interface PlayContract {
         fun bindPlayerService()
 
         fun unbindPlayerService()
-
     }
-
 }
