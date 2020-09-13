@@ -9,7 +9,7 @@ Pandora android client
 - ~Upgrade Gradle~
 - ~Gradle KTS~
 - ~Upgrade to Kotlin 1.4~
-- Add Ktlint
+- ~Add Ktlint~
 - RxJava -> Coroutines
 - ~Support -> AndroidX~
 - Navigation Fragment?
