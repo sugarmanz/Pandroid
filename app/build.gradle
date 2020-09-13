@@ -9,7 +9,6 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.jeremiahzucker.pandroid"
         minSdkVersion 21
