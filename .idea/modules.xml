@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Pandroid.iml" filepath="$PROJECT_DIR$/Pandroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Pandroid-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Pandroid-app.iml" group="Pandroid/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sugarmanz-Pandroid.iml" filepath="$PROJECT_DIR$/.idea/modules/sugarmanz-Pandroid.iml" group="Pandroid" />
     </modules>
   </component>
 </project>
