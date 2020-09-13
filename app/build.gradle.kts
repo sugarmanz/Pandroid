@@ -9,6 +9,7 @@ plugins {
     id("realm-android")
 }
 
+
 android {
     compileSdkVersion(29)
     defaultConfig {
@@ -53,7 +54,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx:17.5.0")
     implementation("com.google.firebase:firebase-crashlytics-ktx:17.2.1")
 
-
     implementation("androidx.preference:preference:1.1.1")
     implementation("androidx.datastore:datastore-preferences:1.0.0-alpha01")
 
@@ -82,5 +82,5 @@ dependencies {
 }
 
 tasks.check {
-    dependsOn("addKtlintFormatGitPreCommitHook")
+    dependsOn(":installKotlinterPrePushHook")
 }

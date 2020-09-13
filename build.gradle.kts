@@ -14,12 +14,12 @@ buildscript {
         classpath("io.realm:realm-gradle-plugin:4.3.4")
         classpath("com.google.gms:google-services:4.3.3")
         classpath("com.google.firebase:firebase-crashlytics-gradle:2.3.0")
-        classpath("org.jlleitschuh.gradle:ktlint-gradle:9.4.0")
+        classpath("org.jmailen.gradle:kotlinter-gradle:3.0.2")
     }
 }
 
 allprojects {
-    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    apply(plugin = "org.jmailen.kotlinter")
 
     repositories {
         google()
