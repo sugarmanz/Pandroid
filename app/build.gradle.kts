@@ -80,3 +80,7 @@ dependencies {
     // UI Testing
     androidTestImplementation("androidx.test.espresso:espresso-core:3.1.0")
 }
+
+tasks.check {
+    dependsOn("addKtlintFormatGitPreCommitHook")
+}
