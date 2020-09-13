@@ -19,7 +19,7 @@ buildscript {
 }
 
 allprojects {
-    apply(plugin = "org.jlleitschuh.gradle.ktlint-idea")
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
     repositories {
         google()
