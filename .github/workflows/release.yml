@@ -18,3 +18,5 @@ jobs:
         
       - name: Shipit
         run: auto shipit --dry-run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
