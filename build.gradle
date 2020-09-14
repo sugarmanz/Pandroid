@@ -2,6 +2,8 @@
 
 buildscript {
     ext.kotlin_version = '1.2.61'
+    ext.projectVersionName = rootProject.hasProperty('version') ? version : "0.0.1"
+    ext.projectVersionCode = rootProject.hasProperty('versionCode') ? versionCode : version.replace(".", "")
     repositories {
         maven { url 'https://maven.google.com' }
         maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
@@ -22,6 +24,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'net.researchgate.release' version '2.6.0' // gradle release plugin
+}
+
 allprojects {
     repositories {
         jcenter()
@@ -30,6 +36,21 @@ allprojects {
         maven { url 'https://jitpack.io' }
         maven { url 'https://clojars.org/repo/' }
         mavenCentral()
+    }
+}
+
+task build {}
+
+release {
+    failOnCommitNeeded = false
+    failOnPublishNeeded = false
+    failOnUnversionedFiles = false
+    failOnUpdateNeeded = false
+}
+
+task getVersion {
+    doLast {
+        println projectVersionName
     }
 }
 

@@ -14,8 +14,8 @@ android {
         applicationId "com.jeremiahzucker.pandroid"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 2
-        versionName "1.0.1"
+        versionCode = Integer.parseInt(projectVersionCode.replace("-SNAPSHOT", ""))
+        versionName = projectVersionName
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
