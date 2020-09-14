@@ -23,11 +23,14 @@ jobs:
       - name: Debug
         run: echo $PATH; echo $ANDROID_HOME;
       
+      - name: Install Auto
+        uses: actions/auto-native-setup-action@v1
+      
       - name: Install NDK
         run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.0.6113669" --sdk_root=${ANDROID_SDK_ROOT}
           
-      - name: Unit tests
-        run: bash ./gradlew test --stacktrace
+#       - name: Unit tests
+#         run: bash ./gradlew test --stacktrace
 
       - name: Build debug APK
         run: bash ./gradlew assembleDebug --stacktrace
