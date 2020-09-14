@@ -16,5 +16,8 @@ jobs:
       - name: Install Auto
         uses: sugarmanz/auto-native-setup-action@v0.0.4
         
+      - name: Debug Auto
+        run: auto --version
+        
       - name: Shipit
         run: bash auto shipit --dry-run
