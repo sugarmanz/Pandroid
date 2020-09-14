@@ -1,4 +1,4 @@
-name: CI - Build & Release
+name: CI
 
 on:
   push:
@@ -13,6 +13,10 @@ jobs:
     steps:
       # Setup
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Prepare repository
+        run: git fetch --unshallow --tags
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
@@ -36,6 +40,6 @@ jobs:
           path: app/build/outputs/apk/debug/app-debug.apk
           
       - name: Shipit
-        run: auto shipit --dry-run
+        run: auto shipit
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

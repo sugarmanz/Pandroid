@@ -1,5 +1,4 @@
-name: Pull Request - Build & Verify
-
+name: PR
 on:
   pull_request:
     branches:
