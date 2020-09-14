@@ -13,6 +13,10 @@ jobs:
     steps:
       # Setup
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Prepare repository
+        run: git fetch --unshallow --tags
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
