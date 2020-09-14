@@ -1,6 +1,11 @@
 {
   "plugins": [
-    "git-tag",
+    [
+      "gradle",
+      {
+        "gradleCommand": "./gradlew",
+      }
+    ],
     "all-contributors",
     "first-time-contributor",
     "released"
