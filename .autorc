@@ -6,8 +6,6 @@
         "gradleCommand": "./gradlew",
       }
     ],
-    "all-contributors",
-    "first-time-contributor",
     "released"
   ],
   "owner": "sugarmanz",
