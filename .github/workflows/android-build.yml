@@ -24,7 +24,7 @@ jobs:
         run: echo $PATH; echo $ANDROID_HOME;
       
       - name: Install Auto
-        uses: sugarmanz/auto-native-setup-action@v0.0.2
+        uses: sugarmanz/auto-native-setup-action@v0.0.3
       
       - name: Install NDK
         run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.0.6113669" --sdk_root=${ANDROID_SDK_ROOT}
