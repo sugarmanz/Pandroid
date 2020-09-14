@@ -1,0 +1,18 @@
+name: Android Pull Request & Master CI
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Auto
+        uses: sugarmanz/auto-native-setup-action@v0.0.3
+      - name: Shipit
+        run: bash auto shipit --dry-run
