@@ -36,6 +36,6 @@ jobs:
           path: app/build/outputs/apk/debug/app-debug.apk
           
       - name: Shipit
-        run: auto shipit --dry-run
+        run: auto shipit
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
