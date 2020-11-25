@@ -1,3 +1,15 @@
+# v0.1.0 (Wed Nov 25 2020)
+
+#### 🚀 Enhancement
+
+- Upgrade & Refactor! [#5](https://github.com/sugarmanz/Pandroid/pull/5) ([@sugarmanz](https://github.com/sugarmanz))
+
+#### Authors: 1
+
+- Jeremiah Zucker ([@sugarmanz](https://github.com/sugarmanz))
+
+---
+
 # v0.0.2 (Mon Sep 14 2020)
 
 #### 🐛 Bug Fix
