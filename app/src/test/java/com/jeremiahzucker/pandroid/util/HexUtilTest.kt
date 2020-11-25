@@ -10,5 +10,4 @@ class HexUtilTest {
         val bytes = byteArrayOf(-1, 0, 1, 2, 3)
         Assert.assertEquals(bytes.bytesToHex(), "ff00010203")
     }
-
 }

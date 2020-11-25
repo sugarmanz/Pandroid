@@ -4,14 +4,13 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.ui.main.MainActivity
@@ -43,8 +42,11 @@ class StationListFragment : Fragment(), StationListContract.View {
         mColumnCount = arguments?.getInt(ARG_COLUMN_COUNT) ?: 1
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater!!.inflate(R.layout.fragment_station_list, container, false)
 
 //        presenter.getStationList()
@@ -52,13 +54,12 @@ class StationListFragment : Fragment(), StationListContract.View {
         return view
     }
 
-
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnListFragmentInteractionListener) {
             mListener = context
         } else {
-            throw RuntimeException(context!!.toString() + " must implement OnListFragmentInteractionListener")
+            throw RuntimeException("$context must implement OnListFragmentInteractionListener")
         }
     }
 
@@ -81,23 +82,27 @@ class StationListFragment : Fragment(), StationListContract.View {
 
         recycler_view_station_list.visibility = if (show) View.GONE else View.VISIBLE
         recycler_view_station_list.animate()
-                .setDuration(shortAnimTime)
-                .alpha((if (show) 0 else 1).toFloat())
-                .setListener(object : AnimatorListenerAdapter() {
+            .setDuration(shortAnimTime)
+            .alpha((if (show) 0 else 1).toFloat())
+            .setListener(
+                object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         recycler_view_station_list.visibility = if (show) View.GONE else View.VISIBLE
                     }
-                })
+                }
+            )
 
         progress_bar_station_list.visibility = if (show) View.VISIBLE else View.GONE
         progress_bar_station_list.animate()
-                .setDuration(shortAnimTime)
-                .alpha((if (show) 1 else 0).toFloat())
-                .setListener(object : AnimatorListenerAdapter() {
+            .setDuration(shortAnimTime)
+            .alpha((if (show) 1 else 0).toFloat())
+            .setListener(
+                object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         progress_bar_station_list.visibility = if (show) View.VISIBLE else View.GONE
                     }
-                })
+                }
+            )
 
         if (recycler_view_station_list.visibility == View.VISIBLE)
             setupRecyclerView() // TODO: Pretty dumb way to handle it (Should improve soon)

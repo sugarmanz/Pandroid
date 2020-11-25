@@ -7,7 +7,7 @@ import com.jeremiahzucker.pandroid.request.json.v5.model.SyncTokenRequestBody
  * Created by jzucker on 7/2/17.
  * https://6xq.net/pandora-apidoc/json/authentication/#user-login
  */
-object UserLogin: BaseMethod() {
+object UserLogin : BaseMethod() {
     data class RequestBody(
         val username: String,
         val password: String,
@@ -41,19 +41,19 @@ object UserLogin: BaseMethod() {
     ) : SyncTokenRequestBody(TokenType.PARTNER)
 
     data class ResponseBody(
-            val stationCreationAdUrl: String,
-            val hasAudioAds: Boolean,
-            val splashScreenAdUrl: String,
-            val videoAdUrl: String,
-            val username: String,
-            val canListen: Boolean,
-            val nowPlayingAdUrl: String,
-            val userId: String,
-            val listeningTimeoutMinutes: String,
-            val maxStationsAllowed: Int,
-            val listeningTimeoutAlertMsgUri: String,
-            val userProfileUrl: String,
-            val minimumAdRefreshInterval: Int,
-            val userAuthToken: String
+        val stationCreationAdUrl: String,
+        val hasAudioAds: Boolean,
+        val splashScreenAdUrl: String,
+        val videoAdUrl: String,
+        val username: String,
+        val canListen: Boolean,
+        val nowPlayingAdUrl: String,
+        val userId: String,
+        val listeningTimeoutMinutes: String,
+        val maxStationsAllowed: Int,
+        val listeningTimeoutAlertMsgUri: String,
+        val userProfileUrl: String,
+        val minimumAdRefreshInterval: Int,
+        val userAuthToken: String
     )
 }

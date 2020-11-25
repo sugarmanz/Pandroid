@@ -1,7 +1,7 @@
 package com.jeremiahzucker.pandroid.ui.station
 
 import android.util.Log
-import com.jeremiahzucker.pandroid.persist.Preferences
+import com.jeremiahzucker.pandroid.PandroidApplication.Companion.Preferences
 import com.jeremiahzucker.pandroid.request.Pandora
 import com.jeremiahzucker.pandroid.request.json.v5.method.auth.UserLogin
 import com.jeremiahzucker.pandroid.request.json.v5.method.user.GetStationList
@@ -45,9 +45,9 @@ class StationListPresenter : StationListContract.Presenter {
 
     override fun getStationList(body: GetStationList.RequestBody) {
         Pandora.HTTP.RequestBuilder(GetStationList)
-                .body(body)
-                .build<GetStationList.ResponseBody>()
-                .subscribe(this::handleGetStationListSuccess, this::handleGetStationListError)
+            .body(body)
+            .build<GetStationList.ResponseBody>()
+            .subscribe(this::handleGetStationListSuccess, this::handleGetStationListError)
     }
 
     private fun handleGetStationListSuccess(responseBody: GetStationList.ResponseBody) {
@@ -71,9 +71,9 @@ class StationListPresenter : StationListContract.Presenter {
     private fun verifyChecksum() {
         Log.i(TAG, "VERIFY")
         Pandora.HTTP.RequestBuilder(GetStationListChecksum)
-                .body(GetStationListChecksum.RequestBody())
-                .build<GetStationListChecksum.ResponseBody>()
-                .subscribe(this::handleGetStationListChecksumSuccess, this::handleGetStationListChecksumError)
+            .body(GetStationListChecksum.RequestBody())
+            .build<GetStationListChecksum.ResponseBody>()
+            .subscribe(this::handleGetStationListChecksumSuccess, this::handleGetStationListChecksumError)
     }
 
     private fun handleGetStationListChecksumSuccess(checksum: GetStationListChecksum.ResponseBody) {
@@ -87,10 +87,10 @@ class StationListPresenter : StationListContract.Presenter {
 
     private fun doUserLogin() {
         Pandora.RequestBuilder(UserLogin)
-                .authToken(Preferences.partnerAuthToken)
-                .body(UserLogin.RequestBody(Preferences.username ?: "", Preferences.password ?: ""))
-                .build<UserLogin.ResponseBody>()
-                .subscribe(this::handleUserLoginSuccess, this::handleUserLoginError)
+            .authToken(Preferences.partnerAuthToken)
+            .body(UserLogin.RequestBody(Preferences.username ?: "", Preferences.password ?: ""))
+            .build<UserLogin.ResponseBody>()
+            .subscribe(this::handleUserLoginSuccess, this::handleUserLoginError)
     }
 
     private fun handleUserLoginSuccess(result: UserLogin.ResponseBody) {
@@ -104,5 +104,4 @@ class StationListPresenter : StationListContract.Presenter {
     private fun handleUserLoginError(throwable: Throwable) {
         view?.showAuth()
     }
-
 }

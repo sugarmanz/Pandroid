@@ -1,9 +1,9 @@
 package com.jeremiahzucker.pandroid.util
 
 import android.graphics.drawable.GradientDrawable
-import android.support.annotation.ColorInt
-import android.support.annotation.FloatRange
 import android.view.Window
+import androidx.annotation.ColorInt
+import androidx.annotation.FloatRange
 
 /**
  * WindowUtil
@@ -14,10 +14,11 @@ import android.view.Window
  */
 
 fun Window.setBackgroundGradient(
-        @ColorInt startColor: Int,
-        @ColorInt endColor: Int, radius: Int,
-        @FloatRange(from = 0.0, to = 1.0) centerX: Float,
-        @FloatRange(from = 0.0, to = 1.0) centerY: Float
+    @ColorInt startColor: Int,
+    @ColorInt endColor: Int,
+    radius: Int,
+    @FloatRange(from = 0.0, to = 1.0) centerX: Float,
+    @FloatRange(from = 0.0, to = 1.0) centerY: Float
 ) {
     val gradientDrawable = GradientDrawable()
     gradientDrawable.colors = intArrayOf(startColor, endColor)

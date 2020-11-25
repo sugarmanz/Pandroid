@@ -1,16 +1,19 @@
 package com.jeremiahzucker.pandroid.player
 
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import android.support.annotation.RequiresApi
-import android.support.v4.app.NotificationCompat
 import android.util.Log
 import android.widget.RemoteViews
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.request.json.v5.model.TrackModel
@@ -136,11 +139,14 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
 
     // Notification
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(): String{
+    private fun createNotificationChannel(): String {
         val channelId = "pandroid_service"
         val channelName = "Pandroid Notification Media Controls"
-        val chan = NotificationChannel(channelId,
-                channelName, NotificationManager.IMPORTANCE_LOW)
+        val chan = NotificationChannel(
+            channelId,
+            channelName,
+            NotificationManager.IMPORTANCE_LOW
+        )
         chan.enableVibration(false)
         chan.enableLights(false)
         chan.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
@@ -154,8 +160,12 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
      */
     private fun showNotification() {
         // The PendingIntent to launch our activity if the user selects this notification
-        val contentIntent = PendingIntent.getActivity(this, 0,
-                Intent(this, MainActivity::class.java), 0)
+        val contentIntent = PendingIntent.getActivity(
+            this,
+            0,
+            Intent(this, MainActivity::class.java),
+            0
+        )
 
         // Cache content views for album art
         val smallRemoteView = smallContentView
@@ -166,22 +176,22 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
 
         // Set the info for the views that show in the notification panel.
         notification = NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.ic_notification_app_logo)  // the status icon
-                .setWhen(System.currentTimeMillis())  // the time stamp
-                .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
-                .setCustomContentView(smallRemoteView)
-                .setCustomBigContentView(bigRemoteView)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setOngoing(true)
-                .setOnlyAlertOnce(true)
-                .build()
+            .setSmallIcon(R.drawable.ic_notification_app_logo) // the status icon
+            .setWhen(System.currentTimeMillis()) // the time stamp
+            .setContentIntent(contentIntent) // The intent to send when the entry is clicked
+            .setCustomContentView(smallRemoteView)
+            .setCustomBigContentView(bigRemoteView)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setOngoing(true)
+            .setOnlyAlertOnce(true)
+            .build()
 
         val albumArtUrl = currentTrack?.albumArtUrl ?: ""
         if (!albumArtUrl.isNullOrEmpty()) {
             Picasso.with(applicationContext).load(albumArtUrl)
-                    .into(smallRemoteView, R.id.image_view_album, NOTIFICATION_ID, notification)
+                .into(smallRemoteView, R.id.image_view_album, NOTIFICATION_ID, notification)
             Picasso.with(applicationContext).load(albumArtUrl) // TODO: Hopefully caching is smert
-                    .into(bigRemoteView, R.id.image_view_album, NOTIFICATION_ID, notification)
+                .into(bigRemoteView, R.id.image_view_album, NOTIFICATION_ID, notification)
         }
 
         // Send the notification.
@@ -231,11 +241,12 @@ class PlayerService : Service(), PlayerInterface, PlayerInterface.Callback {
 //                        .into(remoteView, R.id.image_view_album, NOTIFICATION_ID, notification)
 //            }
         }
-        remoteView.setImageViewResource(R.id.image_view_play_toggle,
-                if (isPlaying) R.drawable.ic_remote_view_pause else R.drawable.ic_remote_view_play)
+        remoteView.setImageViewResource(
+            R.id.image_view_play_toggle,
+            if (isPlaying) R.drawable.ic_remote_view_pause else R.drawable.ic_remote_view_play
+        )
 
         // TODO: Do album cover loading
-
     }
 
     // PendingIntent

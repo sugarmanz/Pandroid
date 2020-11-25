@@ -1,15 +1,23 @@
 package com.jeremiahzucker.pandroid
 
 import android.app.Application
-import com.marcinmoskala.kotlinpreferences.PreferenceHolder
+import com.jeremiahzucker.pandroid.persist.Preferences
 import io.realm.Realm
 
 class PandroidApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        PreferenceHolder.setContext(applicationContext)
         Realm.init(applicationContext)
+//        Preferences.init(applicationContext)
+        initPreferences()
     }
 
+    companion object {
+        lateinit var Preferences: Preferences private set
+
+        fun Application.initPreferences() {
+            Preferences = Preferences(this)
+        }
+    }
 }

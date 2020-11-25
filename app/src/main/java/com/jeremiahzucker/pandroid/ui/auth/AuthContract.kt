@@ -19,13 +19,9 @@ interface AuthContract {
         fun showErrorNetwork(throwable: Throwable)
         fun clearErrors()
         fun showMain()
-
     }
 
     interface Presenter : BasePresenter<View> {
-
         fun attemptLogin(username: String?, password: String?)
-
     }
-
 }

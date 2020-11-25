@@ -24,9 +24,11 @@ class BlowFishTest {
         val algorithmStrategy = "algorithmStrategy"
         val paddingStrategy = "paddingStrategy"
         val transformation = "$algorithm/$algorithmStrategy/$paddingStrategy"
-        val fugu = BlowFish(algorithm = algorithm,
-                algorithmStrategy = algorithmStrategy,
-                paddingStrategy = paddingStrategy)
+        val fugu = BlowFish(
+            algorithm = algorithm,
+            algorithmStrategy = algorithmStrategy,
+            paddingStrategy = paddingStrategy
+        )
 
         Assert.assertEquals(transformation, fugu.transformation)
 
@@ -40,5 +42,4 @@ class BlowFishTest {
 
         Assert.assertEquals(newTransformation, fugu.transformation)
     }
-
 }

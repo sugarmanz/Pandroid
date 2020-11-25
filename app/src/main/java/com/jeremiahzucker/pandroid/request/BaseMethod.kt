@@ -11,5 +11,4 @@ abstract class BaseMethod {
     private val prefix get() = regex.find(subclass.`package`.toString())?.value?.split(".")?.last()
     private val postfix get() = subclass.simpleName.decapitalize()
     val methodName: String get() = arrayOf(prefix, postfix).joinToString(".")
-
 }

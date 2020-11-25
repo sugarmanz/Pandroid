@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/common.list.itemHeight" />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -54,9 +54,9 @@
                     android:maxLines="1"
                     android:singleLine="true" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -72,7 +72,7 @@
                     android:maxLines="1"
                     android:singleLine="true" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/sign_in_button"

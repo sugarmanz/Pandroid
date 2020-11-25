@@ -5,13 +5,12 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-
+import androidx.fragment.app.Fragment
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.player.PlayMode
 import com.jeremiahzucker.pandroid.player.PlayerInterface
@@ -58,34 +57,39 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
     // Need to use an actual Runnable object so that removeCallbacks will werk
     private val progressCallback = Runnable { updateSeekCallback() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_play, container, false)
     }
 
     override fun onStart() {
         super.onStart()
-        seek_bar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    val scaledProgress = ((progress.toFloat() / seek_bar.max) * player!!.duration.toFloat()).toInt()
-                    text_view_progress.text = scaledProgress.formatDurationFromMilliseconds()
+        seek_bar.setOnSeekBarChangeListener(
+            object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    if (fromUser) {
+                        val scaledProgress = ((progress.toFloat() / seek_bar.max) * player!!.duration.toFloat()).toInt()
+                        text_view_progress.text = scaledProgress.formatDurationFromMilliseconds()
+                    }
                 }
-            }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                seekProgressHandler.removeCallbacks(progressCallback)
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                player?.seekTo(getDurationFromProgress(seekBar.progress))
-                if (player?.isPlaying == true) {
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
                     seekProgressHandler.removeCallbacks(progressCallback)
-                    seekProgressHandler.post(progressCallback)
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    player?.seekTo(getDurationFromProgress(seekBar.progress))
+                    if (player?.isPlaying == true) {
+                        seekProgressHandler.removeCallbacks(progressCallback)
+                        seekProgressHandler.post(progressCallback)
+                    }
                 }
             }
-        })
+        )
         button_play_toggle.setOnClickListener {
             // If player is not null and player fails to pause and player fails to play,
             // show station list. This will work because player will return true if it is
@@ -202,10 +206,12 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
     }
 
     override fun updatePlayMode(playMode: PlayMode) {
-        button_play_mode_toggle.setImageResource(when (playMode) {
-            PlayMode.SINGLE -> R.drawable.ic_play_mode_single
-            PlayMode.LIST -> R.drawable.ic_play_mode_list
-        })
+        button_play_mode_toggle.setImageResource(
+            when (playMode) {
+                PlayMode.SINGLE -> R.drawable.ic_play_mode_single
+                PlayMode.LIST -> R.drawable.ic_play_mode_list
+            }
+        )
     }
 
     override fun updatePlayToggle(play: Boolean) {
@@ -264,4 +270,4 @@ class PlayFragment : Fragment(), PlayContract.View, PlayerInterface.Callback {
             return fragment
         }
     }
-}// Required empty public constructor
+} // Required empty public constructor

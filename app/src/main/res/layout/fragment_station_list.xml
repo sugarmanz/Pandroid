@@ -18,7 +18,7 @@
             />
 
         <!-- Login progress -->
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_station_list"
             style="@style/AppTheme.Widget.RecyclerView"
             android:layout_width="match_parent"

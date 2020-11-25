@@ -8,11 +8,13 @@ import javax.crypto.spec.SecretKeySpec
  * Blowfish encryption helpers (supports other crypto algorithms)
  * TODO: Remove enc and dec keys from default params
  */
-class BlowFish(val encryptionKey: String = "6#26FRL\$ZWD",
-               val decryptionKey: String = "R=U!LH\$O2B#",
-               var algorithm: String = "Blowfish",
-               var algorithmStrategy: String = "ECB",
-               var paddingStrategy: String = "PKCS5Padding") {
+class BlowFish(
+    val encryptionKey: String = "6#26FRL\$ZWD",
+    val decryptionKey: String = "R=U!LH\$O2B#",
+    var algorithm: String = "Blowfish",
+    var algorithmStrategy: String = "ECB",
+    var paddingStrategy: String = "PKCS5Padding"
+) {
 
     // This way the changes to the algorithm stats get picked up upon decryption
     val transformation get() = "$algorithm/$algorithmStrategy/$paddingStrategy"

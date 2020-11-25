@@ -16,7 +16,7 @@
         <!--android:paddingTop="@dimen/appbar_padding_top"-->
         <!--android:theme="@style/AppTheme.AppBarOverlay">-->
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             xmlns:toolbar="http://schemas.android.com/apk/res-auto"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -26,11 +26,11 @@
 
             <include layout="@layout/toolbar_main" />
 
-        </android.support.v7.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
     <!--</android.support.design.widget.AppBarLayout>-->
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/container"
         android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"

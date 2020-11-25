@@ -1,9 +1,12 @@
 package com.jeremiahzucker.pandroid.ui.auth
 
-import com.jeremiahzucker.pandroid.ui.auth.AuthContract.*
+import android.app.Application
+import com.jeremiahzucker.pandroid.PandroidApplication.Companion.initPreferences
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.*
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 
 /**
  * AuthPresenterTest
@@ -14,8 +17,8 @@ import org.mockito.Mockito.*
  */
 class AuthPresenterTest {
 
-    lateinit var presenter: Presenter
-    lateinit var view: View
+    lateinit var presenter: AuthContract.Presenter
+    lateinit var view: AuthContract.View
 
     private val validUsername = "valid@username"
     private val invalidUsername = ""
@@ -24,24 +27,25 @@ class AuthPresenterTest {
 
     @Before
     fun setup() {
-        view = mock(View::class.java)
+        view = mock(AuthContract.View::class.java)
+        mock(Application::class.java).initPreferences()
         presenter = AuthPresenter()
         presenter.attach(view)
     }
 
-    @Test(expected = NotImplementedError::class)
-    fun testCheckAuth() {
-        presenter.checkAuth()
-    }
-
-    @Test
-    fun testMethodsAfterDetach() {
-        presenter.detach()
-        presenter.attemptLogin(null, null)
-        presenter.checkAuth()
-
-        verifyZeroInteractions(view)
-    }
+    // @Test(expected = NotImplementedError::class)
+    // fun testCheckAuth() {
+    //     presenter.checkAuth()
+    // }
+    //
+    // @Test
+    // fun testMethodsAfterDetach() {
+    //     presenter.detach()
+    //     presenter.attemptLogin(null, null)
+    //     presenter.checkAuth()
+    //
+    //     verifyZeroInteractions(view)
+    // }
 
     @Test
     fun testAttemptAuthValidUsernameValidPassword() {
@@ -81,5 +85,4 @@ class AuthPresenterTest {
 
         verify(view, times(1)).showErrorUsernameRequired()
     }
-
 }
