@@ -9,6 +9,7 @@ plugins {
     id("realm-android")
 }
 
+val version: String by project
 
 android {
     compileSdkVersion(29)
@@ -16,8 +17,11 @@ android {
         applicationId = "com.jeremiahzucker.pandroid"
         minSdkVersion(21)
         targetSdkVersion(29)
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = version
+            .replace(".", "")
+            .replace("-SNAPSHOT", "")
+            .let(Integer::parseInt)
+        versionName = version
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
@@ -27,6 +31,10 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
+    }
+    lintOptions {
+
+        // abortOnError = false
     }
 }
 

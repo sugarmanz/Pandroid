@@ -18,6 +18,10 @@ buildscript {
     }
 }
 
+plugins {
+    id("net.researchgate.release") version "2.6.0"
+}
+
 allprojects {
     apply(plugin = "org.jmailen.kotlinter")
 
@@ -30,6 +34,22 @@ allprojects {
         maven("http://oss.jfrog.org/artifactory/oss-snapshot-local")
         maven("https://jitpack.io")
         maven("https://clojars.org/repo/")
+    }
+}
+
+val build by tasks.creating
+
+release {
+    failOnCommitNeeded = false
+    failOnPublishNeeded = false
+    failOnUnversionedFiles = false
+    failOnUpdateNeeded = false
+}
+
+
+val getVersion by tasks.creating {
+    doLast {
+        println(version)
     }
 }
 

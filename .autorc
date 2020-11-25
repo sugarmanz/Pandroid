@@ -1,0 +1,15 @@
+{
+  "plugins": [
+    [
+      "gradle",
+      {
+        "gradleCommand": "./gradlew",
+      }
+    ],
+    "released"
+  ],
+  "owner": "sugarmanz",
+  "repo": "Pandroid",
+  "name": "Jeremiah Zucker",
+  "email": "zucker.jeremiah@gmail.com"
+}
