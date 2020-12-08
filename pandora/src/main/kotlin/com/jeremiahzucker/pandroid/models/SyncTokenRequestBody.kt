@@ -19,7 +19,7 @@ open class SyncTokenRequestBody(
         NONE({ null })
     }
 
-    val syncTime: Long = 1607073231
+    val syncTime: Long = (Preferences.syncTimeOffset ?: 0L) + (System.currentTimeMillis() / 1000L)
 
     // Use nullable types to allow GSON to only serialize populated members
     @Transient

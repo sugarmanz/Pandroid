@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Pandroid.iml" filepath="$PROJECT_DIR$/Pandroid.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Pandroid-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Pandroid-app.iml" group="Pandroid/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Pandroid_buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/Pandroid_buildSrc.iml" group="Pandroid/Pandroid_buildSrc" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sugarmanz-Pandroid.iml" filepath="$PROJECT_DIR$/.idea/modules/sugarmanz-Pandroid.iml" group="Pandroid" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/pandroid.iml" filepath="$PROJECT_DIR$/.idea/modules/pandroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/pandroid.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/pandroid.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/pandroid.buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/pandroid.buildSrc.iml" />
     </modules>
   </component>
 </project>

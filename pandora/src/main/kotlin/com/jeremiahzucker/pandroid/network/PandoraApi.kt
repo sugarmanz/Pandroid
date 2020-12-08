@@ -21,17 +21,10 @@ import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.http.ContentType
-import io.ktor.http.contentLength
 import io.ktor.http.contentType
 import io.ktor.http.withCharset
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType
-import okhttp3.RequestBody
-import okio.Buffer
-import okio.Utf8
-import java.nio.charset.Charset
 
 class PandoraApi {
 
@@ -58,14 +51,13 @@ class PandoraApi {
         }
     }
 
-    suspend fun partnerLogin(): Response<PartnerLogin.ResponseBody> = PartnerLogin.call<String> {
+    suspend fun partnerLogin(): Response<PartnerLogin.ResponseBody> = PartnerLogin.call {
         body = PartnerLogin.RequestBody()
-    }.let(json::decodeFromString)
+    }
 
-    suspend fun userLogin(username: String, password: String): Response<UserLogin.ResponseBody> = UserLogin.call<String> {
+    suspend fun userLogin(username: String, password: String): Response<UserLogin.ResponseBody> = UserLogin.call {
         parameter("partner_id", Preferences.partnerId)
         parameter("auth_token", Preferences.partnerAuthToken)
-
 
         // Get body as string
         val bodyStr = json.encodeToString(UserLogin.RequestBody(username, password)).also(::println)
@@ -74,6 +66,11 @@ class PandoraApi {
         val blowFish = BlowFish()
         val encryptedByteArray = blowFish.encrypt(bodyStr)
         val encodedString = encryptedByteArray.bytesToHex()
+
+        // println()
+        // println(blowFish.decrypt(encryptedByteArray))
+        // println(blowFish.decrypt(encodedString))
+        // println()
 
         body = encodedString
 
@@ -89,7 +86,7 @@ class PandoraApi {
         //     .header("Content-Length", newRequestBody.contentLength().toString())
         //     .method(request.method(), newRequestBody)
         //     .build()
-    }.let(json::decodeFromString)
+    }
 
     suspend fun getStations(): List<Station> = httpClient.get(STATIONS_ENDPOINT)
 

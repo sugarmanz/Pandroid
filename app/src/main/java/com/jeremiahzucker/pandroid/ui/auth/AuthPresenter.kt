@@ -97,6 +97,10 @@ class AuthPresenter : AuthContract.Presenter {
         .build<PartnerLogin.ResponseBody>()
 
     private fun handlePartnerLoginSuccess(result: PartnerLogin.ResponseBody) {
+        println(result.syncTime)
+        println(decryptSyncTime(result.syncTime).toLong())
+        println(decryptSyncTime(result.syncTime).toLong() - (System.currentTimeMillis() / 1000L))
+
         // Following Pithos impl. Differs from docs.
         Preferences.syncTimeOffset = decryptSyncTime(result.syncTime).toLong() - (System.currentTimeMillis() / 1000L)
         Preferences.partnerId = result.partnerId

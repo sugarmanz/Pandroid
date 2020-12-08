@@ -7,7 +7,7 @@ object Preferences {
     var partnerId: String? by LogDelegate()
     var userAuthToken: String? by LogDelegate()
     var partnerAuthToken: String? by LogDelegate()
-    var syncTimeOffset: Long? by LogDelegate(1607073231)
+    var syncTimeOffset: Long? by LogDelegate()
 
     private class LogDelegate<T>(private val persistentValue: T? = null) {
 

@@ -40,7 +40,7 @@ class EncryptionInterceptor : Interceptor {
                 .header("Content-Type", newRequestBody.contentType().toString())
                 .header("Content-Length", newRequestBody.contentLength().toString())
                 .method(request.method(), newRequestBody)
-                .build()
+                .build().also(::println)
         } else request
     }.let(chain::proceed)
 }

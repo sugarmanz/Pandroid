@@ -29,9 +29,12 @@ object PartnerLogin : BaseMethod() {
         val partnerAuthToken: String
     ) {
         val processedSyncTimeOffset: Long get() = syncTime
+            .also(::println)
             .decrypt()
             .toLong()
+            .also(::println)
             .offset()
+            .also(::println)
 
         private fun Long.offset() = this - (System.currentTimeMillis() / 1000L)
 
