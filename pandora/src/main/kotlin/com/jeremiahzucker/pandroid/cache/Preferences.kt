@@ -5,6 +5,7 @@ import kotlin.reflect.KProperty
 object Preferences {
 
     var partnerId: String? by LogDelegate()
+    var userId: String? by LogDelegate()
     var userAuthToken: String? by LogDelegate()
     var partnerAuthToken: String? by LogDelegate()
     var syncTimeOffset: Long? by LogDelegate()

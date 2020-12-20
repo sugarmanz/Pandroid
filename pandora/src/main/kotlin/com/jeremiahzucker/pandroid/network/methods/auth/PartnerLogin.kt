@@ -1,7 +1,7 @@
 package com.jeremiahzucker.pandroid.network.methods.auth
 
 import ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray
-import com.jeremiahzucker.pandroid.network.crypt.BlowFish
+import com.jeremiahzucker.pandroid.crypto.Cipher
 import com.jeremiahzucker.pandroid.network.methods.BaseMethod
 import kotlinx.serialization.Serializable
 
@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  * Created by jzucker on 7/1/17.
  * https://6xq.net/pandora-apidoc/json/authentication/#partner-login
  */
-object PartnerLogin : BaseMethod() {
+object PartnerLogin : BaseMethod(false) {
 
     @Serializable
     data class RequestBody(
@@ -24,39 +24,20 @@ object PartnerLogin : BaseMethod() {
 
     @Serializable
     data class ResponseBody(
-        val syncTime: String,
+        private val syncTime: String,
         val partnerId: String,
         val partnerAuthToken: String
     ) {
-        val processedSyncTimeOffset: Long get() = syncTime
-            .also(::println)
-            .decrypt()
+        val Cipher.processedSyncTimeOffset: Long get() = syncTime
+            .decryptSyncTime(this)
             .toLong()
-            .also(::println)
-            .offset()
-            .also(::println)
+            .offsetCurrentTime()
 
-        private fun Long.offset() = this - (System.currentTimeMillis() / 1000L)
+        private fun Long.offsetCurrentTime() = this - (System.currentTimeMillis() / 1000L)
 
-        private fun String.decrypt(): String {
-            val fugu = BlowFish()
-            val decoded = hexStringToByteArray()
-            var decrypted = fugu.decrypt(decoded)
-
-            decrypted = decrypted.copyOfRange(4, decrypted.size)
-
-            return String(decrypted, Charsets.UTF_8).also(::println)
-        }
-
-        private fun String.hexStringToByteArray(): ByteArray {
-            val len = length
-            val data = ByteArray(len / 2)
-            var i = 0
-            while (i < len) {
-                data[i / 2] = ((Character.digit(this[i], 16) shl 4) + Character.digit(this[i + 1], 16)).toByte()
-                i += 2
-            }
-            return data
-        }
+        private fun String.decryptSyncTime(cipher: Cipher) = hexStringToByteArray(this)
+            .let(cipher::decrypt)
+            .run { copyOfRange(4, size) }
+            .let(::String)
     }
 }

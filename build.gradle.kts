@@ -35,6 +35,7 @@ allprojects {
         maven("http://oss.jfrog.org/artifactory/oss-snapshot-local")
         maven("https://jitpack.io")
         maven("https://clojars.org/repo/")
+        maven("https://dl.bintray.com/arrow-kt/arrow-kt/")
     }
 }
 

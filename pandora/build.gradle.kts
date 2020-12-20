@@ -10,7 +10,10 @@ val ktorVersion = "1.4.3"
 val serializationVersion = "1.0.1"
 val coroutinesVersion = "1.4.2"
 val sqlDelightVersion = "1.4.3"
+val arrowVersion = "0.10.4"
 
+fun DependencyHandler.arrow(module: String, version: String? = null) =
+    frame("io.arrow-kt:arrow-", module, version)
 
 fun DependencyHandler.sqlDelight(module: String, version: String? = null) =
     frame("com.squareup.sqldelight:", module, version)
@@ -24,6 +27,7 @@ fun DependencyHandler.kotlinx(module: String, version: String? = null) =
 fun DependencyHandler.frame(prefix: String, module: String, version: String? = null) =
     "$prefix$module${version?.let { ":$version" } ?: ""}"
 
+
 dependencies {
     implementation(kotlin("reflect"))
 
@@ -36,6 +40,8 @@ dependencies {
 
     implementation(sqlDelight("runtime", sqlDelightVersion))
 
+    implementation(arrow("core", arrowVersion))
+    implementation(arrow("syntax", arrowVersion))
 
     // JVM deps
     implementation(ktorClient("okhttp", ktorVersion))
