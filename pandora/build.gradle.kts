@@ -1,52 +1,97 @@
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.serialization") version Versions.Kotlin
-    `java-library`
+    kotlin("multiplatform")
+    kotlin("plugin.serialization") version Versions.kotlin
+    id("com.android.library")
 
     id("com.squareup.sqldelight")
 }
 
-val ktorVersion = "1.4.3"
-val serializationVersion = "1.0.1"
-val coroutinesVersion = "1.4.2"
-val sqlDelightVersion = "1.4.3"
-val arrowVersion = "0.10.4"
+val coroutines by Versions
+val serialization by Versions
+val ktor by Versions
+val sqlDelight by Versions
+val arrow by Versions
 
-fun DependencyHandler.arrow(module: String, version: String? = null) =
-    frame("io.arrow-kt:arrow-", module, version)
+kotlin {
 
-fun DependencyHandler.sqlDelight(module: String, version: String? = null) =
-    frame("com.squareup.sqldelight:", module, version)
+    android()
+    jvm("desktop")
 
-fun DependencyHandler.ktorClient(module: String, version: String? = null) =
-    frame("io.ktor:ktor-client-", module, version)
+    sourceSets {
+        named("commonMain") {
+            dependencies {
+                implementation(kotlin("reflect"))
 
-fun DependencyHandler.kotlinx(module: String, version: String? = null) =
-    frame("org.jetbrains.kotlinx:kotlinx-", module, version)
+                implementation(kotlinx("coroutines-core", coroutines))
+                implementation(kotlinx("serialization-json", serialization))
 
-fun DependencyHandler.frame(prefix: String, module: String, version: String? = null) =
-    "$prefix$module${version?.let { ":$version" } ?: ""}"
+                implementation(ktorClient("core", ktor))
+                implementation(ktorClient("serialization", ktor))
+                implementation(ktorClient("logging", ktor))
 
+                implementation(sqlDelight("runtime", sqlDelight))
 
-dependencies {
-    implementation(kotlin("reflect"))
+                implementation(arrow("core", arrow))
+                implementation(arrow("syntax", arrow))
+            }
+        }
 
-    implementation(kotlinx("coroutines-core", coroutinesVersion))
-    implementation(kotlinx("serialization-json", serializationVersion))
+        named("androidMain") {
+            dependencies {
+                implementation(ktorClient("android", ktor))
+                implementation(sqlDelight("android-driver", sqlDelight))
+                implementation("ch.qos.logback:logback-classic:1.2.3")
+            }
+        }
 
-    implementation(ktorClient("core", ktorVersion))
-    implementation(ktorClient("serialization", ktorVersion))
-    implementation(ktorClient("logging", ktorVersion))
+        named("desktopMain") {
+            dependencies {
+                implementation(ktorClient("okhttp", ktor))
+                implementation(sqlDelight("sqlite-driver", sqlDelight))
+                implementation("ch.qos.logback:logback-classic:1.2.3")
+            }
+        }
+    }
 
-    implementation(sqlDelight("runtime", sqlDelightVersion))
+}
 
-    implementation(arrow("core", arrowVersion))
-    implementation(arrow("syntax", arrowVersion))
+// android {
+//     compileSdkVersion(29)
+//     defaultConfig {
+//         applicationId = "com.jeremiahzucker.pandroid"
+//         minSdkVersion(21)
+//         targetSdkVersion(29)
+//         versionCode = version
+//             .replace(".", "")
+//             .replace("-SNAPSHOT", "")
+//             .let(Integer::parseInt)
+//         versionName = version
+//         vectorDrawables.useSupportLibrary = true
+//         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+//         multiDexEnabled = true
+//     }
+//     buildTypes {
+//         getByName("release") {
+//             isMinifyEnabled = false
+//             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+//         }
+//     }
+// }
 
-    // JVM deps
-    implementation(ktorClient("okhttp", ktorVersion))
-    implementation("ch.qos.logback:logback-classic:1.2.3")
-    implementation(sqlDelight("sqlite-driver", sqlDelightVersion))
+android {
+    compileSdkVersion(29)
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    defaultConfig {
+        minSdkVersion(21)
+        targetSdkVersion(29)
+        versionCode = 1
+        versionName = "1.0"
+    }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+        }
+    }
 }
 
 sqldelight {

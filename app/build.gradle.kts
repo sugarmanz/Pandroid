@@ -10,6 +10,7 @@ plugins {
 }
 
 val version: String by project
+val kotlin by Versions
 
 android {
     compileSdkVersion(29)
@@ -43,7 +44,7 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
     // Kotlin
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.Kotlin}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 

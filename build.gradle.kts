@@ -9,13 +9,15 @@ buildscript {
         maven("https://plugins.gradle.org/m2/")
     }
     dependencies {
+        val kotlin by Versions
+        val sqlDelight by Versions
         classpath("com.android.tools.build:gradle:4.1.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Kotlin}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin")
         classpath("io.realm:realm-gradle-plugin:4.3.4")
         classpath("com.google.gms:google-services:4.3.3")
         classpath("com.google.firebase:firebase-crashlytics-gradle:2.3.0")
         classpath("org.jmailen.gradle:kotlinter-gradle:3.0.2")
-        classpath("com.squareup.sqldelight:gradle-plugin:1.4.3")
+        classpath("com.squareup.sqldelight:gradle-plugin:$sqlDelight")
     }
 }
 
@@ -56,5 +58,5 @@ val getVersion by tasks.creating {
 }
 
 tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
+    subprojects.forEach { delete(it.buildDir) }
 }

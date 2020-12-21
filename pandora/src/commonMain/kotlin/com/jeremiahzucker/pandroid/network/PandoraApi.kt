@@ -10,6 +10,7 @@ import com.jeremiahzucker.pandroid.network.crypto.Encryption.encrypt
 import com.jeremiahzucker.pandroid.network.methods.BaseMethod
 import com.jeremiahzucker.pandroid.network.methods.auth.PartnerLogin
 import com.jeremiahzucker.pandroid.network.methods.auth.UserLogin
+import com.jeremiahzucker.pandroid.network.methods.station.GetPlaylist
 import com.jeremiahzucker.pandroid.network.methods.user.GetStationList
 import io.ktor.client.HttpClient
 import io.ktor.client.features.feature
@@ -67,6 +68,10 @@ class PandoraApi {
 
     suspend fun getStations(): Response<GetStationList.ResponseBody> = GetStationList.call {
         body = GetStationList.RequestBody()
+    }
+
+    suspend fun getPlaylist(body: GetPlaylist.RequestBody): Response<GetPlaylist.ResponseBody> = GetPlaylist.call {
+        this.body = body
     }
 
     private suspend inline fun <reified T> BaseMethod.call(block: HttpRequestBuilder.() -> Unit = {}): Response<T> = httpClient.post(BASE_ENDPOINT) {

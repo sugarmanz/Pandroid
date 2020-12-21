@@ -1,14 +1,14 @@
 package com.jeremiahzucker.pandroid
 
+import com.jeremiahzucker.pandroid.audio.AudioUrlFormat
 import com.jeremiahzucker.pandroid.cache.Preferences
 import com.jeremiahzucker.pandroid.models.ExpandedStationModel
+import com.jeremiahzucker.pandroid.models.Response
+import com.jeremiahzucker.pandroid.models.TrackModel
 import com.jeremiahzucker.pandroid.network.PandoraApi
 import com.jeremiahzucker.pandroid.network.methods.auth.PartnerLogin
 import com.jeremiahzucker.pandroid.network.methods.auth.UserLogin
-
-/** expect */ val partnerUsername: String = "android"
-/** expect */ val partnerPassword: String = "AC7IBG09A3DTSYM4R41UJWL07VLN8JI7"
-/** expect */ val deviceModel: String = "android-generic"
+import com.jeremiahzucker.pandroid.network.methods.station.GetPlaylist
 
 object PandoraSdk/**(databaseDriverFactory: DatabaseDriverFactory)*/ {
 
@@ -46,6 +46,16 @@ object PandoraSdk/**(databaseDriverFactory: DatabaseDriverFactory)*/ {
                 // database.createLaunches(it)
             }.success.result.stations
         }
+    }
+
+    @Throws(Exception::class) suspend fun getPlaylist(stationToken: String): List<TrackModel> {
+        return api.getPlaylist(GetPlaylist.RequestBody(stationToken)).success.result.items
+    }
+
+    @Throws(Exception::class) suspend fun playStation(stationToken: String) {
+        api.getPlaylist(GetPlaylist.RequestBody(stationToken))
+
+        // create player abstraction
     }
 
 }
