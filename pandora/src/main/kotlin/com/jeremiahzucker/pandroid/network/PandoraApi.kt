@@ -32,7 +32,7 @@ class PandoraApi {
 
     private val logger: Logger get() = httpClient.feature(Logging)!!.logger
 
-    private val cipher: Cipher get() = httpClient.feature(Encryption)!!
+    val cipher: Cipher get() = httpClient.feature(Encryption)!!
 
     val json = Json {
         ignoreUnknownKeys = true
@@ -54,34 +54,22 @@ class PandoraApi {
         install(Encryption)
     }
 
-    suspend fun partnerLogin(): Response<PartnerLogin.ResponseBody> = PartnerLogin.call<PartnerLogin.ResponseBody> {
-        body = PartnerLogin.RequestBody()
-    }.also { response ->
-        // TODO: Should response handling belong in the API layer?
-        response.success.result.apply {
-            Preferences.partnerId = partnerId
-            Preferences.partnerAuthToken = partnerAuthToken
-            Preferences.syncTimeOffset = cipher.processedSyncTimeOffset
-        }
+    suspend fun partnerLogin(body: PartnerLogin.RequestBody = PartnerLogin.RequestBody()): Response<PartnerLogin.ResponseBody> = PartnerLogin.call<PartnerLogin.ResponseBody> {
+        this.body = body
     }
 
-    suspend fun userLogin(username: String, password: String): Response<UserLogin.ResponseBody> = UserLogin.call<UserLogin.ResponseBody> {
+    suspend fun userLogin(body: UserLogin.RequestBody): Response<UserLogin.ResponseBody> = UserLogin.call {
         parameter("partner_id", Preferences.partnerId)
         parameter("auth_token", Preferences.partnerAuthToken)
 
-        body = UserLogin.RequestBody(username, password)
-    }.also { response ->
-        response.success.result.apply {
-            Preferences.userAuthToken = userAuthToken
-            Preferences.userId = userId
-        }
+        this.body = body
     }
 
     suspend fun getStations(): Response<GetStationList.ResponseBody> = GetStationList.call {
         body = GetStationList.RequestBody()
     }
 
-    private suspend inline fun <reified T> BaseMethod.call(block: HttpRequestBuilder.() -> Unit): Response<T> = httpClient.post(BASE_ENDPOINT) {
+    private suspend inline fun <reified T> BaseMethod.call(block: HttpRequestBuilder.() -> Unit = {}): Response<T> = httpClient.post(BASE_ENDPOINT) {
         methodParam(methodName)
         Preferences.partnerId?.let(partnerParam)
         Preferences.userId?.let(userParam)
@@ -98,8 +86,6 @@ class PandoraApi {
     private val HttpRequestBuilder.partnerParam get() = partialParameter("partner_id")
     private val HttpRequestBuilder.userParam get() = partialParameter("user_id")
     private val HttpRequestBuilder.authParam get() = partialParameter("auth_token")
-
-    // private val HttpRequestBuilder.methodParam get() = { value: String -> parameter("method", value) }
 
     private fun HttpRequestBuilder.partialParameter(key: String) = ::parameter.partially1(key)
 

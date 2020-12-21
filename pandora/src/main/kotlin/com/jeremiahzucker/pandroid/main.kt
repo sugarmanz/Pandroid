@@ -7,11 +7,11 @@ import com.jeremiahzucker.pandroid.network.PandoraApi
 
 inline fun <reified T> Response<T>.unwrap(): T = success.result
 
-suspend fun main() = with<PandoraApi, Unit>(PandoraApi()) {
-    partnerLogin().log()
-    userLogin(
+suspend fun main() = with<PandoraSdk, Unit>(PandoraSdk) {
+    authenticate(
         "zucker.jeremiah+pandroid2@gmail.com",
-        "pencil"
-    ).log()
-    getStations().log().unwrap().stations.map(ExpandedStationModel::stationName).log()
+        "pencil",
+    )
+
+    getStations().map(ExpandedStationModel::stationName).log()
 }
