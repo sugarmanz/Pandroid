@@ -11,7 +11,7 @@ buildscript {
     dependencies {
         val kotlin by Versions
         val sqlDelight by Versions
-        classpath("com.android.tools.build:gradle:4.1.1")
+        classpath("com.android.tools.build:gradle:4.0.2")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin")
         classpath("io.realm:realm-gradle-plugin:4.3.4")
         classpath("com.google.gms:google-services:4.3.3")
@@ -38,6 +38,7 @@ allprojects {
         maven("https://jitpack.io")
         maven("https://clojars.org/repo/")
         maven("https://dl.bintray.com/arrow-kt/arrow-kt/")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
 
