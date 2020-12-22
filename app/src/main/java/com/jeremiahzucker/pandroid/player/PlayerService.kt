@@ -16,7 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.models.ExpandedStationModel
-import com.jeremiahzucker.pandroid.request.json.v5.model.TrackModel
+import com.jeremiahzucker.pandroid.models.TrackModel
 import com.jeremiahzucker.pandroid.ui.main.MainActivity
 import com.squareup.picasso.Picasso
 

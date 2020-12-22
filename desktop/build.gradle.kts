@@ -29,26 +29,29 @@ kotlin {
 
 compose.desktop {
     application {
+        javaHome = System.getenv("JDK_14")
         // mainClass.set("com.jeremiahzucker.pandroid.MainKt")
         mainClass = "com.jeremiahzucker.pandroid.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "ImageViewer"
-            modules("jdk.crypto.ec")
+            packageName = "Pandroid"
 
-            val iconsRoot = project.file("../common/src/desktopMain/resources/images")
+            setVersion(rootProject.version.toString().replace("-SNAPSHOT", ""))
+            // modules("jdk.crypto.ec")
+
+            // val iconsRoot = project.file("../common/src/desktopMain/resources/images")
             macOS {
-                iconFile.set(iconsRoot.resolve("icon-mac.icns"))
+                // iconFile.set(iconsRoot.resolve("icon-mac.icns"))
             }
             windows {
-                iconFile.set(iconsRoot.resolve("icon-windows.ico"))
-                menuGroup = "Compose Examples"
+                // iconFile.set(iconsRoot.resolve("icon-windows.ico"))
+                menuGroup = "Pandroid"
                 // see https://wixtoolset.org/documentation/manual/v3/howtos/general/generate_guids.html
-                upgradeUuid = "18159995-d967-4CD2-8885-77BFA97CFA9F"
+                upgradeUuid = "8b120fb1-09ea-40df-b313-7137426b210c"
             }
             linux {
-                iconFile.set(iconsRoot.resolve("icon-linux.png"))
+                // iconFile.set(iconsRoot.resolve("icon-linux.png"))
             }
         }
     }

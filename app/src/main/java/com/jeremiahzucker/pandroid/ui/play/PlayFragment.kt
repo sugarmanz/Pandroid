@@ -13,10 +13,10 @@ import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.models.ExpandedStationModel
+import com.jeremiahzucker.pandroid.models.TrackModel
 import com.jeremiahzucker.pandroid.player.PlayMode
 import com.jeremiahzucker.pandroid.player.PlayerInterface
 import com.jeremiahzucker.pandroid.player.PlayerService
-import com.jeremiahzucker.pandroid.request.json.v5.model.TrackModel
 import com.jeremiahzucker.pandroid.ui.main.MainActivity
 import com.jeremiahzucker.pandroid.util.formatDurationFromMilliseconds
 import com.jeremiahzucker.pandroid.util.formatDurationFromSeconds
