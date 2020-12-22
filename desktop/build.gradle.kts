@@ -13,6 +13,7 @@ kotlin {
             dependencies {
                 implementation(project(":pandora"))
                 implementation(kotlinx("coroutines-core", Versions.coroutines))
+                implementation("uk.co.caprica:vlcj:4.7.0")
             }
         }
     }
