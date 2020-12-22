@@ -4,7 +4,6 @@ import arrow.syntax.function.partially1
 import com.jeremiahzucker.pandroid.cache.Preferences
 import com.jeremiahzucker.pandroid.crypto.Cipher
 import com.jeremiahzucker.pandroid.models.Response
-import com.jeremiahzucker.pandroid.models.Station
 import com.jeremiahzucker.pandroid.network.crypto.Encryption
 import com.jeremiahzucker.pandroid.network.crypto.Encryption.encrypt
 import com.jeremiahzucker.pandroid.network.methods.BaseMethod
@@ -21,12 +20,12 @@ import io.ktor.client.features.logging.LogLevel
 import io.ktor.client.features.logging.Logger
 import io.ktor.client.features.logging.Logging
 import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.withCharset
+import io.ktor.utils.io.charsets.Charsets
 import kotlinx.serialization.json.Json
 
 class PandoraApi {
@@ -60,9 +59,6 @@ class PandoraApi {
     }
 
     suspend fun userLogin(body: UserLogin.RequestBody): Response<UserLogin.ResponseBody> = UserLogin.call {
-        parameter("partner_id", Preferences.partnerId)
-        parameter("auth_token", Preferences.partnerAuthToken)
-
         this.body = body
     }
 
@@ -92,7 +88,8 @@ class PandoraApi {
     private val HttpRequestBuilder.userParam get() = partialParameter("user_id")
     private val HttpRequestBuilder.authParam get() = partialParameter("auth_token")
 
-    private fun HttpRequestBuilder.partialParameter(key: String) = ::parameter.partially1(key)
+    private fun HttpRequestBuilder.partialParameter(key: String): (String) -> Unit =
+        ::parameter.partially1(key)
 
     companion object {
         private const val BASE_ENDPOINT = "https://tuner.pandora.com/services/json/"

@@ -1,4 +1,4 @@
-package com.jeremiahzucker.pandroid.persist
+package com.jeremiahzucker.pandroid.cache
 
 import android.app.Application
 import android.content.Context
@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import kotlin.reflect.KClass
+import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty
 
 // class NullableDatastoreDelegate<V>(private val dataStore: DataStore<Preferences>, private val key: Preferences.Key<V>) {
@@ -66,32 +67,55 @@ inline fun <reified V : Any> SharedPreferences.bindToPreferenceFieldNullable() =
  * Created by jzucker on 7/7/17.
  * SharedPreferences
  */
-class Preferences(application: Application) {
+actual object Preferences {
 
-//    fun init(context: Context) {
-//        this.context = context
-//    }
-//
-//    private lateinit var context: Context
-    private val context: Context = application
+    private lateinit var backing: Backing
 
-    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-//    private val dataStore: DataStore<Preferences> = context.createDataStore("settings")
+    private class Backing(val context: Context) {
+        private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
-//    init {
-//        GlobalScope.launch {
-//            dataStore.data.first()
-//        }
-//    }
+        var syncTimeOffset: Long? by sharedPreferences.bindToPreferenceFieldNullable()
+        var partnerId: String? by sharedPreferences.bindToPreferenceFieldNullable()
+        var partnerAuthToken: String? by sharedPreferences.bindToPreferenceFieldNullable()
+        var userAuthToken: String? by sharedPreferences.bindToPreferenceFieldNullable()
+        var userId: String? by sharedPreferences.bindToPreferenceFieldNullable()
+        var stationListChecksum: String? by sharedPreferences.bindToPreferenceFieldNullable()
+        var username: String? by sharedPreferences.bindToPreferenceFieldNullable()
+        var password: String? by sharedPreferences.bindToPreferenceFieldNullable()
+    }
 
-    var syncTimeOffset: Long? by sharedPreferences.bindToPreferenceFieldNullable()
-    var partnerId: String? by sharedPreferences.bindToPreferenceFieldNullable()
-    var partnerAuthToken: String? by sharedPreferences.bindToPreferenceFieldNullable()
-    var userAuthToken: String? by sharedPreferences.bindToPreferenceFieldNullable()
-    var userId: String? by sharedPreferences.bindToPreferenceFieldNullable()
-    var stationListChecksum: String? by sharedPreferences.bindToPreferenceFieldNullable()
-    var username: String? by sharedPreferences.bindToPreferenceFieldNullable()
-    var password: String? by sharedPreferences.bindToPreferenceFieldNullable()
+    fun initialize(context: Context) {
+       backing = Backing(context)
+    }
+
+    actual var syncTimeOffset: Long? by BackingDelegate()
+    actual var partnerId: String? by BackingDelegate()
+    actual var partnerAuthToken: String? by BackingDelegate()
+    actual var userAuthToken: String? by BackingDelegate()
+    actual var userId: String? by BackingDelegate()
+    actual var stationListChecksum: String? by BackingDelegate()
+    actual var username: String? by BackingDelegate()
+    actual var password: String? by BackingDelegate()
+
+    private class BackingDelegate<T> {
+
+        operator fun getValue(preferences: Preferences, property: KProperty<*>): T? {
+            return backing::class.members
+                .filterIsInstance<KProperty<T>>()
+                .first { it.name == property.name }
+                .getter
+                .call(backing)
+        }
+
+        operator fun setValue(preferences: Preferences, property: KProperty<*>, value: T?) {
+            backing::class.members
+                .filterIsInstance<KMutableProperty<T>>()
+                .first { it.name == property.name }
+                .setter
+                .call(backing, value)
+        }
+
+    }
 
     fun reset() {
         syncTimeOffset = null
@@ -101,4 +125,5 @@ class Preferences(application: Application) {
         userId = null
         stationListChecksum = null
     }
+
 }

@@ -22,6 +22,6 @@ interface AuthContract {
     }
 
     interface Presenter : BasePresenter<View> {
-        fun attemptLogin(username: String?, password: String?)
+        suspend fun attemptLogin(username: String?, password: String?)
     }
 }

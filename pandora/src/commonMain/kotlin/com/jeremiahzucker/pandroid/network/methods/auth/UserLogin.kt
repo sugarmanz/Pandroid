@@ -45,6 +45,8 @@ object UserLogin : BaseMethod() {
 
     @Serializable
     data class ResponseBody(
+        val userId: String,
+        val userAuthToken: String,
         val stationCreationAdUrl: String,
         val hasAudioAds: Boolean,
         val splashScreenAdUrl: String,
@@ -52,12 +54,10 @@ object UserLogin : BaseMethod() {
         val username: String,
         val canListen: Boolean,
         val nowPlayingAdUrl: String? = null,
-        val userId: String,
         val listeningTimeoutMinutes: String,
         val maxStationsAllowed: Int,
         val listeningTimeoutAlertMsgUri: String,
         val userProfileUrl: String,
         val minimumAdRefreshInterval: Int,
-        val userAuthToken: String
     )
 }

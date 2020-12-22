@@ -10,29 +10,37 @@ import com.jeremiahzucker.pandroid.network.methods.auth.PartnerLogin
 import com.jeremiahzucker.pandroid.network.methods.auth.UserLogin
 import com.jeremiahzucker.pandroid.network.methods.station.GetPlaylist
 
-object PandoraSdk/**(databaseDriverFactory: DatabaseDriverFactory)*/ {
+class PandoraSdk {
 
     // private val database = Database(databaseDriverFactory)
+
+    // private val preferences: Preferences = preferencesFactory.buildPreferences()
+
     private val api = PandoraApi()
 
     @Throws(Exception::class) suspend fun authenticate(username: String, password: String) {
-        api.partnerLogin(PartnerLogin.RequestBody(
+        Preferences.partnerAuthToken
+            ?: doPartnerLogin()
+
+        Preferences.username = username
+        Preferences.password = password
+
+        // TODO: Potentially just cache UserLogin response instead of using preferences
+        val (userId, userAuthToken) = api.userLogin(UserLogin.RequestBody(username, password)).unwrap()
+        Preferences.userAuthToken = userAuthToken
+        Preferences.userId = userId
+    }
+
+    private suspend fun doPartnerLogin() {
+        val result = api.partnerLogin(PartnerLogin.RequestBody(
             username = partnerUsername,
             password = partnerPassword,
             deviceModel = deviceModel,
-        )).let { response ->
-            response.success.result.apply {
-                Preferences.partnerId = partnerId
-                Preferences.partnerAuthToken = partnerAuthToken
-                Preferences.syncTimeOffset = api.cipher.processedSyncTimeOffset
-            }
-        }
-        api.userLogin(UserLogin.RequestBody(username, password)).let { response ->
-            response.success.result.apply {
-                Preferences.userAuthToken = userAuthToken
-                Preferences.userId = userId
-            }
-        }
+        )).unwrap()
+
+        Preferences.syncTimeOffset = result.decryptSyncTimeOffset(api.cipher)
+        Preferences.partnerId = result.partnerId
+        Preferences.partnerAuthToken = result.partnerAuthToken
     }
 
     @Throws(Exception::class) suspend fun getStations(forceReload: Boolean = false): List<ExpandedStationModel> {

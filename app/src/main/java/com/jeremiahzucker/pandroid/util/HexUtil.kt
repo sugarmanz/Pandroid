@@ -1,20 +1,5 @@
 package com.jeremiahzucker.pandroid.util
 
-/**
- * Created by Jeremiah Zucker on 8/19/2017.
- */
-
-fun String.hexStringToByteArray(): ByteArray {
-    val len = length
-    val data = ByteArray(len / 2)
-    var i = 0
-    while (i < len) {
-        data[i / 2] = ((Character.digit(this[i], 16) shl 4) + Character.digit(this[i + 1], 16)).toByte()
-        i += 2
-    }
-    return data
-}
-
 // Credit where credit is due
 // https://stackoverflow.com/questions/9655181/how-to-convert-a-byte-array-to-a-hex-string-in-java
 private val hexArray = "0123456789abcdef".toCharArray()

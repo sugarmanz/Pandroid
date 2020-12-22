@@ -6,8 +6,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.jeremiahzucker.pandroid.PandroidApplication.Companion.Preferences
+
 import com.jeremiahzucker.pandroid.R
+import com.jeremiahzucker.pandroid.cache.Preferences
 import com.jeremiahzucker.pandroid.player.Player
 import com.jeremiahzucker.pandroid.player.PlayerService
 import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel

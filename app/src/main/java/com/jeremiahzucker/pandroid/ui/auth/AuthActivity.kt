@@ -8,11 +8,13 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.jeremiahzucker.pandroid.R
 import com.jeremiahzucker.pandroid.ui.base.BaseActivity
 import com.jeremiahzucker.pandroid.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_auth.*
+import kotlinx.coroutines.launch
 
 /**
  * AuthActivity
@@ -40,7 +42,9 @@ class AuthActivity : BaseActivity(), AuthContract.View {
             }
         )
 
-        sign_in_button.setOnClickListener { attemptLogin() }
+        sign_in_button.setOnClickListener {
+            attemptLogin()
+        }
     }
 
     override fun onResume() {
@@ -110,6 +114,8 @@ class AuthActivity : BaseActivity(), AuthContract.View {
     }
 
     private fun attemptLogin() {
-        presenter.attemptLogin(username.text.toString(), password.text.toString())
+        lifecycleScope.launch {
+            presenter.attemptLogin(username.text.toString(), password.text.toString())
+        }
     }
 }

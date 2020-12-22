@@ -3,6 +3,7 @@ package com.jeremiahzucker.pandroid.crypto
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
+// TODO: Platform specific
 /** Simple [javax.crypto.Cipher] wrapper to easily encrypt and decrypt content */
 class Cipher(val config: Config) {
 

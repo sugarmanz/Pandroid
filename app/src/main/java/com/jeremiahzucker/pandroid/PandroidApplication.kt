@@ -1,7 +1,7 @@
 package com.jeremiahzucker.pandroid
 
 import android.app.Application
-import com.jeremiahzucker.pandroid.persist.Preferences
+import com.jeremiahzucker.pandroid.cache.Preferences
 import io.realm.Realm
 
 class PandroidApplication : Application() {
@@ -14,10 +14,8 @@ class PandroidApplication : Application() {
     }
 
     companion object {
-        lateinit var Preferences: Preferences private set
-
         fun Application.initPreferences() {
-            Preferences = Preferences(this)
+            Preferences.initialize(this)
         }
     }
 }

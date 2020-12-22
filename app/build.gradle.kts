@@ -42,6 +42,7 @@ android {
 dependencies {
     // Local
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation(project(":pandora"))
 
     // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin")
@@ -62,9 +63,6 @@ dependencies {
     // Analytics
     implementation("com.google.firebase:firebase-analytics-ktx:17.5.0")
     implementation("com.google.firebase:firebase-crashlytics-ktx:17.2.1")
-
-    implementation("androidx.preference:preference:1.1.1")
-    implementation("androidx.datastore:datastore-preferences:1.0.0-alpha01")
 
     // Networking
     implementation("com.squareup.retrofit2:retrofit:2.3.0")

@@ -33,6 +33,8 @@ object PartnerLogin : BaseMethod(false) {
             .toLong()
             .offsetCurrentTime()
 
+        fun decryptSyncTimeOffset(cipher: Cipher): Long = cipher.processedSyncTimeOffset
+
         private fun Long.offsetCurrentTime() = this - (System.currentTimeMillis() / 1000L)
 
         private fun String.decryptSyncTime(cipher: Cipher) = hexStringToByteArray(this)

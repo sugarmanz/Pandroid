@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.jeremiahzucker.pandroid.PandroidApplication.Companion.Preferences
+
 import com.jeremiahzucker.pandroid.R
+import com.jeremiahzucker.pandroid.cache.Preferences
 import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.ui.station.StationListFragment.OnListFragmentInteractionListener
 import com.squareup.picasso.Picasso

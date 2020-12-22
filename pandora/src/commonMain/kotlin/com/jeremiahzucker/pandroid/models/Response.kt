@@ -23,6 +23,8 @@ sealed class Response<T> {
         is Failure<*> -> throw ResponseFailedException(this)
     }
 
+    fun unwrap() = success.result
+
     @Serializable
     @SerialName("ok")
     data class Success<T>(
@@ -34,7 +36,11 @@ sealed class Response<T> {
     data class Failure<T>(
         val message: String,
         val code: Int,
-    ) : Response<T>()
+    ) : Response<T>() {
+
+        val exception get() = ResponseFailedException(this)
+
+    }
 
     class Serializer<T>(private val serializer: KSerializer<T>) : JsonContentPolymorphicSerializer<Response<*>>(Response::class) {
         override fun selectDeserializer(element: JsonElement) =  when (val stat = (element as? JsonObject)?.get("stat")) {
@@ -44,30 +50,4 @@ sealed class Response<T> {
         }
     }
 
-}
-
-fun main() {
-    PandoraApi().json.apply {
-        decodeFromString<Response<Map<String, String>>>("""
-{
-    "stat": "fail",
-    "message": "u suk",
-    "code": 9
-}
-        """).let(::println)
-
-        decodeFromString(Response.serializer(MapSerializer(String.serializer(), String.serializer())), """
-{
-    "stat": "ok",
-    "result": { "a": "b" }
-}
-        """).let(::println)
-
-        decodeFromString<Response<Map<String, String>>>("""
-{
-    "stat": "ok",
-    "result": { "a": "b" }
-}
-        """).let(::println)
-    }
 }

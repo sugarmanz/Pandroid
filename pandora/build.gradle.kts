@@ -41,6 +41,11 @@ kotlin {
                 implementation(ktorClient("android", ktor))
                 implementation(sqlDelight("android-driver", sqlDelight))
                 implementation("ch.qos.logback:logback-classic:1.2.3")
+
+                implementation("androidx.core:core-ktx:1.1.0")
+                implementation(kotlinx("coroutines-android", coroutines))
+                implementation("androidx.preference:preference:1.1.1")
+                implementation("androidx.datastore:datastore-preferences:1.0.0-alpha01")
             }
         }
 

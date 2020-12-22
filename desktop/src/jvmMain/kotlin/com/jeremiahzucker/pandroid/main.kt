@@ -9,7 +9,7 @@ import javax.sound.sampled.Clip
 import javax.sound.sampled.DataLine
 import javax.sound.sampled.SourceDataLine
 
-suspend fun main() = with<PandoraSdk, Unit>(PandoraSdk) {
+suspend fun main() = with<PandoraSdk, Unit>(PandoraSdk()) {
     authenticate(
         "zucker.jeremiah+pandroid2@gmail.com",
         "pencil",
