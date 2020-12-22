@@ -1,12 +1,14 @@
 package com.jeremiahzucker.pandroid.player
 
 import android.media.MediaPlayer
+import com.jeremiahzucker.pandroid.PandroidApplication.Companion.pandoraSdk
+import com.jeremiahzucker.pandroid.models.ExpandedStationModel
+import com.jeremiahzucker.pandroid.models.TrackModel
 import com.jeremiahzucker.pandroid.request.Pandora
-import com.jeremiahzucker.pandroid.request.json.v5.method.station.GetPlaylist
 import com.jeremiahzucker.pandroid.request.json.v5.method.station.GetStation
-import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
 import com.jeremiahzucker.pandroid.request.json.v5.model.FeedbackModel
-import com.jeremiahzucker.pandroid.request.json.v5.model.TrackModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty
 
 /**
@@ -43,7 +45,9 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
                 // Load feedbacks first
                 loadFeedback()
                 // Load initial playlist
-                loadPlaylist()
+                GlobalScope.launch {
+                    loadPlaylist()
+                }
             }
         }
 
@@ -87,8 +91,9 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
                 notifyPlayStatusChanged(true)
             }
 
-            if (!hasNext)
+            if (!hasNext) GlobalScope.launch {
                 loadPlaylist()
+            }
             return true
         }
         return false
@@ -212,29 +217,26 @@ internal object Player : PlayerInterface, MediaPlayer.OnCompletionListener {
         currentTrack = null
     }
 
-    private fun loadPlaylist() = Pandora.HTTP
-        .RequestBuilder(GetPlaylist)
-        .body(GetPlaylist.RequestBody(station?.stationToken ?: ""))
-        .build<GetPlaylist.ResponseBody>()
-        .subscribe(this::loadPlaylistSuccess, this::loadPlaylistError)
+    private suspend fun loadPlaylist() {
+        try {
+            val items = pandoraSdk.getPlaylist(station?.stationToken ?: "")
+                .filter { it.trackToken != null }
+                // Add feedback id if it exists
+                .onEach {
+                    it.feedbackId = feedbacks[it.trackToken]?.feedbackId
+                }
 
-    private fun loadPlaylistSuccess(response: GetPlaylist.ResponseBody) {
-        // Add feedback id if it exists
-        response.items.forEach {
-            it.feedbackId = feedbacks[it.trackToken]?.feedbackId
+            // Add the tracks to the queue
+            tracks.addAll(items)
+            if (currentTrack == null) {
+                index = 0
+                currentTrack = tracks[0]
+                play()
+                notifyComplete(currentTrack)
+            }
+        } catch (exception: Exception) {
+            exception.printStackTrace()
         }
-
-        // Add the tracks to the queue
-        tracks.addAll(response.items.filter { it.trackToken != null })
-        if (currentTrack == null) {
-            index = 0
-            currentTrack = tracks[0]
-            play()
-            notifyComplete(currentTrack)
-        }
-    }
-    private fun loadPlaylistError(throwable: Throwable) {
-        throwable.printStackTrace()
     }
 
     private fun loadFeedback() = Pandora.HTTPS

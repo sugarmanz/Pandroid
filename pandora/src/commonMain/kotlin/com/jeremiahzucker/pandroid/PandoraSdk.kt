@@ -1,7 +1,10 @@
 package com.jeremiahzucker.pandroid
 
 import com.jeremiahzucker.pandroid.audio.AudioUrlFormat
+import com.jeremiahzucker.pandroid.cache.Database
+import com.jeremiahzucker.pandroid.cache.DatabaseDriverFactory
 import com.jeremiahzucker.pandroid.cache.Preferences
+import com.jeremiahzucker.pandroid.extensions.log
 import com.jeremiahzucker.pandroid.models.ExpandedStationModel
 import com.jeremiahzucker.pandroid.models.Response
 import com.jeremiahzucker.pandroid.models.TrackModel
@@ -10,9 +13,9 @@ import com.jeremiahzucker.pandroid.network.methods.auth.PartnerLogin
 import com.jeremiahzucker.pandroid.network.methods.auth.UserLogin
 import com.jeremiahzucker.pandroid.network.methods.station.GetPlaylist
 
-class PandoraSdk {
+class PandoraSdk(databaseDriverFactory: DatabaseDriverFactory) {
 
-    // private val database = Database(databaseDriverFactory)
+    private val database = Database(databaseDriverFactory)
 
     // private val preferences: Preferences = preferencesFactory.buildPreferences()
 
@@ -22,6 +25,18 @@ class PandoraSdk {
         Preferences.partnerAuthToken
             ?: doPartnerLogin()
 
+        try {
+            doUserLogin(username, password)
+        } catch (exception: Response.ResponseFailedException) {
+            // retry once with new partner auth token
+            if (exception.failure.code == 1001) {
+                doPartnerLogin()
+                doUserLogin(username, password)
+            }
+        }
+    }
+
+    private suspend fun doUserLogin(username: String, password: String) {
         Preferences.username = username
         Preferences.password = password
 
@@ -44,16 +59,15 @@ class PandoraSdk {
     }
 
     @Throws(Exception::class) suspend fun getStations(forceReload: Boolean = false): List<ExpandedStationModel> {
-        // TODO: Do checksum & check validation?
-        val cachedStations = emptyList<ExpandedStationModel>() //database.getStations()
-        return if (cachedStations.isNotEmpty() && !forceReload) {
-            cachedStations
-        } else {
-            api.getStations().also {
-                // database.clearDatabase()
-                // database.createLaunches(it)
-            }.success.result.stations
-        }
+        val staleCachedStations = forceReload || Preferences.stationListChecksum.isNullOrEmpty() ||
+            api.getStationsChecksum().unwrap().checksum != Preferences.stationListChecksum
+
+        return if (staleCachedStations) {
+            val (stations, checksum) = api.getStations().unwrap()
+            Preferences.stationListChecksum = checksum
+            database.setStations(stations)
+            stations
+        } else database.getStations()
     }
 
     @Throws(Exception::class) suspend fun getPlaylist(stationToken: String): List<TrackModel> {

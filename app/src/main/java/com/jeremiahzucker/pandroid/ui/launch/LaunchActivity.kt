@@ -2,7 +2,6 @@ package com.jeremiahzucker.pandroid.ui.launch
 
 import android.content.Intent
 import android.os.Bundle
-
 import com.jeremiahzucker.pandroid.cache.Preferences
 import com.jeremiahzucker.pandroid.ui.auth.AuthActivity
 import com.jeremiahzucker.pandroid.ui.base.BaseActivity

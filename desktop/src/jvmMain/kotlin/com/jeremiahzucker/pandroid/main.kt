@@ -1,6 +1,8 @@
 package com.jeremiahzucker.pandroid
 
+import com.jeremiahzucker.pandroid.cache.DatabaseDriverFactory
 import com.jeremiahzucker.pandroid.extensions.log
+import com.jeremiahzucker.pandroid.models.ExpandedStationModel
 import kotlinx.coroutines.delay
 import java.net.URL
 import javax.sound.sampled.AudioFormat
@@ -9,7 +11,7 @@ import javax.sound.sampled.Clip
 import javax.sound.sampled.DataLine
 import javax.sound.sampled.SourceDataLine
 
-suspend fun main() = with<PandoraSdk, Unit>(PandoraSdk()) {
+suspend fun main() = with<PandoraSdk, Unit>(PandoraSdk(DatabaseDriverFactory())) {
     authenticate(
         "zucker.jeremiah+pandroid2@gmail.com",
         "pencil",
@@ -20,7 +22,8 @@ suspend fun main() = with<PandoraSdk, Unit>(PandoraSdk()) {
     val tracks = getPlaylist(stationToken).log()
     val url = tracks.first().audioUrlMap?.highQuality?.audioUrl.log()
 
-    MediaPlayer
+
+    // MediaPlayer
 
     // AudioSystem.getAudioFileTypes().map { it.extension }.log()
     // // URL(url).content.log()

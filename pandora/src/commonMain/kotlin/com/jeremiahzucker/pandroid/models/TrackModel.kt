@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class TrackModel(
-    // val trackToken: String?,
+    val trackToken: String? = null,
     val artistName: String? = null,
     val albumName: String? = null,
     // val amazonAlbumUrl: String?,

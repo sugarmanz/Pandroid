@@ -11,6 +11,7 @@ import com.jeremiahzucker.pandroid.network.methods.auth.PartnerLogin
 import com.jeremiahzucker.pandroid.network.methods.auth.UserLogin
 import com.jeremiahzucker.pandroid.network.methods.station.GetPlaylist
 import com.jeremiahzucker.pandroid.network.methods.user.GetStationList
+import com.jeremiahzucker.pandroid.network.methods.user.GetStationListChecksum
 import io.ktor.client.HttpClient
 import io.ktor.client.features.feature
 import io.ktor.client.features.json.JsonFeature
@@ -60,6 +61,10 @@ class PandoraApi {
 
     suspend fun userLogin(body: UserLogin.RequestBody): Response<UserLogin.ResponseBody> = UserLogin.call {
         this.body = body
+    }
+
+    suspend fun getStationsChecksum(): Response<GetStationListChecksum.ResponseBody> = GetStationListChecksum.call {
+        body = GetStationListChecksum.RequestBody()
     }
 
     suspend fun getStations(): Response<GetStationList.ResponseBody> = GetStationList.call {

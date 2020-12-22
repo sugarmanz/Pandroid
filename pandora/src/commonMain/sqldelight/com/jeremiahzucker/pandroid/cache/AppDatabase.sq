@@ -1,0 +1,15 @@
+CREATE TABLE Station (
+    stationId TEXT NOT NULL,
+    stationToken TEXT NOT NULL,
+    stationName TEXT NOT NULL
+);
+
+removeAllStations:
+DELETE FROM Station;
+
+insertStation:
+INSERT INTO Station(stationId, stationToken, stationName)
+VALUES(?, ?, ?);
+
+selectAllStations:
+SELECT * FROM Station;

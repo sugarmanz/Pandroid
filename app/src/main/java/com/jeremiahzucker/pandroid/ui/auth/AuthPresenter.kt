@@ -1,14 +1,12 @@
 package com.jeremiahzucker.pandroid.ui.auth
 
 import android.util.Log
-import com.jeremiahzucker.pandroid.PandoraSdk
-import com.jeremiahzucker.pandroid.cache.Preferences
+import com.jeremiahzucker.pandroid.PandroidApplication.Companion.pandoraSdk
 
 class AuthPresenter : AuthContract.Presenter {
 
     private val TAG: String = AuthPresenter::class.java.simpleName
     private var view: AuthContract.View? = null
-    private val sdk = PandoraSdk()
 
     override fun attach(view: AuthContract.View) {
         this.view = view
@@ -46,7 +44,7 @@ class AuthPresenter : AuthContract.Presenter {
 
     private suspend fun authenticate(username: String, password: String) {
         try {
-            sdk.authenticate(username, password)
+            pandoraSdk.authenticate(username, password)
             view?.showMain()
         } catch (exception: Exception) {
             Log.e(TAG, exception.message, exception)
@@ -54,5 +52,4 @@ class AuthPresenter : AuthContract.Presenter {
             view?.showErrorNetwork(exception)
         }
     }
-
 }

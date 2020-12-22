@@ -9,12 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jeremiahzucker.pandroid.R
-import com.jeremiahzucker.pandroid.request.json.v5.model.ExpandedStationModel
+import com.jeremiahzucker.pandroid.models.ExpandedStationModel
 import com.jeremiahzucker.pandroid.ui.main.MainActivity
 import kotlinx.android.synthetic.main.fragment_station_list.*
+import kotlinx.coroutines.launch
 
 /**
  * A fragment representing a list of Items.
@@ -46,13 +48,7 @@ class StationListFragment : Fragment(), StationListContract.View {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater!!.inflate(R.layout.fragment_station_list, container, false)
-
-//        presenter.getStationList()
-
-        return view
-    }
+    ) = inflater!!.inflate(R.layout.fragment_station_list, container, false)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -66,7 +62,12 @@ class StationListFragment : Fragment(), StationListContract.View {
     override fun onResume() {
         super.onResume()
         presenter.attach(this)
-        // TODO: Check station list checksum here!
+
+        setupRecyclerView()
+        lifecycleScope.launch {
+            presenter.getStations().let(::updateStations)
+            showProgress(false)
+        }
     }
 
     override fun onDetach() {
@@ -104,13 +105,11 @@ class StationListFragment : Fragment(), StationListContract.View {
                 }
             )
 
-        if (recycler_view_station_list.visibility == View.VISIBLE)
-            setupRecyclerView() // TODO: Pretty dumb way to handle it (Should improve soon)
     }
 
-    override fun updateStationList(stations: List<ExpandedStationModel>) {
+    private fun updateStations(stations: List<ExpandedStationModel>) {
         Log.i(TAG, stations.toString())
-        (recycler_view_station_list.adapter as StationListAdapter).updateStationList(stations)
+        (recycler_view_station_list.adapter as StationListAdapter).updateStations(stations)
     }
 
     private fun setupRecyclerView() {

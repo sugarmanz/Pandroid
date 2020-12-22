@@ -9,7 +9,8 @@ import kotlinx.serialization.Serializable
  * https://6xq.net/pandora-apidoc/json/stations/#user-getstationlist
  */
 object GetStationListChecksum : BaseMethod() {
-    fun RequestBody() = object : UserRequestBody() {}
+
+    @Serializable class RequestBody : UserRequestBody()
 
     @Serializable
     data class ResponseBody(
