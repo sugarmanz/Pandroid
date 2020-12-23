@@ -3,14 +3,17 @@ package com.jeremiahzucker.pandroid
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredHeight
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -39,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import com.jeremiahzucker.pandroid.cache.DatabaseDriverFactory
 import com.jeremiahzucker.pandroid.cache.Preferences
 import com.jeremiahzucker.pandroid.extensions.log
+import com.jeremiahzucker.pandroid.models.Response
 import com.jeremiahzucker.pandroid.models.TrackModel
 import kotlinx.coroutines.launch
 import org.jetbrains.skija.Image.*
@@ -237,7 +241,18 @@ fun main() = Window(title = "Pandroid", size = IntSize(400, 530)) {
     val (tracks, setTracks) = remember { mutableStateOf(emptyList<TrackModel>()) }
 
     MaterialTheme {
-        if (!authenticated) {
+        if (!authenticated && Preferences.username != null && Preferences.password != null) {
+            coroutineScope.launch {
+                pandoraSdk.authenticate(Preferences.username!!, Preferences.password!!)
+                setAuthenticated(true)
+            }
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                CircularProgressIndicator(progress = 0.5f)
+            }
+        } else if (!authenticated) {
             Auth { username, password ->
                 pandoraSdk.authenticate(username, password)
                 setAuthenticated(true)
@@ -245,8 +260,16 @@ fun main() = Window(title = "Pandroid", size = IntSize(400, 530)) {
         } else if (tracks.isEmpty()) {
             // TODO: Choose station
             coroutineScope.launch {
-                val stationToken = pandoraSdk.getStations().first().stationToken
-                pandoraSdk.getPlaylist(stationToken).filter { it.trackToken != null }.let(setTracks)
+                try {
+                    val stationToken = pandoraSdk.getStations().first().stationToken
+                    pandoraSdk.getPlaylist(stationToken).filter { it.trackToken != null }.let(setTracks)
+                } catch (exception: Response.ResponseFailedException) {
+                    if (exception.failure.code == 1001) {
+                        setAuthenticated(false)
+                    } else {
+                        throw exception
+                    }
+                }
             }
         } else {
             Muzak(tracks.first()) {
